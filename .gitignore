@@ -1,0 +1,51 @@
+# --- Tooling / AI ---
+.claude/
+.gemini/
+.python-version
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# --- Tailwind CSS (v4) ---
+server/tailwindcss
+server/static/css/output.css
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# uv
+.uv/
+
+# Node
+node_modules/
+npm-debug.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tailwind (keep output.css for production)
+# static/css/output.css
