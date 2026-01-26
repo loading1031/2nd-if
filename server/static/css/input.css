@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* DaisyUI 플러그인 */
+@plugin "daisyui" {
+    themes: light, dark, corporate;
+    darkTheme: dark;
+}
+
 @source "../../templates/**/*.html";
 @source "../../apps/**/templates/**/*.html";
 

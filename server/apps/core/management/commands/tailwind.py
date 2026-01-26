@@ -10,6 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 
@@ -27,7 +28,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         action = options['action']
-        base_dir = Path(__file__).resolve().parent.parent.parent.parent.parent
+        base_dir = Path(settings.BASE_DIR)
 
         tailwind_bin = base_dir / 'tailwindcss'
         input_css = base_dir / 'static' / 'css' / 'input.css'
