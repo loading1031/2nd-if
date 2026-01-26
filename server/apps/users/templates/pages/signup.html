@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}회원가입 - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[80vh] px-4">
+    <div class="card bg-base-100 shadow-xl w-full max-w-md">
+        <div class="card-body">
+            <h2 class="card-title text-2xl font-bold justify-center mb-4">
+                회원가입
+            </h2>
+
+            <form class="space-y-4" hx-post="/htmx/auth/signup/" hx-trigger="submit" hx-swap="innerHTML" hx-target="#content" hx-indicator="#signup-indicator">
+                {% csrf_token %}
+
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text">이메일 주소</span>
+                    </div>
+                    <input id="email" name="email" type="email" autocomplete="email" required
+                           placeholder="example@email.com"
+                           class="input input-bordered w-full" />
+                </label>
+
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text">비밀번호</span>
+                    </div>
+                    <input id="password" name="password" type="password" autocomplete="new-password" required
+                           placeholder="••••••••"
+                           class="input input-bordered w-full" />
+                </label>
+
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text">비밀번호 확인</span>
+                    </div>
+                    <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required
+                           placeholder="••••••••"
+                           class="input input-bordered w-full" />
+                </label>
+
+                <button type="submit" class="btn btn-primary w-full mt-2">
+                    <span id="signup-indicator" class="loading loading-spinner htmx-indicator"></span>
+                    회원가입
+                </button>
+            </form>
+
+            <div class="divider">OR</div>
+
+            <p class="text-center text-sm">
+                이미 계정이 있으신가요?
+                <a href="{% url 'users:login_page' %}" class="link link-primary">
+                    로그인
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -23,8 +23,8 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     {% block nav_items %}
-                    <a href="{% url 'core:login_page' %}" class="text-gray-600 hover:text-gray-900">로그인</a>
-                    <a href="{% url 'core:signup_page' %}" class="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">회원가입</a>
+                    <a href="{% url 'users:login_page' %}" class="text-gray-600 hover:text-gray-900">로그인</a>
+                    <a href="{% url 'users:signup_page' %}" class="btn btn-primary btn-sm">회원가입</a>
                     {% endblock %}
                 </div>
             </div>

@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django_editorjs_fields',
     # Local apps
     'apps.core',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
