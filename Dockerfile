@@ -54,6 +54,15 @@ FROM python:3.14-slim AS runtime
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+# Install Grafana Alloy (metrics push sidecar)
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    curl -sLO https://github.com/grafana/alloy/releases/latest/download/alloy-linux-amd64.zip && \
+    apt-get install -y --no-install-recommends unzip && \
+    unzip alloy-linux-amd64.zip -d /usr/local/bin/ && \
+    chmod +x /usr/local/bin/alloy && \
+    rm alloy-linux-amd64.zip && \
+    apt-get purge -y curl unzip && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Install Python dependencies (cached layer)
@@ -66,8 +75,11 @@ COPY --from=builder /app/server/ ./server/
 # Copy collected static files
 COPY --from=builder /app/server/staticfiles/ ./server/staticfiles/
 
+# Copy Alloy config + start script
+COPY docker/alloy/config.alloy /etc/alloy/config.alloy
+COPY scripts/start.sh /app/start.sh
+
 # Create data directory (Railway Volume mounts to /data)
-# SQLite DB + media files stored here for persistence
 RUN mkdir -p /data/media
 
 # Create non-root user
@@ -79,12 +91,4 @@ WORKDIR /app/server
 
 EXPOSE 8000
 
-# Auto-migrate + gunicorn
-CMD uv run --no-dev python manage.py migrate --noinput && \
-    uv run --no-dev gunicorn config.asgi:application \
-    -k uvicorn.workers.UvicornWorker \
-    -b 0.0.0.0:8000 \
-    --workers 2 \
-    --timeout 120 \
-    --access-logfile - \
-    --error-logfile -
+CMD ["/app/start.sh"]

@@ -51,7 +51,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
-# Logging — console + Grafana Cloud Loki
+# Logging — console + file (Alloy tails file → Grafana Cloud Loki)
+LOG_DIR = "/data/logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -65,19 +68,21 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
-        "loki": {
-            "class": "apps.monitoring.loki_handler.LokiHandler",
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": f"{LOG_DIR}/django.log",
+            "maxBytes": 10 * 1024 * 1024,
+            "backupCount": 3,
             "formatter": "verbose",
-            "level": "INFO",
         },
     },
     "root": {
-        "handlers": ["console", "loki"],
+        "handlers": ["console", "file"],
         "level": "INFO",
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "loki"],
+            "handlers": ["console", "file"],
             "level": "WARNING",
             "propagate": False,
         },

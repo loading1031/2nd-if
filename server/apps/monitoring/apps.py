@@ -5,8 +5,3 @@ class MonitoringConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.monitoring"
     verbose_name = "Monitoring"
-
-    def ready(self):
-        from .pusher import start_push_thread
-
-        start_push_thread()

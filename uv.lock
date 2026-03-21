@@ -14,7 +14,6 @@ dependencies = [
     { name = "neomodel" },
     { name = "pillow" },
     { name = "prometheus-client" },
-    { name = "requests" },
 ]
 
 [package.optional-dependencies]
@@ -51,7 +50,6 @@ requires-dist = [
     { name = "neomodel", specifier = ">=6.1.0" },
     { name = "pillow", specifier = ">=10.0.0" },
     { name = "prometheus-client", specifier = ">=0.24.1" },
-    { name = "requests", specifier = ">=2.32.5" },
     { name = "uvicorn", marker = "extra == 'prod'", specifier = ">=0.42.0" },
     { name = "whitenoise", marker = "extra == 'prod'", specifier = ">=6.12.0" },
 ]
