@@ -51,28 +51,33 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
-# Logging
+# Logging — console + Grafana Cloud Loki
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "json": {
+        "verbose": {
             "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
         },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "json",
+            "formatter": "verbose",
+        },
+        "loki": {
+            "class": "apps.monitoring.loki_handler.LokiHandler",
+            "formatter": "verbose",
+            "level": "INFO",
         },
     },
     "root": {
-        "handlers": ["console"],
+        "handlers": ["console", "loki"],
         "level": "INFO",
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", "loki"],
             "level": "WARNING",
             "propagate": False,
         },
