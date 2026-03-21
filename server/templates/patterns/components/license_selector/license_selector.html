@@ -1,0 +1,16 @@
+<div class="space-y-8 max-w-lg">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">기본 (선택 없음)</p>
+        {% include "components/license_selector.html" with name="license-default" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">자유 분기 허용 선택됨</p>
+        {% include "components/license_selector.html" with name="license-free" selected="free" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">에러 상태</p>
+        {% include "components/license_selector.html" with name="license-error" error="라이선스를 선택해주세요." %}
+    </div>
+</div>
