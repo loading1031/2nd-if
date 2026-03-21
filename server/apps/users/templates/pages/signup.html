@@ -29,7 +29,15 @@
                 </button>
             </form>
 
-            <div class="divider">OR</div>
+            <div class="divider">소셜 로그인</div>
+
+            <div class="space-y-2">
+                <a href="{% url 'google_login' %}" class="btn btn-outline w-full gap-2">Google로 계속하기</a>
+                <a href="{% url 'twitter_oauth2_login' %}" class="btn btn-outline w-full gap-2">X로 계속하기</a>
+                <a href="{% url 'instagram_login' %}" class="btn btn-outline w-full gap-2">Instagram으로 계속하기</a>
+            </div>
+
+            <div class="divider"></div>
 
             <p class="text-center text-sm">
                 이미 계정이 있으신가요?
