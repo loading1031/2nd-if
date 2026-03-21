@@ -135,6 +135,28 @@ name: Alert
 - **dev 환경에서만** 활성화 (`pattern_library`가 dev INSTALLED_APPS에 있음)
 - CSS 변경 후 `tailwindcss` 빌드 필요
 
+## 주석 규칙 (중요)
+
+Django 템플릿 주석 `{# #}`은 **반드시 한 줄 단위**로 작성한다.
+여러 줄 주석 안에 `{% %}` 태그가 있으면 Django 파서가 실제 태그로 파싱하여 무한 재귀 등 치명적 오류가 발생한다.
+
+```html
+{# Good: 한 줄씩 분리 #}
+{# 재사용 가능한 알림 컴포넌트 #}
+{# 사용법: include "components/alert.html" with alert_type="alert-error" message="에러" #}
+{# 필수: message / 선택: alert_type, extra_class #}
+
+{# Bad: 여러 줄 주석 + 태그 포함 → 무한 재귀 발생 #}
+{# 사용법: {% include "components/alert.html" with ... %}
+   필수: message
+#}
+```
+
+**규칙:**
+- `{# #}` 주석은 한 줄에 열고 닫기
+- 주석 안에 `{% %}` 태그 절대 금지 (파서가 실제 태그로 인식함)
+- 사용법 설명 시 `{% %}` 대신 `include "..."` 등 평문으로 작성
+
 ## 주의사항
 
 1. **컴포넌트 수정 = components/ 파일만 수정** — 패턴 라이브러리와 프로덕션에 자동 반영
