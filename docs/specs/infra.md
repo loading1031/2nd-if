@@ -13,7 +13,7 @@
 ### Railway 선택 이유 (vs Fly.io, AWS EC2)
 - **Fly.io**: 영구 무료 티어 폐지 (2024~). 7일 트라이얼 후 종량제. 최소 월 ~$2.
 - **AWS EC2**: Terraform으로 완전한 IaC 가능하나, 프리티어 1년 한정. 1인 개발에 서버 관리 부담.
-- **Railway**: $5 크레딧/월 영구 무료. Docker 배포 지원. Git push 자동 배포. MVP 운영에 충분. 규모 커지면 AWS 이전 용이 (Docker 기반).
+- **Railway**: Hobby $5/월 (크레딧 $5 포함). Docker 배포 지원. Git push 자동 배포. 싱가포르 리전으로 한국 ~70ms 레이턴시. MVP 운영에 충분. 규모 커지면 AWS 이전 용이 (Docker 기반).
 
 ### Grafana Cloud 선택 이유 (vs 셀프호스팅 Prometheus+Grafana)
 - 셀프호스팅 시 Prometheus(200MB) + Grafana(150MB) + Loki(200MB) = 550MB 추가. 컨테이너 무거움.
@@ -40,7 +40,7 @@
 
 ### 네트워크 흐름
 ```
-User → Railway (us-west) → Django (Gunicorn+Uvicorn, 2 workers)
+User → Railway (Singapore) → Django (Gunicorn+Uvicorn, 2 workers)
                               ├── Railway Postgres (SQL, 같은 환경)
                               ├── Neo4j Aura (Graph, 외부)
                               ├── Railway Volume (Media)
