@@ -33,19 +33,30 @@
 2. **2차 창작 분기**: engagement_score 내림차순
 3. 분기가 없으면 원작 다음 화만 표시 (일반 소설 읽기와 동일)
 
+## 지표 분리
+
+| 위치 | 지표 | 의미 |
+|------|------|------|
+| Django ORM (Episode) | avg_rating | 에피소드 별점 평균 (품질 평가) |
+| Neo4j (NEXT 엣지) | visit_count | 이 경로로 이동한 유효 횟수 |
+
 ## engagement_score 계산
 
 ```
-engagement_score = (visit_count × 1.0) + (like_count × 3.0)
+engagement_score = visit_count
 ```
 
-- `visit_count`: 이 경로로 실제 이동한 횟수 (클릭)
-- `like_count`: 해당 에피소드에 달린 좋아요 수
-- 가중치 비율은 추후 조정 가능
+- `visit_count`: 이 경로로 이동한 **유효** 횟수
+- 단순하게 visit_count 기반 정렬 (추후 추가 지표 반영 가능)
 
-## 가중치 업데이트 시점
-- **visit_count**: 독자가 해당 "다음 화" 항목을 클릭하여 이동할 때 +1
-- **like_count**: 에피소드 내에서 좋아요 버튼 클릭 시 +1 (토글)
+## 가중치 업데이트 조건
+
+독자가 A→B 경로로 이동할 때:
+1. B 에피소드로 이동
+2. B의 별점 확인:
+   - **별점 3점 이하** → visit_count 증가하지 않음 (저품질 필터)
+   - **별점 미등록 또는 4점 이상** → visit_count +1
+3. 낮은 평점의 경로는 자연스럽게 추천에서 밀림
 
 ## 표시 조건
 - 분기점은 해당 에피소드까지 모두 읽은 독자에게만 표시
@@ -58,8 +69,8 @@ engagement_score = (visit_count × 1.0) + (like_count × 3.0)
 | 에피소드 번호 | 분기 시작점 기준 화 번호 |
 | 제목 | 에피소드 제목 |
 | 작성자 | by {닉네임} |
-| 좋아요 수 | ♥ {like_count} |
-| 이동 횟수 | 👁 {visit_count} |
+| 별점 | ★ {avg_rating} (에피소드 품질) |
+| 이동 횟수 | 👁 {visit_count} (유효 이동만) |
 
 ## HTMX 구현 방향
 - 에피소드 본문 하단에 다음 화 선택 영역

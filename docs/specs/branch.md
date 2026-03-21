@@ -29,9 +29,8 @@
 | 속성 | 타입 | 설명 |
 |------|------|------|
 | is_original | bool | 원작 경로 여부 |
-| like_count | int | 좋아요 수 |
-| visit_count | int | 이 경로로 이동한 횟수 |
-| engagement_score | float | 가중치 ([[next-episode-ui]] 공식 참조) |
+| visit_count | int | 유효 이동 횟수 (별점 3점 이하 제외) |
+| engagement_score | float | = visit_count ([[next-episode-ui]] 참조) |
 
 ## 분기 생성 플로우
 1. 독자가 에피소드 N화를 읽음
@@ -42,9 +41,10 @@
 6. 이후 해당 분기에서 계속 연재 가능
 
 ## 가중치 업데이트
-- 독자가 "다음 화"에서 특정 경로를 선택할 때마다 해당 `NEXT` 엣지의 `visit_count` +1
-- 좋아요 클릭 시 `like_count` +1
-- `engagement_score` = `(visit_count × 1.0) + (like_count × 3.0)` ([[next-episode-ui]] 참조, 비율 조정 가능)
+- 독자가 A→B 경로로 이동 시:
+  - B의 별점이 3점 이하 → visit_count 증가하지 않음
+  - B의 별점 미등록 또는 4점 이상 → visit_count +1
+- `engagement_score` = `visit_count` ([[next-episode-ui]] 참조)
 
 ## 의존성
 - [[story]] — 에피소드가 존재해야 분기 가능

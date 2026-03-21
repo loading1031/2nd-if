@@ -31,7 +31,8 @@
 | is_paid | bool | O | 유료 여부, default=False ([[revenue]] 참조) |
 | price | decimal | X | 코인 가격 (is_paid=True일 때) |
 | view_count | int | O | 조회수, default=0 |
-| like_count | int | O | 좋아요 수, default=0 |
+| avg_rating | float | X | 별점 평균 (1~5), null=미등록 |
+| rating_count | int | O | 별점 등록 수, default=0 |
 
 > `is_branch` 여부는 Neo4j의 `BRANCHES_FROM` 관계로 판단 ([[branch]] 참조). Django 모델에 중복 저장하지 않음.
 
