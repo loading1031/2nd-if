@@ -7,12 +7,18 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+handler404 = 'apps.core.views.error_views.handler404'
+handler500 = 'apps.core.views.error_views.handler500'
+handler403 = 'apps.core.views.error_views.handler403'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
     path('users/', include('apps.users.urls')),
     path('accounts/', include('allauth.urls')),
     path('stories/', include('apps.stories.urls')),
+    path('api/', include('apps.stories.urls_api')),
+    path('', include('apps.monitoring.urls')),
 ]
 
 # Pattern library (development only)

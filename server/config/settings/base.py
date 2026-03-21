@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.users',
     'apps.stories',
+    'apps.monitoring',
 ]
 
 MIDDLEWARE = [
@@ -42,7 +43,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'apps.monitoring.middleware.PrometheusMetricsMiddleware',
 ]
+
+# Email (console backend for development — override in prod.py)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@2nd-if.com'
 
 ROOT_URLCONF = 'config.urls'
 

@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
+from asgiref.sync import sync_to_async
 from django.test import AsyncClient
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -12,11 +13,10 @@ User = get_user_model()
 @pytest.fixture
 async def user(db):
     """테스트용 사용자 생성"""
-    return await User.objects.acreate_user(
-        email='test@example.com',
-        password='testpass123',
-        nickname='테스트유저',
-    )
+    u = User(email='test@example.com', nickname='테스트유저')
+    u.set_password('testpass123')
+    await u.asave()
+    return u
 
 
 @pytest.fixture
