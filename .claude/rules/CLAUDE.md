@@ -57,6 +57,11 @@
 - 테마 설정
 - HTMX 통합
 
+### [기획 문서 관리 컨벤션](docs.md)
+- docs/ = Obsidian 볼트, [[위키링크]]로 의존관계 연결
+- 스펙 문서 템플릿 및 상태 관리
+- 기획 변경 시 의존성 충돌 감지
+
 ### [개발 워크플로우 컨벤션](workflow.md)
 - Git 브랜치 전략 (main → dev → feat/fix)
 - 병렬 작업: Worktree + Subagent 사용 기준

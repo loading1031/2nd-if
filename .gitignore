@@ -1,5 +1,6 @@
 # --- Tooling / AI ---
 .gemini/
+docs/.obsidian/
 .python-version
 
 # Python
