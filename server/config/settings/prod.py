@@ -1,5 +1,5 @@
 """
-Django settings for project - Production configuration (Fly.io).
+Django settings for project - Production configuration (Railway).
 """
 import os
 
@@ -14,7 +14,7 @@ CSRF_TRUSTED_ORIGINS = [
     f"https://{host.strip()}" for host in ALLOWED_HOSTS if host.strip()
 ]
 
-# Database (Fly Postgres — DATABASE_URL auto-set by `flyctl postgres attach`)
+# Database (Railway Postgres — DATABASE_URL auto-set by Railway)
 DATABASES = {
     'default': dj_database_url.config(
         conn_max_age=600,

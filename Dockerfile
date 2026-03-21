@@ -1,5 +1,5 @@
 # ============================================================
-# 2nd-if Fly.io Production Dockerfile
+# 2nd-if Production Dockerfile
 # Django 6.0 + HTMX + Tailwind v4 + DaisyUI
 # ============================================================
 
@@ -76,7 +76,7 @@ WORKDIR /app/server
 EXPOSE 8000
 
 # Run with gunicorn (ASGI mode with uvicorn workers)
-# 256MB Fly VM: 2 workers max
+# Railway Free: $5 credit/month, 2 workers
 CMD ["uv", "run", "gunicorn", "config.asgi:application", \
      "-k", "uvicorn.UvicornWorker", \
      "-b", "0.0.0.0:8000", \
