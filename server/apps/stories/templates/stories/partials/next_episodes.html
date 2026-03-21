@@ -1,0 +1,39 @@
+<div class="space-y-3">
+    <h3 class="text-lg font-bold">다음 화</h3>
+
+    {% for item in next_list %}
+    <a class="card card-compact bg-base-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer block
+              {% if item.is_original %}border-2 border-primary{% else %}border border-base-300{% endif %}"
+       hx-post="{% url 'stories:htmx_visit_episode' episode.work_id episode.episode_number item.episode.episode_number %}"
+       hx-swap="none">
+        <div class="card-body flex-row items-center justify-between">
+            <div class="flex items-center gap-3">
+                {% if item.is_original %}
+                <span class="badge badge-primary badge-sm">원작</span>
+                {% else %}
+                <span class="badge badge-secondary badge-sm">분기</span>
+                {% endif %}
+                <div>
+                    <p class="font-semibold">{{ item.episode.episode_number }}화: {{ item.episode.title }}</p>
+                    <p class="text-sm text-base-content/60">by {{ item.episode.author.nickname }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 text-sm text-base-content/50">
+                {% if item.episode.avg_rating %}
+                <span>★ {{ item.episode.avg_rating|floatformat:1 }}</span>
+                {% endif %}
+                <span>👁 {{ item.visit_count }}</span>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <p class="text-base-content/50 text-sm">다음 화가 없습니다.</p>
+    {% endfor %}
+
+    {% if can_branch %}
+    <a href="{% url 'stories:branch_create' work.pk episode.episode_number %}"
+       class="btn btn-outline btn-primary w-full mt-2">
+        + 여기서 새 분기 만들기
+    </a>
+    {% endif %}
+</div>

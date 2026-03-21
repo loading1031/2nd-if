@@ -30,3 +30,12 @@ def episode_read(request, work_pk, episode_number):
         "work_id": work_pk,
         "episode_number": episode_number,
     })
+
+
+@login_required
+def branch_create(request, work_pk, episode_number):
+    """분기 생성 페이지."""
+    return render(request, "stories/pages/branch_create.html", {
+        "work_id": work_pk,
+        "episode_number": episode_number,
+    })

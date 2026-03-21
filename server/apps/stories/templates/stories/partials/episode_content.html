@@ -44,6 +44,16 @@
 
     <div class="divider"></div>
 
+    {# 다음 화 선택 UI (핵심 기능) #}
+    <div id="next-episodes"
+         hx-get="{% url 'stories:htmx_next_episodes' episode.work_id episode.episode_number %}"
+         hx-trigger="load"
+         hx-indicator="#next-spinner">
+        <span id="next-spinner" class="loading loading-spinner htmx-indicator"></span>
+    </div>
+
+    <div class="divider"></div>
+
     <div class="flex justify-between">
         {% if episode.episode_number > 1 %}
         <a href="{% url 'stories:episode_read' episode.work_id episode.episode_number|add:'-1' %}"

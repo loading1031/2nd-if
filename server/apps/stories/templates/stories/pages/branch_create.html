@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}새 분기 만들기 - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="breadcrumbs text-sm mb-6">
+        <ul>
+            <li><a href="{% url 'stories:work_detail' work_id %}">작품</a></li>
+            <li><a href="{% url 'stories:episode_read' work_id episode_number %}">{{ episode_number }}화</a></li>
+            <li>새 분기</li>
+        </ul>
+    </div>
+
+    <div class="alert mb-6">
+        <span>이 분기는 <strong>{{ episode_number }}화</strong>에서 시작됩니다.</span>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-2xl font-bold mb-6">새 분기 만들기</h2>
+
+            <form hx-post="{% url 'stories:htmx_branch_create' work_id episode_number %}"
+                  hx-indicator="#branch-spinner"
+                  class="space-y-6">
+                {% csrf_token %}
+
+                {% include "components/form_field.html" with label="에피소드 제목" type="text" name="title" placeholder="분기 에피소드 제목을 입력하세요" required=True %}
+
+                <div>
+                    <div class="label">
+                        <span class="label-text font-medium">본문</span>
+                    </div>
+                    <div id="editorjs" class="border border-base-300 rounded-lg min-h-[400px] p-4 bg-white"></div>
+                    <input type="hidden" name="content" id="content-input" />
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="flex items-center gap-4">
+                    <label class="label cursor-pointer gap-3">
+                        <span class="label-text font-medium">유료 에피소드</span>
+                        <input type="checkbox" name="is_paid" class="toggle toggle-primary" id="branch-paid-toggle" />
+                    </label>
+                </div>
+
+                <div id="branch-price-section" class="hidden">
+                    {% include "components/form_field.html" with label="코인 가격" type="number" name="price" placeholder="0" %}
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="flex justify-end gap-3">
+                    <a href="{% url 'stories:episode_read' work_id episode_number %}" class="btn btn-ghost">취소</a>
+                    <button type="submit" class="btn btn-primary">
+                        <span id="branch-spinner" class="loading loading-spinner htmx-indicator"></span>
+                        분기 발행
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.getElementById('branch-paid-toggle')?.addEventListener('change', function() {
+        document.getElementById('branch-price-section')?.classList.toggle('hidden', !this.checked);
+    });
+</script>
+{% endblock %}
