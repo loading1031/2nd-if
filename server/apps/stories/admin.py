@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Work, Episode, Rating
+from .models import Episode, Rating, Work
 
 
 @admin.register(Work)

@@ -1,5 +1,3 @@
-import pytest
-
 from apps.stories.watermark import embed_watermark, extract_watermark
 
 
@@ -52,5 +50,5 @@ class TestWatermark:
         wm_id = "42"
         watermarked = embed_watermark(text, wm_id)
         # zero-width 문자 제거 후 비교
-        visible = watermarked.replace('\u200b', '').replace('\u200c', '').replace('\u200d', '')
+        visible = watermarked.replace("\u200b", "").replace("\u200c", "").replace("\u200d", "")
         assert visible == text

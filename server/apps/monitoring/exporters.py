@@ -6,7 +6,6 @@ and exposed automatically via the ``/metrics/`` endpoint.
 
 from prometheus_client import Counter, Gauge
 
-
 # ---------------------------------------------------------------------------
 # Story metrics
 # ---------------------------------------------------------------------------

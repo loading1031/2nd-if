@@ -6,9 +6,9 @@
 - ZWJ (U+200D) = 구분자 (시작/끝 마커)
 """
 
-ZWS = "\u200b"   # 0
+ZWS = "\u200b"  # 0
 ZWNJ = "\u200c"  # 1
-ZWJ = "\u200d"   # 구분자
+ZWJ = "\u200d"  # 구분자
 MARKER = ZWJ + ZWS + ZWJ  # 워터마크 시작/끝 마커
 
 
@@ -29,7 +29,7 @@ def _decode(zwc_string: str) -> str | None:
         return None
 
     try:
-        return bytes(int(binary[i:i+8], 2) for i in range(0, len(binary), 8)).decode("utf-8")
+        return bytes(int(binary[i : i + 8], 2) for i in range(0, len(binary), 8)).decode("utf-8")
     except (ValueError, UnicodeDecodeError):
         return None
 
@@ -43,7 +43,7 @@ def embed_watermark(text: str, identifier: str) -> str:
     space_idx = text.find(" ")
     if space_idx == -1:
         return text + encoded
-    return text[:space_idx + 1] + encoded + text[space_idx + 1:]
+    return text[: space_idx + 1] + encoded + text[space_idx + 1 :]
 
 
 def extract_watermark(text: str) -> str | None:

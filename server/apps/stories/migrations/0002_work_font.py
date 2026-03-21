@@ -4,15 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('stories', '0001_initial'),
+        ("stories", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='work',
-            name='font',
-            field=models.CharField(choices=[('default', '기본 (Pretendard)'), ('serif', '명조 (Noto Serif KR)'), ('classic', '궁서 (Gowun Batang)'), ('modern', '고딕 (Noto Sans KR)')], default='default', max_length=20, verbose_name='글씨체'),
+            model_name="work",
+            name="font",
+            field=models.CharField(
+                choices=[
+                    ("default", "기본 (Pretendard)"),
+                    ("serif", "명조 (Noto Serif KR)"),
+                    ("classic", "궁서 (Gowun Batang)"),
+                    ("modern", "고딕 (Noto Sans KR)"),
+                ],
+                default="default",
+                max_length=20,
+                verbose_name="글씨체",
+            ),
         ),
     ]

@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.test import AsyncClient
 
-from apps.stories.models import Work, Episode, Rating
+from apps.stories.models import Episode, Work
 
 User = get_user_model()
 
@@ -22,10 +22,13 @@ async def user():
 
 @pytest.fixture
 async def authenticated_client(client, user):
-    await client.post("/users/htmx/auth/login/", {
-        "email": "author@example.com",
-        "password": "testpass123",
-    })
+    await client.post(
+        "/users/htmx/auth/login/",
+        {
+            "email": "author@example.com",
+            "password": "testpass123",
+        },
+    )
     return client
 
 
@@ -69,20 +72,26 @@ class TestWorkCRUD:
         assert response.status_code == 200
 
     async def test_work_create(self, authenticated_client):
-        response = await authenticated_client.post("/stories/htmx/works/create/", {
-            "title": "새 작품",
-            "description": "새 작품 소개",
-            "license": "free",
-        })
+        response = await authenticated_client.post(
+            "/stories/htmx/works/create/",
+            {
+                "title": "새 작품",
+                "description": "새 작품 소개",
+                "license": "free",
+            },
+        )
         assert response.status_code == 200
         assert "HX-Redirect" in response
         assert await Work.objects.filter(title="새 작품").aexists()
 
     async def test_work_create_requires_login(self, client):
-        response = await client.post("/stories/htmx/works/create/", {
-            "title": "새 작품",
-            "license": "free",
-        })
+        response = await client.post(
+            "/stories/htmx/works/create/",
+            {
+                "title": "새 작품",
+                "license": "free",
+            },
+        )
         assert response.status_code == 302  # redirect to login
 
 
@@ -100,9 +109,12 @@ class TestEpisodeCRUD:
         assert ep.view_count == 1
 
     async def test_episode_create(self, authenticated_client, work):
-        response = await authenticated_client.post(f"/stories/htmx/{work.pk}/episodes/create/", {
-            "title": "새 에피소드",
-        })
+        response = await authenticated_client.post(
+            f"/stories/htmx/{work.pk}/episodes/create/",
+            {
+                "title": "새 에피소드",
+            },
+        )
         assert response.status_code == 200
         assert "HX-Redirect" in response
         assert await Episode.objects.filter(work=work, title="새 에피소드").aexists()
@@ -157,10 +169,13 @@ class TestRating:
 @pytest.mark.django_db(transaction=True)
 class TestWorkErrors:
     async def test_work_create_empty_title(self, authenticated_client):
-        response = await authenticated_client.post("/stories/htmx/works/create/", {
-            "title": "",
-            "license": "free",
-        })
+        response = await authenticated_client.post(
+            "/stories/htmx/works/create/",
+            {
+                "title": "",
+                "license": "free",
+            },
+        )
         assert response.status_code == 400
 
     async def test_work_detail_not_found(self, client):
@@ -168,9 +183,12 @@ class TestWorkErrors:
         assert response.status_code == 200  # 페이지는 렌더링, HTMX가 404 처리
 
     async def test_episode_create_requires_login(self, client, work):
-        response = await client.post(f"/stories/htmx/{work.pk}/episodes/create/", {
-            "title": "무단 에피소드",
-        })
+        response = await client.post(
+            f"/stories/htmx/{work.pk}/episodes/create/",
+            {
+                "title": "무단 에피소드",
+            },
+        )
         assert response.status_code == 302
 
     async def test_episode_read_not_found(self, client, work):

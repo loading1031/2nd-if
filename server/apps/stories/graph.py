@@ -1,12 +1,11 @@
 from neomodel import (
+    BooleanProperty,
+    FloatProperty,
+    IntegerProperty,
+    RelationshipFrom,
+    RelationshipTo,
     StructuredNode,
     StructuredRel,
-    IntegerProperty,
-    FloatProperty,
-    BooleanProperty,
-    RelationshipTo,
-    RelationshipFrom,
-    UniqueIdProperty,
 )
 
 
@@ -42,22 +41,27 @@ class EpisodeNode(StructuredNode):
         원작(is_original=True)은 항상 첫 번째."""
         results = []
         for rel in self.next_episodes.all_relationships():
-            results.append({
-                "node": rel.end_node(),
-                "is_original": rel.is_original,
-                "visit_count": rel.visit_count,
-                "engagement_score": rel.engagement_score,
-            })
+            results.append(
+                {
+                    "node": rel.end_node(),
+                    "is_original": rel.is_original,
+                    "visit_count": rel.visit_count,
+                    "engagement_score": rel.engagement_score,
+                }
+            )
         results.sort(key=lambda x: (-x["is_original"], -x["engagement_score"]))
         return results
 
     def add_next(self, target_node, is_original=False):
         """다음 화 연결."""
-        return self.next_episodes.connect(target_node, {
-            "is_original": is_original,
-            "visit_count": 0,
-            "engagement_score": 0.0,
-        })
+        return self.next_episodes.connect(
+            target_node,
+            {
+                "is_original": is_original,
+                "visit_count": 0,
+                "engagement_score": 0.0,
+            },
+        )
 
     def add_branch(self, branch_node):
         """분기 관계 생성."""

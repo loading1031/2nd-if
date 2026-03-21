@@ -1,11 +1,11 @@
+from asgiref.sync import sync_to_async
 from django.contrib.auth import alogin, alogout, authenticate, get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from asgiref.sync import sync_to_async
 
-from ..forms import SignupForm, LoginForm
-from ..models import FingerprintLog, FingerprintBlacklist
+from ..forms import LoginForm, SignupForm
+from ..models import FingerprintBlacklist, FingerprintLog
 
 User = get_user_model()
 
@@ -33,20 +33,28 @@ async def htmx_signup(request):
     # 핑거프린트 블랙리스트 확인
     block_msg = await _check_fingerprint_blacklist(request)
     if block_msg:
-        return render(request, "pages/signup.html", {
-            "error_message": block_msg,
-            "errors": {},
-        })
+        return render(
+            request,
+            "pages/signup.html",
+            {
+                "error_message": block_msg,
+                "errors": {},
+            },
+        )
 
     form = SignupForm(request.POST)
     is_valid = await sync_to_async(form.is_valid)()
 
     if not is_valid:
         errors = {field: errs[0] for field, errs in form.errors.items()}
-        return render(request, "pages/signup.html", {
-            "error_message": "입력 정보를 확인해주세요.",
-            "errors": errors,
-        })
+        return render(
+            request,
+            "pages/signup.html",
+            {
+                "error_message": "입력 정보를 확인해주세요.",
+                "errors": errors,
+            },
+        )
 
     data = form.cleaned_data
     user = User(email=data["email"], nickname=data["nickname"])
@@ -66,19 +74,27 @@ async def htmx_login(request):
     # 핑거프린트 블랙리스트 확인
     block_msg = await _check_fingerprint_blacklist(request)
     if block_msg:
-        return render(request, "pages/login.html", {
-            "error_message": block_msg,
-            "errors": {},
-        })
+        return render(
+            request,
+            "pages/login.html",
+            {
+                "error_message": block_msg,
+                "errors": {},
+            },
+        )
 
     form = LoginForm(request.POST)
     is_valid = await sync_to_async(form.is_valid)()
 
     if not is_valid:
-        return render(request, "pages/login.html", {
-            "error_message": "이메일과 비밀번호를 입력해주세요.",
-            "errors": {},
-        })
+        return render(
+            request,
+            "pages/login.html",
+            {
+                "error_message": "이메일과 비밀번호를 입력해주세요.",
+                "errors": {},
+            },
+        )
 
     data = form.cleaned_data
     user = await sync_to_async(authenticate)(
@@ -88,10 +104,14 @@ async def htmx_login(request):
     )
 
     if user is None:
-        return render(request, "pages/login.html", {
-            "error_message": "이메일 또는 비밀번호가 올바르지 않습니다.",
-            "errors": {},
-        })
+        return render(
+            request,
+            "pages/login.html",
+            {
+                "error_message": "이메일 또는 비밀번호가 올바르지 않습니다.",
+                "errors": {},
+            },
+        )
 
     # remember-me 처리
     if not request.POST.get("remember-me"):

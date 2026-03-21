@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Work, Episode
+from .models import Episode, Work
 
 
 class WorkCreateForm(forms.ModelForm):

@@ -1,19 +1,20 @@
+from asgiref.sync import sync_to_async
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
 from django.http import HttpResponse
-from django.shortcuts import render, aget_object_or_404
+from django.shortcuts import aget_object_or_404, render
 from django.views.decorators.http import require_http_methods
-from asgiref.sync import sync_to_async
 
-from ..models import Work, Episode, Rating
-from ..forms import WorkCreateForm, EpisodeCreateForm
+from ..forms import EpisodeCreateForm, WorkCreateForm
 from ..graph import EpisodeNode
+from ..models import Episode, Rating, Work
 from ..watermark import embed_watermark
 
 
 async def _get_user(request):
     from django.contrib.auth import get_user_model
     from django.contrib.auth.models import AnonymousUser
+
     User = get_user_model()
     user_id = await sync_to_async(lambda: request.user.pk)()
     if user_id is None:
@@ -44,10 +45,14 @@ async def htmx_episode_list(request, work_pk):
     """HTMX 에피소드 목록."""
     work = await aget_object_or_404(Work.objects.select_related("author"), pk=work_pk)
     episodes = [ep async for ep in Episode.objects.filter(work=work).select_related("author")]
-    return render(request, "stories/partials/episode_list.html", {
-        "work": work,
-        "episodes": episodes,
-    })
+    return render(
+        request,
+        "stories/partials/episode_list.html",
+        {
+            "work": work,
+            "episodes": episodes,
+        },
+    )
 
 
 @require_http_methods(["POST"])
@@ -58,9 +63,14 @@ async def htmx_work_create(request):
     is_valid = await sync_to_async(form.is_valid)()
 
     if not is_valid:
-        return render(request, "stories/partials/work_create_form.html", {
-            "form": form,
-        }, status=400)
+        return render(
+            request,
+            "stories/partials/work_create_form.html",
+            {
+                "form": form,
+            },
+            status=400,
+        )
 
     work = form.instance
     work.author = await _get_user(request)
@@ -81,10 +91,15 @@ async def htmx_episode_create(request, work_pk):
     is_valid = await sync_to_async(form.is_valid)()
 
     if not is_valid:
-        return render(request, "stories/partials/episode_write_form.html", {
-            "form": form,
-            "work": work,
-        }, status=400)
+        return render(
+            request,
+            "stories/partials/episode_write_form.html",
+            {
+                "form": form,
+                "work": work,
+            },
+            status=400,
+        )
 
     episode = form.instance
     episode.work = work
@@ -131,11 +146,15 @@ async def htmx_episode_read(request, work_pk, episode_number):
     # 콘텐츠에 워터마크 삽입
     watermarked_content = embed_watermark(str(episode.content or ""), wm_id)
 
-    return render(request, "stories/partials/episode_content.html", {
-        "episode": episode,
-        "watermarked_content": watermarked_content,
-        "user_watermark_label": wm_label,
-    })
+    return render(
+        request,
+        "stories/partials/episode_content.html",
+        {
+            "episode": episode,
+            "watermarked_content": watermarked_content,
+            "user_watermark_label": wm_label,
+        },
+    )
 
 
 @require_http_methods(["POST"])
@@ -165,10 +184,14 @@ async def htmx_rate_episode(request, work_pk, episode_number):
     episode.rating_count = await Rating.objects.filter(episode=episode).acount()
     await episode.asave(update_fields=["avg_rating", "rating_count"])
 
-    return render(request, "stories/partials/rating_result.html", {
-        "episode": episode,
-        "user_score": score,
-    })
+    return render(
+        request,
+        "stories/partials/rating_result.html",
+        {
+            "episode": episode,
+            "user_score": score,
+        },
+    )
 
 
 @require_http_methods(["GET"])
@@ -186,11 +209,13 @@ async def htmx_next_episodes(request, work_pk, episode_number):
     enriched = []
     for item in next_list:
         ep = await Episode.objects.select_related("author").aget(pk=item["node"].episode_id)
-        enriched.append({
-            "episode": ep,
-            "is_original": item["is_original"],
-            "visit_count": item["visit_count"],
-        })
+        enriched.append(
+            {
+                "episode": ep,
+                "is_original": item["is_original"],
+                "visit_count": item["visit_count"],
+            }
+        )
 
     # 분기 가능 여부 확인 (20화 제한 + 라이선스)
     work = await aget_object_or_404(Work, pk=work_pk)
@@ -201,12 +226,16 @@ async def htmx_next_episodes(request, work_pk, episode_number):
         and request.user.is_authenticated
     )
 
-    return render(request, "stories/partials/next_episodes.html", {
-        "episode": episode,
-        "next_list": enriched,
-        "can_branch": can_branch,
-        "work": work,
-    })
+    return render(
+        request,
+        "stories/partials/next_episodes.html",
+        {
+            "episode": episode,
+            "next_list": enriched,
+            "can_branch": can_branch,
+            "work": work,
+        },
+    )
 
 
 @require_http_methods(["POST"])
@@ -226,11 +255,16 @@ async def htmx_branch_create(request, work_pk, episode_number):
     form = EpisodeCreateForm(request.POST)
     is_valid = await sync_to_async(form.is_valid)()
     if not is_valid:
-        return render(request, "stories/partials/branch_create_form.html", {
-            "form": form,
-            "origin_episode": origin_episode,
-            "work": origin_work,
-        }, status=400)
+        return render(
+            request,
+            "stories/partials/branch_create_form.html",
+            {
+                "form": form,
+                "origin_episode": origin_episode,
+                "work": origin_work,
+            },
+            status=400,
+        )
 
     user = await _get_user(request)
     branch_episode = form.instance
@@ -256,9 +290,7 @@ async def htmx_visit_episode(request, work_pk, from_number, to_number):
     from_ep = await aget_object_or_404(Episode, work_id=work_pk, episode_number=from_number)
     to_ep = await aget_object_or_404(Episode, work_id=work_pk, episode_number=to_number)
 
-    await sync_to_async(EpisodeNode.increment_visit)(
-        from_ep.pk, to_ep.pk, to_ep.avg_rating
-    )
+    await sync_to_async(EpisodeNode.increment_visit)(from_ep.pk, to_ep.pk, to_ep.avg_rating)
 
     response = HttpResponse()
     response["HX-Redirect"] = f"/stories/{work_pk}/episodes/{to_number}/"

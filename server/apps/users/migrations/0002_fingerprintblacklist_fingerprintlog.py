@@ -6,34 +6,42 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0001_initial'),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FingerprintBlacklist',
+            name="FingerprintBlacklist",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fingerprint', models.CharField(max_length=64, unique=True, verbose_name='핑거프린트')),
-                ('reason', models.TextField(verbose_name='차단 사유')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("fingerprint", models.CharField(max_length=64, unique=True, verbose_name="핑거프린트")),
+                ("reason", models.TextField(verbose_name="차단 사유")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'db_table': 'fingerprint_blacklist',
+                "db_table": "fingerprint_blacklist",
             },
         ),
         migrations.CreateModel(
-            name='FingerprintLog',
+            name="FingerprintLog",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fingerprint', models.CharField(db_index=True, max_length=64, verbose_name='핑거프린트')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='fingerprint_logs', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("fingerprint", models.CharField(db_index=True, max_length=64, verbose_name="핑거프린트")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="fingerprint_logs",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'fingerprint_logs',
+                "db_table": "fingerprint_logs",
             },
         ),
     ]

@@ -1,9 +1,7 @@
-import json
-
+from asgiref.sync import sync_to_async
 from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
-from asgiref.sync import sync_to_async
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from .exporters import DB_UP, NEO4J_UP

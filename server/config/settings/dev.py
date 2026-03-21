@@ -1,36 +1,37 @@
 """
 Django settings for project - Development configuration.
 """
+
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
 # Development-specific apps
 INSTALLED_APPS += [
-    'django_extensions',
-    'pattern_library',
+    "django_extensions",
+    "pattern_library",
 ]
 
 # CORS for development
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Pattern library iframe rendering
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Pattern library loader_tags (dev only)
-TEMPLATES[0]['OPTIONS']['builtins'] = [
-    'pattern_library.loader_tags',
+TEMPLATES[0]["OPTIONS"]["builtins"] = [
+    "pattern_library.loader_tags",
 ]
 
 # Pattern Library Configuration

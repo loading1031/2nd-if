@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import sync_views, async_views
+from .views import async_views, sync_views
 
 app_name = "stories"
 
@@ -21,10 +21,26 @@ htmx_urlpatterns = [
     path("htmx/<int:work_pk>/episodes/", async_views.htmx_episode_list, name="htmx_episode_list"),
     path("htmx/<int:work_pk>/episodes/create/", async_views.htmx_episode_create, name="htmx_episode_create"),
     path("htmx/<int:work_pk>/episodes/<int:episode_number>/", async_views.htmx_episode_read, name="htmx_episode_read"),
-    path("htmx/<int:work_pk>/episodes/<int:episode_number>/rate/", async_views.htmx_rate_episode, name="htmx_rate_episode"),
-    path("htmx/<int:work_pk>/episodes/<int:episode_number>/next/", async_views.htmx_next_episodes, name="htmx_next_episodes"),
-    path("htmx/<int:work_pk>/episodes/<int:episode_number>/branch/", async_views.htmx_branch_create, name="htmx_branch_create"),
-    path("htmx/<int:work_pk>/episodes/<int:from_number>/visit/<int:to_number>/", async_views.htmx_visit_episode, name="htmx_visit_episode"),
+    path(
+        "htmx/<int:work_pk>/episodes/<int:episode_number>/rate/",
+        async_views.htmx_rate_episode,
+        name="htmx_rate_episode",
+    ),
+    path(
+        "htmx/<int:work_pk>/episodes/<int:episode_number>/next/",
+        async_views.htmx_next_episodes,
+        name="htmx_next_episodes",
+    ),
+    path(
+        "htmx/<int:work_pk>/episodes/<int:episode_number>/branch/",
+        async_views.htmx_branch_create,
+        name="htmx_branch_create",
+    ),
+    path(
+        "htmx/<int:work_pk>/episodes/<int:from_number>/visit/<int:to_number>/",
+        async_views.htmx_visit_episode,
+        name="htmx_visit_episode",
+    ),
 ]
 
 urlpatterns += htmx_urlpatterns

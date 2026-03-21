@@ -2,7 +2,6 @@ import time
 
 from prometheus_client import Counter, Gauge, Histogram
 
-
 REQUEST_COUNT = Counter(
     "django_http_requests_total",
     "Total HTTP requests",
@@ -44,7 +43,7 @@ class PrometheusMetricsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         # Support both sync and async Django middleware
-        if hasattr(get_response, "__call__"):
+        if callable(get_response):
             import asyncio
 
             if asyncio.iscoroutinefunction(get_response):
@@ -77,7 +76,6 @@ class PrometheusMetricsMiddleware:
     def __call__(self, request):
         if self._is_async:
             # Let Django's ASGIHandler use __acall__
-            import asyncio
 
             return self.__acall__(request)
 

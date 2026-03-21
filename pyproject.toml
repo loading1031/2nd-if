@@ -46,3 +46,30 @@ markers = [
 # Unit 테스트: python -m pytest server/apps/
 # E2E 테스트: python -m pytest server/tests/e2e/ -o "asyncio_mode=strict"
 # 전체: 위 두 명령을 순서대로 실행
+
+[tool.ruff]
+target-version = "py314"
+src = ["server"]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "DJ",   # flake8-django
+]
+ignore = [
+    "E501",  # line-length (formatter handles this)
+    "F403",  # star imports (Django settings pattern)
+    "F405",  # may be undefined from star imports (Django settings pattern)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config"]
+
+[tool.ruff.format]
+quote-style = "double"
