@@ -51,6 +51,7 @@
 - [[license]] — 분기 허용 여부 결정
 - [[next-episode-ui]] — 분기된 다음 화를 가중치 순으로 표시
 - [[auth]] — 분기 생성자 인증
+- [[plagiarism]] — 분기 생성 시 유사도 자동 검사 (MVP 이후)
 
 ## 디자인 문서
 - [[design-episode-reader]] - 에피소드 리더 페이지 (분기 선택 UI 포함)
