@@ -1,0 +1,56 @@
+<article class="max-w-4xl mx-auto">
+    <div class="breadcrumbs text-sm mb-6">
+        <ul>
+            <li><a href="{% url 'stories:work_detail' episode.work.pk %}">{{ episode.work.title }}</a></li>
+            <li>{{ episode.episode_number }}화: {{ episode.title }}</li>
+        </ul>
+    </div>
+
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold mb-2">{{ episode.title }}</h1>
+        <div class="flex items-center gap-3 text-base-content/60">
+            <span>by {{ episode.author.nickname }}</span>
+            <span>·</span>
+            <span>👁 {{ episode.view_count }}</span>
+            {% if episode.avg_rating %}
+            <span>·</span>
+            <span>★ {{ episode.avg_rating|floatformat:1 }} ({{ episode.rating_count }})</span>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="prose prose-lg max-w-none mb-8">
+        {{ episode.content|safe }}
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <p class="text-sm text-base-content/50 mb-2">이 에피소드를 평가해주세요</p>
+            <div class="rating rating-lg">
+                {% for i in "12345" %}
+                <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400"
+                       value="{{ i }}"
+                       hx-post="{% url 'stories:htmx_rate_episode' episode.work_id episode.episode_number %}"
+                       hx-vals='{"score": "{{ i }}"}'
+                       hx-target="#rating-result"
+                       hx-swap="innerHTML" />
+                {% endfor %}
+            </div>
+            <div id="rating-result"></div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="flex justify-between">
+        {% if episode.episode_number > 1 %}
+        <a href="{% url 'stories:episode_read' episode.work_id episode.episode_number|add:'-1' %}"
+           class="btn btn-ghost">← 이전 화</a>
+        {% else %}
+        <div></div>
+        {% endif %}
+        <a href="{% url 'stories:work_detail' episode.work.pk %}" class="btn btn-ghost">목록</a>
+    </div>
+</article>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}에피소드 - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div id="episode-content"
+     hx-get="{% url 'stories:htmx_episode_read' work_id episode_number %}"
+     hx-trigger="load"
+     hx-indicator="#read-spinner">
+    <div class="flex justify-center py-12">
+        <span id="read-spinner" class="loading loading-spinner loading-lg htmx-indicator"></span>
+    </div>
+</div>
+{% endblock %}

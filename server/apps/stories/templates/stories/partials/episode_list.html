@@ -1,0 +1,48 @@
+<div class="mb-6">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h1 class="text-3xl font-bold">{{ work.title }}</h1>
+            <p class="text-base-content/60 mt-1">by {{ work.author.nickname }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="badge badge-outline">{{ work.get_license_display }}</span>
+            <span class="badge badge-{{ work.status }}">{{ work.get_status_display }}</span>
+        </div>
+    </div>
+    {% if work.description %}
+    <p class="text-base-content/70 mb-4">{{ work.description }}</p>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated and user.id == work.author_id %}
+<div class="mb-4">
+    <a href="{% url 'stories:episode_write' work.pk %}" class="btn btn-primary btn-sm">새 에피소드 작성</a>
+</div>
+{% endif %}
+
+<div class="space-y-2">
+    {% for episode in episodes %}
+    <a href="{% url 'stories:episode_read' episode.work_id episode.episode_number %}"
+       class="block card card-compact bg-base-100 shadow-sm hover:shadow-md transition-shadow">
+        <div class="card-body flex-row items-center justify-between">
+            <div>
+                <span class="font-mono text-base-content/50 mr-2">{{ episode.episode_number }}화</span>
+                <span class="font-semibold">{{ episode.title }}</span>
+                {% if episode.is_paid %}
+                <span class="badge badge-warning badge-sm ml-2">{{ episode.price }} 코인</span>
+                {% endif %}
+            </div>
+            <div class="flex items-center gap-3 text-sm text-base-content/50">
+                {% if episode.avg_rating %}
+                <span>★ {{ episode.avg_rating|floatformat:1 }}</span>
+                {% endif %}
+                <span>👁 {{ episode.view_count }}</span>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <div class="text-center py-12">
+        <p class="text-base-content/50">아직 에피소드가 없습니다.</p>
+    </div>
+    {% endfor %}
+</div>

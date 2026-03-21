@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
     path('users/', include('apps.users.urls')),
+    path('stories/', include('apps.stories.urls')),
 ]
 
 # Pattern library (development only)
