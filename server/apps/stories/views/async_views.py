@@ -8,12 +8,16 @@ from asgiref.sync import sync_to_async
 from ..models import Work, Episode, Rating
 from ..forms import WorkCreateForm, EpisodeCreateForm
 from ..graph import EpisodeNode
+from ..watermark import embed_watermark
 
 
 async def _get_user(request):
     from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import AnonymousUser
     User = get_user_model()
     user_id = await sync_to_async(lambda: request.user.pk)()
+    if user_id is None:
+        return AnonymousUser()
     return await User.objects.aget(pk=user_id)
 
 
@@ -113,8 +117,24 @@ async def htmx_episode_read(request, work_pk, episode_number):
     episode.view_count += 1
     await episode.asave(update_fields=["view_count"])
 
+    # 워터마크 식별자 결정
+    user = await _get_user(request)
+    if user.is_authenticated:
+        wm_id = str(user.id)
+        wm_label = user.nickname
+    else:
+        if not request.session.session_key:
+            await sync_to_async(request.session.create)()
+        wm_id = f"anon:{request.session.session_key[:16]}"
+        wm_label = f"anon-{request.session.session_key[:8]}"
+
+    # 콘텐츠에 워터마크 삽입
+    watermarked_content = embed_watermark(str(episode.content or ""), wm_id)
+
     return render(request, "stories/partials/episode_content.html", {
         "episode": episode,
+        "watermarked_content": watermarked_content,
+        "user_watermark_label": wm_label,
     })
 
 

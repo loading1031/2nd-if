@@ -8,6 +8,11 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
@@ -30,6 +35,10 @@
             </p>
         </div>
     </footer>
+
+    <!-- FingerprintJS + Copy Protection -->
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
+    <script src="{% static 'js/copy-protection.js' %}"></script>
 
     {% block extra_scripts %}{% endblock %}
 </body>

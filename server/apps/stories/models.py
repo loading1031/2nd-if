@@ -12,6 +12,12 @@ class Work(models.Model):
         COMPLETED = "completed", "완결"
         SUSPENDED = "suspended", "중단"
 
+    class Font(models.TextChoices):
+        DEFAULT = "default", "기본 (Pretendard)"
+        SERIF = "serif", "명조 (Noto Serif KR)"
+        CLASSIC = "classic", "궁서 (Gowun Batang)"
+        MODERN = "modern", "고딕 (Noto Sans KR)"
+
     class License(models.TextChoices):
         FREE = "free", "자유 분기 허용"
         NON_COMMERCIAL = "non_commercial", "비상업적 분기만 허용"
@@ -36,6 +42,12 @@ class Work(models.Model):
         max_length=20,
         choices=Status.choices,
         default=Status.ONGOING,
+    )
+    font = models.CharField(
+        "글씨체",
+        max_length=20,
+        choices=Font.choices,
+        default=Font.DEFAULT,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
