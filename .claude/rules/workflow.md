@@ -64,16 +64,36 @@ git merge feat/article-crud
 - 작업 간 의존성이 있을 때 (B가 A의 결과에 의존)
 - 단일 작업이거나 작업량이 적을 때
 
+### 워크트리 에이전트 역할 분리 (충돌 방지)
+
+워크트리 에이전트는 **새 파일 생성만** 한다. 기존 공통 파일은 수정하지 않는다.
+
+```
+워크트리 Agent: 새 파일만 생성
+  - components/, patterns/ 템플릿
+  - docs/design/ 디자인 문서
+  - 기존 파일(specs/, index.md 등) 수정 금지
+
+    ↓ merge (충돌 없음)
+
+dev에서 정리: /merge 스킬로 후처리
+  - specs 문서에 디자인 역링크 추가
+  - index.md 갱신
+  - CSS 빌드
+  - 충돌 검사 (/doc check)
+```
+
 ### 실행 방법
 
 ```
 1. Agent tool에 isolation: "worktree" 설정
-2. 각 subagent에 명확한 작업 범위와 브랜치명 지시
-3. 결과 확인 후 dev 브랜치에 순차 merge
+2. 각 subagent에 "기존 파일 수정 금지" 명시
+3. 전체 완료 후 dev에서 순차 merge
+4. /merge 스킬로 후처리 (역링크, CSS, 검사)
 ```
 
 ### 주의사항
 
+- 워크트리 에이전트에게 "기존 파일 수정 금지, 새 파일 생성만" 반드시 명시
 - merge 전 각 worktree의 변경 사항을 반드시 리뷰
-- 충돌 발생 시 사용자에게 확인 후 해결
 - worktree에서 생성된 브랜치는 merge 후 정리
