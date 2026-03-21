@@ -1,0 +1,28 @@
+<div class="space-y-6 max-w-3xl">
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">원작 에피소드 (무료)</p>
+        {% include "components/episode_row.html" with episode_number=1 title="프롤로그 - 모든 것의 시작" author="원작자" view_count=12450 avg_rating=4.8 is_original=True is_paid=False %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">원작 에피소드 (유료)</p>
+        {% include "components/episode_row.html" with episode_number=5 title="반전 - 숨겨진 진실" author="원작자" view_count=8230 avg_rating=4.9 is_original=True is_paid=True price=3 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">분기 에피소드 (무료)</p>
+        {% include "components/episode_row.html" with episode_number=3 title="다른 선택 - 만약 그때..." author="2차창작자A" view_count=3210 avg_rating=4.2 is_original=False is_paid=False %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">분기 에피소드 (유료)</p>
+        {% include "components/episode_row.html" with episode_number=4 title="평행세계의 결말" author="2차창작자B" view_count=1580 avg_rating=4.0 is_original=False is_paid=True price=2 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">별점 없는 에피소드</p>
+        {% include "components/episode_row.html" with episode_number=6 title="새로운 시작" author="원작자" view_count=42 is_original=True is_paid=False %}
+    </div>
+
+</div>
