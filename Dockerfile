@@ -54,14 +54,8 @@ FROM python:3.14-slim AS runtime
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install Grafana Alloy (metrics push sidecar)
-RUN apt-get update && apt-get install -y --no-install-recommends curl && \
-    curl -sLO https://github.com/grafana/alloy/releases/latest/download/alloy-linux-amd64.zip && \
-    apt-get install -y --no-install-recommends unzip && \
-    unzip alloy-linux-amd64.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/alloy && \
-    rm alloy-linux-amd64.zip && \
-    apt-get purge -y curl unzip && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+# Copy Grafana Alloy binary from official image
+COPY --from=grafana/alloy:latest /bin/alloy /usr/local/bin/alloy
 
 WORKDIR /app
 
