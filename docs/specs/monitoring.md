@@ -2,25 +2,43 @@
 
 > 기획 문서
 
-## 상태: 기획 완료
+## 상태: 구현 완료
 
 ## 개요
 
-Prometheus + Grafana 기반 모니터링 시스템으로 2nd-if 플랫폼의 성능, 가용성, 비즈니스 메트릭을 수집하고 시각화한다.
+Grafana Cloud + Grafana Alloy 기반 모니터링 시스템.
+Django 앱의 성능, 가용성, 비즈니스 메트릭을 수집하고 시각화한다.
 
 ## 아키텍처
 
 ```
 Django App (:8000)
-  ├── /metrics/  ← Prometheus 스크래핑 엔드포인트
-  └── /health/   ← 헬스체크 엔드포인트 (JSON)
+  ├── /metrics/  ← Prometheus 텍스트 포맷 노출
+  ├── /health/   ← 헬스체크 JSON (DB + Neo4j)
+  └── /data/logs/django.log ← 파일 로그 (RotatingFileHandler)
 
-Prometheus (:9090)
-  └── 15초 간격으로 /metrics/ 스크래핑
+Grafana Alloy (사이드카, 같은 컨테이너)
+  ├── localhost:8000/metrics/ scrape (60초) → Grafana Cloud Prometheus push
+  └── /data/logs/django.log tail → Grafana Cloud Loki push
 
-Grafana (:3000)
-  └── Prometheus를 데이터소스로 대시보드 시각화
+Grafana Cloud (SaaS, 영구 무료)
+  ├── Prometheus — 메트릭 저장/조회 (10K series, 14일)
+  ├── Loki — 로그 저장/조회 (50GB/월, 14일)
+  └── Dashboard — 시각화/알림
 ```
+
+## 의사결정 기록
+
+### Alloy 사이드카 선택 이유
+- 로컬 docker-compose: Prometheus가 `/metrics/`를 직접 pull (텍스트 포맷 OK)
+- Grafana Cloud: push 필요 → Prometheus remote write (snappy+protobuf) 필수
+- Django에서 직접 push 구현: 복잡 (protobuf 인코딩 필요)
+- **Alloy**: 공식 경량 에이전트. pull→push 변환 자동 처리. 같은 컨테이너에서 백그라운드 실행
+
+### 로그 수집: 파일 tail 방식
+- Django logging → RotatingFileHandler (`/data/logs/django.log`, 10MB×3 백업)
+- Alloy가 파일을 tail해서 Loki로 push
+- 최대 디스크 사용: 40MB
 
 ## 수집 메트릭
 
@@ -48,17 +66,16 @@ Grafana (:3000)
 | `app_db_up` | Gauge | Django DB 연결 상태 (1=정상, 0=장애) |
 | `app_neo4j_up` | Gauge | Neo4j 연결 상태 (1=정상, 0=장애) |
 
-## Grafana 대시보드 패널
+## 구현 파일
 
-1. **Request Rate** — 초당 요청 수 (method별)
-2. **Response Time** — p50, p95, p99 응답 시간
-3. **Error Rate** — 4xx, 5xx 에러 비율
-4. **Active Users** — 활성 사용자 수
-5. **Story Views per hour** — 시간당 작품 조회 수
-6. **Branch Creation Rate** — 시간당 분기 생성 수
-7. **Neo4j Health** — Neo4j 연결 상태
-8. **Database Health** — Django DB 연결 상태
-9. **Database Query Time** — 평균 요청 처리 시간
+| 파일 | 역할 |
+|------|------|
+| `server/apps/monitoring/middleware.py` | 요청 메트릭 수집 (PrometheusMetricsMiddleware) |
+| `server/apps/monitoring/exporters.py` | 비즈니스/헬스 메트릭 정의 |
+| `server/apps/monitoring/views.py` | `/health/`, `/metrics/` 엔드포인트 |
+| `docker/alloy/config.alloy` | Alloy 설정 (scrape + tail → push) |
+| `scripts/start.sh` | 컨테이너 시작 (migrate → Alloy → gunicorn) |
+| `docs/grafana/dashboard.json` | Grafana 대시보드 JSON (Import용) |
 
 ## 알림 규칙 (향후 구현 예정)
 
@@ -69,10 +86,9 @@ Grafana (:3000)
 | Neo4j 연결 실패 (3분 이상) | critical | Slack |
 | Django DB 연결 실패 (1분 이상) | critical | Slack |
 
-## 디자인 문서
-
-- (해당 없음 — 인프라 기능이므로 UI 디자인 불필요)
+## 의존성
+- [[infra]] — Railway 배포, Grafana Cloud 계정
 
 ## 개발 문서
-
 - [[dev-monitoring]] — 모니터링 시스템 개발 가이드
+- [[dev-grafana-cloud]] — Grafana Cloud 연동 가이드

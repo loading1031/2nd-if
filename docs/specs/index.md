@@ -15,6 +15,10 @@
 - [[auth]] - 인증 시스템
 - [[social-login]] - 소셜 로그인 (Google + X + Instagram)
 
+## 인프라
+- [[infra]] - 인프라 구성 (Railway + Neo4j Aura + Grafana Cloud)
+- [[monitoring]] - 모니터링 시스템 (Alloy + Grafana Cloud)
+
 ## 후속 (MVP 이후)
 - [[revenue]] - 수익 모델 (코인 직접 결제 + 구글 광고)
 - [[point-system]] - 포인트 시스템 (원작자 홍보비 → 2차 창작자 보상)

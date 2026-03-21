@@ -2,50 +2,75 @@
 
 > 개발 문서
 
-## 상태: 미구현
+## 상태: 구현 완료
 
 ## 기획
 - [[monitoring]] — 모니터링 기획
 - [[infra]] — 인프라 기획
 
 ## 개요
-기존 셀프호스팅 Prometheus+Grafana를 Grafana Cloud Free 티어로 전환.
-Django에서 메트릭과 로그를 Grafana Cloud로 push.
+Grafana Alloy 사이드카가 Django `/metrics/` scrape + 로그 파일 tail → Grafana Cloud로 push.
 
-## 구현 위치
-- 설정: `server/config/settings/prod.py`
-- 로그: `server/apps/monitoring/log_config.py` (새 파일)
-- 미들웨어: `server/apps/monitoring/middleware.py` (기존 유지)
-
-## 설정 방법
-
-### 1. Grafana Cloud 계정 생성
-1. https://grafana.com/auth/sign-up/create-user 에서 가입
-2. Stack 생성 (region: ap-southeast-1 또는 us-central-1)
-3. API Key 발급 (Grafana.com > My Account > API Keys > Add API Key)
-
-### 2. Prometheus Remote Write
-Grafana Cloud에서 Prometheus 연결 정보 확인:
-- Remote Write Endpoint: `https://prometheus-prod-xx.grafana.net/api/prom/push`
-- Username: (숫자 ID)
-- Password: API Key
-
-### 3. Loki Log Push
-별도 패키지 (python-logging-loki 등)로 Django 로그를 Loki에 push.
-
-### 4. 환경변수
-```bash
-flyctl secrets set \
-  GRAFANA_CLOUD_API_KEY="glc_..." \
-  GRAFANA_CLOUD_PROM_URL="https://..." \
-  GRAFANA_CLOUD_LOKI_URL="https://..."
+## 아키텍처
 ```
+Django /metrics/ ← Alloy scrape (60s) → Grafana Cloud Prometheus
+Django /data/logs/django.log ← Alloy tail → Grafana Cloud Loki
+```
+
+## 구현 파일
+| 파일 | 역할 |
+|------|------|
+| `docker/alloy/config.alloy` | Alloy 설정 (scrape + tail → push) |
+| `scripts/start.sh` | Alloy 백그라운드 시작 |
+| `server/apps/monitoring/middleware.py` | 요청 메트릭 수집 |
+| `server/apps/monitoring/views.py` | `/health/`, `/metrics/` 엔드포인트 |
+| `server/config/settings/prod.py` | 로깅 → 파일 출력 (RotatingFileHandler) |
+| `docs/grafana/dashboard.json` | 대시보드 JSON (Import용) |
+
+## Grafana Cloud 계정 설정
+
+### 1. 가입
+https://grafana.com/auth/sign-up/create-user
+
+### 2. Access Policy 토큰 발급
+대시보드 → **Administration** → **Access Policies** → **Create access policy**
+- Scope: `metrics:write`, `logs:write`
+- **Add token** → 토큰 복사
+
+### 3. Prometheus 정보 확인
+Grafana Cloud 대시보드 → Stack → **Prometheus** → **Details**
+- Remote Write Endpoint URL
+- Username (숫자 ID)
+
+### 4. Loki 정보 확인
+Stack → **Loki** → **Details**
+- URL (호스트만, 경로 불포함)
+- Username (숫자 ID)
+
+### 5. Railway 환경변수
+| 변수 | 예시 |
+|------|------|
+| `GRAFANA_CLOUD_API_KEY` | `glc_...` |
+| `GRAFANA_CLOUD_PROM_URL` | `https://prometheus-prod-xx.grafana.net/api/prom/push` |
+| `GRAFANA_CLOUD_PROM_USER` | `123456` |
+| `GRAFANA_CLOUD_LOKI_URL` | `https://logs-prod-xx.grafana.net` |
+| `GRAFANA_CLOUD_LOKI_USER` | `123456` |
+
+## 대시보드 Import
+1. Grafana 대시보드 → **Dashboards** → **New** → **Import**
+2. `docs/grafana/dashboard.json` 내용 붙여넣기
+3. Import
+
+## 조회 방법
+- **메트릭**: Explore → secondary-prom → `django_http_requests_total`
+- **로그**: Explore → grafanacloud-logs → `{app="2nd-if"}`
+- **대시보드**: Dashboards → 2nd-if Django
 
 ## 무료 한도
 | 항목 | 한도 |
 |------|------|
-| 메트릭 | 10,000 series, 14일 보존 |
-| 로그 | 50GB/월, 14일 보존 |
-| 트레이스 | 50GB/월 |
+| 메트릭 (Prometheus) | 10,000 series, 14일 보존 |
+| 로그 (Loki) | 50GB/월, 14일 보존 |
 | 알림 | 무제한 |
 | 사용자 | 3명 |
+| 기간 | **영구 무료** (크레딧 아님) |
