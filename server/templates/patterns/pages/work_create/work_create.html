@@ -1,0 +1,65 @@
+{% extends "patterns/base_page.html" %}
+
+{% block title %}새 작품 만들기 - 2nd-if{% endblock %}
+
+{% block nav %}
+<nav class="navbar bg-base-100 shadow-sm">
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <div class="flex-1">
+            <a href="#" class="text-xl font-bold">2nd-if</a>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="#" class="btn btn-ghost btn-sm">작품 목록</a>
+            <span class="text-sm text-base-content/60">user@example.com</span>
+            <button class="btn btn-ghost btn-sm">로그아웃</button>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-2xl font-bold mb-8">새 작품 만들기</h1>
+
+    <form class="space-y-6"
+        hx-post="#"
+        hx-target="body"
+        hx-indicator="#submit-loading">
+
+        {# Title Field #}
+        {% include "components/form_field.html" with label="작품 제목" type="text" name="title" placeholder="작품 제목을 입력하세요" required="true" %}
+
+        {# Description Field #}
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">작품 소개</span>
+            </div>
+            <textarea
+                name="description"
+                class="textarea textarea-bordered w-full"
+                rows="4"
+                placeholder="작품에 대한 간단한 소개를 작성하세요 (선택사항)"></textarea>
+        </label>
+
+        {# License Selection #}
+        {% include "components/license_selector.html" with name="license" selected="free" %}
+
+        {# License Info #}
+        <div class="alert alert-info">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="text-sm">라이선스는 작품 생성 후에도 변경할 수 있습니다. 단, 이미 생성된 분기에는 소급 적용되지 않습니다.</span>
+        </div>
+
+        {# Submit Buttons #}
+        <div class="flex justify-end gap-3 pt-4">
+            <a href="#" class="btn btn-ghost">취소</a>
+            <button type="submit" class="btn btn-primary">
+                <span id="submit-loading" class="loading loading-spinner loading-sm htmx-indicator"></span>
+                작품 만들기
+            </button>
+        </div>
+    </form>
+</main>
+{% endblock %}

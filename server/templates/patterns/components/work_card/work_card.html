@@ -1,0 +1,21 @@
+<div class="space-y-6">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">연재중 (모든 정보 표시)</p>
+        {% include "components/work_card.html" with title="달빛 아래의 약속" author="김소설" status="연재중" description="평범한 고등학생이 달빛 아래에서 발견한 고대의 책. 그 책을 펼치는 순간, 전혀 다른 세계의 문이 열리고..." episode_count=24 view_count=15200 branch_count=8 avg_rating=4.5 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">완결</p>
+        {% include "components/work_card.html" with title="시간의 끝에서" author="이작가" status="완결" description="시간여행자가 마지막으로 도착한 곳은 모든 것이 시작된 그날이었다." episode_count=120 view_count=89400 branch_count=42 avg_rating=4.8 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">중단</p>
+        {% include "components/work_card.html" with title="잊혀진 왕국의 기사" author="박판타지" status="중단" description="중세 판타지 세계에서 벌어지는 기사들의 이야기." episode_count=35 view_count=4300 branch_count=2 avg_rating=3.9 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">최소 정보 (제목, 작가만)</p>
+        {% include "components/work_card.html" with title="새로운 시작" author="신인작가" %}
+    </div>
+</div>
