@@ -1,7 +1,6 @@
-{# 사용법: {% include "components/next_episode_card.html" with episode_number=31 title="제목" author="작가명" is_original=True avg_rating="4.2" visit_count="5678" %}
-   필수: episode_number, title, author
-   선택: is_original (default: False), avg_rating (default: ""), visit_count (default: "0"), extra_class
-#}
+{# 사용법: include "components/next_episode_card.html" with episode_number=31 title="제목" author="작가명" is_original=True avg_rating="4.2" visit_count="5678" #}
+{# 필수: episode_number, title, author #}
+{# 선택: is_original (default: False), avg_rating (default: ""), visit_count (default: "0"), extra_class #}
 <a href="#" class="card card-compact bg-base-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer {{ extra_class }}
     {% if is_original %}border-2 border-primary{% else %}border border-base-300{% endif %}">
     <div class="card-body flex-row items-center gap-4">

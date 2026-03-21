@@ -84,14 +84,127 @@
 
     {# 에피소드 목록 #}
     <div id="episode-list" class="space-y-2">
-        {% include "components/episode_row.html" with episode_number=1 title="프롤로그 - 모든 것의 시작" author="김작가" view_count=12450 avg_rating=4.8 is_original=True is_paid=False %}
-        {% include "components/episode_row.html" with episode_number=2 title="시간의 문을 열다" author="김작가" view_count=11230 avg_rating=4.7 is_original=True is_paid=False %}
-        {% include "components/episode_row.html" with episode_number=3 title="과거로의 여행" author="김작가" view_count=10100 avg_rating=4.6 is_original=True is_paid=False %}
-        {% include "components/episode_row.html" with episode_number=3 title="다른 선택 - 만약 문을 닫았다면" author="이분기" view_count=3210 avg_rating=4.2 is_original=False is_paid=False %}
-        {% include "components/episode_row.html" with episode_number=4 title="평행세계의 법칙" author="김작가" view_count=9870 avg_rating=4.5 is_original=True is_paid=False %}
-        {% include "components/episode_row.html" with episode_number=4 title="평행세계 - 어둠의 길" author="박창작" view_count=1580 avg_rating=4.0 is_original=False is_paid=True price=2 %}
-        {% include "components/episode_row.html" with episode_number=5 title="반전 - 숨겨진 진실" author="김작가" view_count=8230 avg_rating=4.9 is_original=True is_paid=True price=3 %}
-        {% include "components/episode_row.html" with episode_number=6 title="새로운 시작" author="김작가" view_count=42 is_original=True is_paid=False %}
+        {# Episode 1 #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">1</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">프롤로그 - 모든 것의 시작</h3>
+                    <span class="badge badge-primary badge-sm">원작</span>
+                </div>
+                <p class="text-sm text-base-content/50">김작가</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>12450</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.8</span></div>
+            </div>
+        </div>
+        {# Episode 2 #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">2</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">시간의 문을 열다</h3>
+                    <span class="badge badge-primary badge-sm">원작</span>
+                </div>
+                <p class="text-sm text-base-content/50">김작가</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>11230</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.7</span></div>
+            </div>
+        </div>
+        {# Episode 3 (원작) #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">3</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">과거로의 여행</h3>
+                    <span class="badge badge-primary badge-sm">원작</span>
+                </div>
+                <p class="text-sm text-base-content/50">김작가</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>10100</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.6</span></div>
+            </div>
+        </div>
+        {# Episode 3 (분기) #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">3</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">다른 선택 - 만약 문을 닫았다면</h3>
+                    <span class="badge badge-accent badge-sm">분기</span>
+                </div>
+                <p class="text-sm text-base-content/50">이분기</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>3210</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.2</span></div>
+            </div>
+        </div>
+        {# Episode 4 (원작) #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">4</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">평행세계의 법칙</h3>
+                    <span class="badge badge-primary badge-sm">원작</span>
+                </div>
+                <p class="text-sm text-base-content/50">김작가</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>9870</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.5</span></div>
+            </div>
+        </div>
+        {# Episode 4 (분기, 유료) #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">4</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">평행세계 - 어둠의 길</h3>
+                    <span class="badge badge-accent badge-sm">분기</span>
+                    <span class="badge badge-warning badge-sm badge-outline">2코인</span>
+                </div>
+                <p class="text-sm text-base-content/50">박창작</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>1580</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.0</span></div>
+            </div>
+        </div>
+        {# Episode 5 (원작, 유료) #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">5</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">반전 - 숨겨진 진실</h3>
+                    <span class="badge badge-primary badge-sm">원작</span>
+                    <span class="badge badge-warning badge-sm badge-outline">3코인</span>
+                </div>
+                <p class="text-sm text-base-content/50">김작가</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>8230</span></div>
+                <div class="flex items-center gap-1"><svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg><span>4.9</span></div>
+            </div>
+        </div>
+        {# Episode 6 (원작, 별점 없음) #}
+        <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
+            <div class="flex-none w-12 text-center"><span class="text-lg font-bold text-base-content/60">6</span></div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-semibold text-base-content truncate">새로운 시작</h3>
+                    <span class="badge badge-primary badge-sm">원작</span>
+                </div>
+                <p class="text-sm text-base-content/50">김작가</p>
+            </div>
+            <div class="flex-none flex items-center gap-4 text-sm text-base-content/50">
+                <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg><span>42</span></div>
+            </div>
+        </div>
     </div>
 
 </main>

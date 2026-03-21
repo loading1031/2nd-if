@@ -1,8 +1,7 @@
-{# 작품 카드 컴포넌트
-   사용법: {% include "components/work_card.html" with title="작품 제목" author="작가명" status="연재중" description="작품 소개" episode_count=12 view_count=1234 branch_count=5 avg_rating=4.2 url="#" %}
-   필수: title, author
-   선택: status (연재중/완결/중단), description, episode_count, view_count, branch_count, avg_rating, url, extra_class
-#}
+{# 작품 카드 컴포넌트 #}
+{# 사용법: include "components/work_card.html" with title="작품 제목" author="작가명" status="연재중" description="작품 소개" episode_count=12 view_count=1234 branch_count=5 avg_rating=4.2 url="#" #}
+{# 필수: title, author #}
+{# 선택: status (연재중/완결/중단), description, episode_count, view_count, branch_count, avg_rating, url, extra_class #}
 <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow {{ extra_class }}">
     <div class="card-body">
         <div class="flex items-start justify-between gap-2">

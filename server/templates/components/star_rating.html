@@ -1,10 +1,8 @@
-{# 사용법: {% include "components/star_rating.html" with name="rating" current_rating=4 readonly=False %}
-   필수: name
-   선택: current_rating (default: 0), readonly (default: False)
-
-   interactive 모드: 클릭 가능한 별점 (폼 제출용)
-   readonly 모드: 표시 전용 (카드/리스트에서 사용)
-#}
+{# 사용법: include "components/star_rating.html" with name="rating" current_rating=4 readonly=False #}
+{# 필수: name #}
+{# 선택: current_rating (default: 0), readonly (default: False) #}
+{# interactive 모드: 클릭 가능한 별점 (폼 제출용) #}
+{# readonly 모드: 표시 전용 (카드/리스트에서 사용) #}
 {% if readonly %}
 {# Readonly 모드: 표시 전용 #}
 <div class="rating rating-half rating-sm" aria-label="별점 {{ current_rating|default:'0' }}점">

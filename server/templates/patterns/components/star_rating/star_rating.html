@@ -1,17 +1,38 @@
 <div class="space-y-6">
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Empty (0점) - Interactive</p>
-        {% include "components/star_rating.html" with name="rating-empty" current_rating=0 %}
+        <div class="rating rating-lg" aria-label="별점 선택">
+            <input type="radio" name="rating-empty" value="0" class="rating-hidden" checked />
+            <input type="radio" name="rating-empty" value="1" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-empty" value="2" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-empty" value="3" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-empty" value="4" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-empty" value="5" class="mask mask-star-2 bg-warning" />
+        </div>
     </div>
 
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Partial (3점) - Interactive</p>
-        {% include "components/star_rating.html" with name="rating-partial" current_rating=3 %}
+        <div class="rating rating-lg" aria-label="별점 선택">
+            <input type="radio" name="rating-partial" value="0" class="rating-hidden" />
+            <input type="radio" name="rating-partial" value="1" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-partial" value="2" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-partial" value="3" class="mask mask-star-2 bg-warning" checked />
+            <input type="radio" name="rating-partial" value="4" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-partial" value="5" class="mask mask-star-2 bg-warning" />
+        </div>
     </div>
 
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Full (5점) - Interactive</p>
-        {% include "components/star_rating.html" with name="rating-full" current_rating=5 %}
+        <div class="rating rating-lg" aria-label="별점 선택">
+            <input type="radio" name="rating-full" value="0" class="rating-hidden" />
+            <input type="radio" name="rating-full" value="1" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-full" value="2" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-full" value="3" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-full" value="4" class="mask mask-star-2 bg-warning" />
+            <input type="radio" name="rating-full" value="5" class="mask mask-star-2 bg-warning" checked />
+        </div>
     </div>
 
     <div class="divider"></div>
@@ -19,7 +40,19 @@
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Readonly - 4.5점 (half star)</p>
         <div class="flex items-center gap-2">
-            {% include "components/star_rating.html" with name="rating-ro-half" current_rating="4.5" readonly=True %}
+            <div class="rating rating-half rating-sm" aria-label="별점 4.5점">
+                <input type="radio" class="rating-hidden" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled checked />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+            </div>
             <span class="text-sm text-base-content/60">4.5</span>
         </div>
     </div>
@@ -27,7 +60,19 @@
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Readonly - 3점</p>
         <div class="flex items-center gap-2">
-            {% include "components/star_rating.html" with name="rating-ro-3" current_rating="3" readonly=True %}
+            <div class="rating rating-half rating-sm" aria-label="별점 3점">
+                <input type="radio" class="rating-hidden" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled checked />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+            </div>
             <span class="text-sm text-base-content/60">3.0</span>
         </div>
     </div>
@@ -35,7 +80,19 @@
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Readonly - 0점 (미등록)</p>
         <div class="flex items-center gap-2">
-            {% include "components/star_rating.html" with name="rating-ro-0" current_rating=0 readonly=True %}
+            <div class="rating rating-half rating-sm" aria-label="별점 0점">
+                <input type="radio" class="rating-hidden" disabled checked />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled />
+                <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled />
+            </div>
             <span class="text-sm text-base-content/60">-</span>
         </div>
     </div>

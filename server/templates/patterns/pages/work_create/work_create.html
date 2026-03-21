@@ -27,7 +27,18 @@
         hx-indicator="#submit-loading">
 
         {# Title Field #}
-        {% include "components/form_field.html" with label="작품 제목" type="text" name="title" placeholder="작품 제목을 입력하세요" required="true" %}
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">작품 제목</span>
+            </div>
+            <input
+                id="title"
+                name="title"
+                type="text"
+                placeholder="작품 제목을 입력하세요"
+                required
+                class="input input-bordered w-full" />
+        </label>
 
         {# Description Field #}
         <label class="form-control w-full">
@@ -42,7 +53,39 @@
         </label>
 
         {# License Selection #}
-        {% include "components/license_selector.html" with name="license" selected="free" %}
+        <fieldset class="space-y-3">
+            <legend class="label">
+                <span class="label-text font-semibold">라이선스 선택</span>
+            </legend>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-primary bg-primary/5">
+                <input type="radio" name="license" value="free" class="radio radio-primary mt-0.5" checked />
+                <div>
+                    <p class="font-semibold text-sm">자유 분기 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">누구나 분기 가능, 상업적 이용 가능</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license" value="non-commercial" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">비상업적 분기만 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 가능하되 상업적 이용 금지</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license" value="share-alike" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">동일 조건 변경 허락</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 시 동일한 라이선스 적용 필수</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license" value="no-branch" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">분기 금지</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">2차 창작 불허 (읽기만 가능)</p>
+                </div>
+            </label>
+        </fieldset>
 
         {# License Info #}
         <div class="alert alert-info">

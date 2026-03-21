@@ -1,8 +1,7 @@
-{# 재사용 가능한 폼 필드 컴포넌트
-   사용법: {% include "components/form_field.html" with label="이메일" type="email" name="email" placeholder="example@email.com" error=error_msg %}
-   필수: label, type, name
-   선택: placeholder, error, required, autocomplete, id, value, extra_class
-#}
+{# 재사용 가능한 폼 필드 컴포넌트 #}
+{# 사용법: include "components/form_field.html" with label="이메일" type="email" name="email" placeholder="example@email.com" error=error_msg #}
+{# 필수: label, type, name #}
+{# 선택: placeholder, error, required, autocomplete, id, value, extra_class #}
 <label class="form-control w-full">
     <div class="label">
         <span class="label-text">{{ label }}</span>

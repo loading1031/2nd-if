@@ -1,17 +1,50 @@
 <div class="space-y-6 max-w-md">
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Text Input</p>
-        {% include "components/form_field.html" with label="이메일 주소" type="email" name="email" placeholder="example@email.com" %}
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">이메일 주소</span>
+            </div>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="example@email.com"
+                class="input input-bordered w-full" />
+        </label>
     </div>
 
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Input with Error</p>
-        {% include "components/form_field.html" with label="이메일 주소" type="email" name="email_error" value="invalid" error="올바른 이메일 주소를 입력하세요." %}
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">이메일 주소</span>
+            </div>
+            <input
+                id="email_error"
+                name="email_error"
+                type="email"
+                value="invalid"
+                class="input input-bordered w-full input-error" />
+            <div class="label">
+                <span class="label-text-alt text-error">올바른 이메일 주소를 입력하세요.</span>
+            </div>
+        </label>
     </div>
 
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Password Input</p>
-        {% include "components/form_field.html" with label="비밀번호" type="password" name="password" placeholder="••••••••" %}
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">비밀번호</span>
+            </div>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                class="input input-bordered w-full" />
+        </label>
     </div>
 
     <div>
@@ -55,10 +88,38 @@
     <div>
         <p class="text-sm text-gray-500 mb-2 font-mono">Input Sizes</p>
         <div class="space-y-2">
-            {% include "components/form_field.html" with label="" type="text" name="size_xs" placeholder="input-xs" extra_class="input-xs" %}
-            {% include "components/form_field.html" with label="" type="text" name="size_sm" placeholder="input-sm" extra_class="input-sm" %}
-            {% include "components/form_field.html" with label="" type="text" name="size_md" placeholder="input-md" extra_class="input-md" %}
-            {% include "components/form_field.html" with label="" type="text" name="size_lg" placeholder="input-lg" extra_class="input-lg" %}
+            <label class="form-control w-full">
+                <input
+                    id="size_xs"
+                    name="size_xs"
+                    type="text"
+                    placeholder="input-xs"
+                    class="input input-bordered w-full input-xs" />
+            </label>
+            <label class="form-control w-full">
+                <input
+                    id="size_sm"
+                    name="size_sm"
+                    type="text"
+                    placeholder="input-sm"
+                    class="input input-bordered w-full input-sm" />
+            </label>
+            <label class="form-control w-full">
+                <input
+                    id="size_md"
+                    name="size_md"
+                    type="text"
+                    placeholder="input-md"
+                    class="input input-bordered w-full input-md" />
+            </label>
+            <label class="form-control w-full">
+                <input
+                    id="size_lg"
+                    name="size_lg"
+                    type="text"
+                    placeholder="input-lg"
+                    class="input input-bordered w-full input-lg" />
+            </label>
         </div>
     </div>
 </div>

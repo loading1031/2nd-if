@@ -1,8 +1,7 @@
-{# 재사용 가능한 에피소드 행 컴포넌트
-   사용법: {% include "components/episode_row.html" with episode_number=1 title="시작" author="작가명" view_count=1234 avg_rating=4.5 is_original=True is_paid=False price=0 %}
-   필수: episode_number, title, author
-   선택: view_count (default: 0), avg_rating (default: None), is_original (default: False), is_paid (default: False), price (default: 0), episode_url
-#}
+{# 재사용 가능한 에피소드 행 컴포넌트 #}
+{# 사용법: include "components/episode_row.html" with episode_number=1 title="시작" author="작가명" view_count=1234 avg_rating=4.5 is_original=True is_paid=False price=0 #}
+{# 필수: episode_number, title, author #}
+{# 선택: view_count (default: 0), avg_rating (default: None), is_original (default: False), is_paid (default: False), price (default: 0), episode_url #}
 <div class="flex items-center gap-4 px-4 py-3 bg-base-100 rounded-lg hover:bg-base-200 transition-colors cursor-pointer">
     {# 에피소드 번호 #}
     <div class="flex-none w-12 text-center">

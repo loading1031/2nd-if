@@ -28,6 +28,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Pattern library iframe rendering
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
+# Pattern library loader_tags (dev only)
+TEMPLATES[0]['OPTIONS']['builtins'] = [
+    'pattern_library.loader_tags',
+]
+
 # Pattern Library Configuration
 PATTERN_LIBRARY = {
     "SECTIONS": (

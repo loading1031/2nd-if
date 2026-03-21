@@ -27,14 +27,58 @@
                     회원가입
                 </h2>
 
-                {% include "components/alert.html" with alert_type="alert-error" message=error_message %}
+                <div class="alert alert-error" role="alert">
+                    <span>입력 정보를 확인해주세요.</span>
+                </div>
 
                 <form class="space-y-4">
-                    {% include "components/form_field.html" with label="이메일 주소" type="email" name="email" placeholder="example@email.com" autocomplete="email" required=True error=email_error %}
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">이메일 주소</span>
+                        </div>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="example@email.com"
+                            autocomplete="email"
+                            required
+                            class="input input-bordered w-full input-error" />
+                        <div class="label">
+                            <span class="label-text-alt text-error">이미 등록된 이메일입니다.</span>
+                        </div>
+                    </label>
 
-                    {% include "components/form_field.html" with label="비밀번호" type="password" name="password" placeholder="••••••••" autocomplete="new-password" required=True %}
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">비밀번호</span>
+                        </div>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="••••••••"
+                            autocomplete="new-password"
+                            required
+                            class="input input-bordered w-full" />
+                    </label>
 
-                    {% include "components/form_field.html" with label="비밀번호 확인" type="password" name="password_confirm" placeholder="••••••••" autocomplete="new-password" required=True error=password_error %}
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">비밀번호 확인</span>
+                        </div>
+                        <input
+                            id="password_confirm"
+                            name="password_confirm"
+                            type="password"
+                            placeholder="••••••••"
+                            autocomplete="new-password"
+                            required
+                            class="input input-bordered w-full input-error" />
+                        <div class="label">
+                            <span class="label-text-alt text-error">비밀번호가 일치하지 않습니다.</span>
+                        </div>
+                    </label>
 
                     <button type="button" class="btn btn-primary w-full mt-2">
                         회원가입
