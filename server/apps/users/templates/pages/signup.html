@@ -17,6 +17,8 @@
 
                 {% include "components/form_field.html" with label="이메일 주소" type="email" name="email" placeholder="example@email.com" autocomplete="email" required=True error=errors.email %}
 
+                {% include "components/form_field.html" with label="닉네임" type="text" name="nickname" placeholder="닉네임을 입력하세요" required=True error=errors.nickname %}
+
                 {% include "components/form_field.html" with label="비밀번호" type="password" name="password" placeholder="••••••••" autocomplete="new-password" required=True error=errors.password %}
 
                 {% include "components/form_field.html" with label="비밀번호 확인" type="password" name="password_confirm" placeholder="••••••••" autocomplete="new-password" required=True error=errors.password_confirm %}
