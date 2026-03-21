@@ -1,0 +1,26 @@
+{% include "components/alert.html" with alert_type="alert-error" message="입력 정보를 확인해주세요." %}
+
+<form hx-post="{% url 'stories:htmx_work_create' %}"
+      hx-indicator="#create-spinner"
+      class="space-y-6">
+    {% csrf_token %}
+
+    {% include "components/form_field.html" with label="작품 제목" type="text" name="title" placeholder="작품 제목을 입력하세요" required=True error=form.title.errors.0 %}
+
+    <label class="form-control w-full">
+        <div class="label">
+            <span class="label-text">작품 소개</span>
+        </div>
+        <textarea name="description" class="textarea textarea-bordered w-full" rows="4" placeholder="작품에 대해 소개해주세요...">{{ form.description.value|default:"" }}</textarea>
+    </label>
+
+    {% include "components/license_selector.html" with name="license" %}
+
+    <div class="flex justify-end gap-3">
+        <a href="{% url 'stories:work_list' %}" class="btn btn-ghost">취소</a>
+        <button type="submit" class="btn btn-primary">
+            <span id="create-spinner" class="loading loading-spinner htmx-indicator"></span>
+            작품 생성
+        </button>
+    </div>
+</form>

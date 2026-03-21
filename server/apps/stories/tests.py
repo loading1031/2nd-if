@@ -138,3 +138,47 @@ class TestRating:
         )
         ep = await Episode.objects.aget(work=work, episode_number=1)
         assert ep.avg_rating == 5.0  # 같은 유저 업데이트
+
+    async def test_rate_zero(self, authenticated_client, work, episodes):
+        response = await authenticated_client.post(
+            f"/stories/htmx/{work.pk}/episodes/1/rate/",
+            {"score": "0"},
+        )
+        assert response.status_code == 400
+
+    async def test_rate_requires_login(self, client, work, episodes):
+        response = await client.post(
+            f"/stories/htmx/{work.pk}/episodes/1/rate/",
+            {"score": "4"},
+        )
+        assert response.status_code == 302
+
+
+@pytest.mark.django_db(transaction=True)
+class TestWorkErrors:
+    async def test_work_create_empty_title(self, authenticated_client):
+        response = await authenticated_client.post("/stories/htmx/works/create/", {
+            "title": "",
+            "license": "free",
+        })
+        assert response.status_code == 400
+
+    async def test_work_detail_not_found(self, client):
+        response = await client.get("/stories/99999/")
+        assert response.status_code == 200  # 페이지는 렌더링, HTMX가 404 처리
+
+    async def test_episode_create_requires_login(self, client, work):
+        response = await client.post(f"/stories/htmx/{work.pk}/episodes/create/", {
+            "title": "무단 에피소드",
+        })
+        assert response.status_code == 302
+
+    async def test_episode_read_not_found(self, client, work):
+        response = await client.get(f"/stories/htmx/{work.pk}/episodes/999/")
+        assert response.status_code == 404
+
+    async def test_episode_view_count_increments(self, client, work, episodes):
+        await client.get(f"/stories/htmx/{work.pk}/episodes/1/")
+        await client.get(f"/stories/htmx/{work.pk}/episodes/1/")
+        ep = await Episode.objects.aget(work=work, episode_number=1)
+        assert ep.view_count == 2
