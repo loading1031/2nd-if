@@ -13,6 +13,7 @@
 
 ## 인증
 - [[auth]] - 인증 시스템
+- [[social-login]] - 소셜 로그인 (Google + X + Instagram)
 
 ## 후속 (MVP 이후)
 - [[revenue]] - 수익 모델 (코인 직접 결제 + 구글 광고)
