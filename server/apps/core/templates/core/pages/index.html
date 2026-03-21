@@ -1,20 +1,99 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - 2nd-if{% endblock %}
+{% block title %}2nd-if - 소설의 새로운 가능성{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to 2nd-if</h1>
-    <p class="text-lg text-gray-600 mb-8">Django Async + HTMX + django-editor-js</p>
+<main>
+    {# Hero Section #}
+    <section class="hero min-h-[60vh] bg-base-200">
+        <div class="hero-content text-center py-16">
+            <div class="max-w-2xl">
+                <h1 class="text-5xl font-bold">소설의 새로운 가능성, <span class="text-primary">2nd-if</span></h1>
+                <p class="py-6 text-lg text-base-content/70">
+                    만약 그때 다른 선택을 했다면? 원작 소설에서 새로운 이야기를 분기하고,
+                    나만의 스토리라인을 만들어 공유하세요.
+                </p>
+                <div class="flex gap-3 justify-center">
+                    <a href="#featured-works" class="btn btn-primary">작품 둘러보기</a>
+                    <a href="{% url 'users:signup_page' %}" class="btn btn-outline">새 작품 시작하기</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="card max-w-md mx-auto">
-        <h2 class="text-xl font-semibold mb-4">Getting Started</h2>
-        <ul class="text-left text-gray-700 space-y-2">
-            <li>1. Run migrations: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py migrate</code></li>
-            <li>2. Create superuser: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py createsuperuser</code></li>
-            <li>3. Build CSS: <code class="bg-gray-100 px-2 py-1 rounded">npm run dev</code></li>
-            <li>4. Run server: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py runserver</code></li>
-        </ul>
-    </div>
-</div>
+    {# Featured Works Section #}
+    <section id="featured-works" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold">인기 작품</h2>
+        </div>
+        {% if featured_works %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for work in featured_works %}
+                {% include "components/work_card.html" with title=work.title author=work.author.nickname status=work.get_status_display description=work.description episode_count=work.episode_count url=work.get_absolute_url %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-16">
+            <div class="max-w-md mx-auto">
+                <svg class="w-16 h-16 mx-auto mb-4 text-base-content/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <p class="text-lg text-base-content/60 mb-2">아직 작품이 없습니다</p>
+                <p class="text-sm text-base-content/40">첫 번째 작품을 등록해보세요!</p>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    {# How It Works Section #}
+    <section class="bg-base-200 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-center mb-12">어떻게 작동하나요?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">1. 읽기</h3>
+                        <p class="text-base-content/70">다양한 원작 소설과 분기된 이야기를 자유롭게 읽어보세요.</p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">2. 분기하기</h3>
+                        <p class="text-base-content/70">"만약 이랬다면?" 원하는 지점에서 새로운 스토리를 시작하세요.</p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">3. 공유하기</h3>
+                        <p class="text-base-content/70">당신의 이야기를 다른 독자들과 나누고, 함께 세계관을 확장하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# CTA Section #}
+    <section class="py-16">
+        <div class="max-w-2xl mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-4">지금 바로 시작하세요</h2>
+            <p class="text-base-content/70 mb-6">무료로 가입하고, 소설의 새로운 가능성을 경험해보세요.</p>
+            <a href="{% url 'users:signup_page' %}" class="btn btn-primary btn-lg">무료 회원가입</a>
+        </div>
+    </section>
+</main>
 {% endblock %}

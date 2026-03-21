@@ -1,1 +1,1 @@
-from . import sync_views
+from . import async_views, sync_views
