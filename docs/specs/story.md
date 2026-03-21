@@ -64,3 +64,4 @@
 ## 디자인 문서
 - [[design-episode-reader]] - 에피소드 리더 페이지
 - [[design-star-rating]] - 별점 평가 컴포넌트
+- [[design-episode-write]] - 에피소드 작성 페이지
