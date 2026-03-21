@@ -79,11 +79,12 @@ WORKDIR /app/server
 
 EXPOSE 8000
 
-# Run with gunicorn + uvicorn worker (ASGI)
-CMD ["uv", "run", "--no-dev", "gunicorn", "config.asgi:application", \
-     "-k", "uvicorn.workers.UvicornWorker", \
-     "-b", "0.0.0.0:8000", \
-     "--workers", "2", \
-     "--timeout", "120", \
-     "--access-logfile", "-", \
-     "--error-logfile", "-"]
+# Auto-migrate + gunicorn
+CMD uv run --no-dev python manage.py migrate --noinput && \
+    uv run --no-dev gunicorn config.asgi:application \
+    -k uvicorn.workers.UvicornWorker \
+    -b 0.0.0.0:8000 \
+    --workers 2 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile -
