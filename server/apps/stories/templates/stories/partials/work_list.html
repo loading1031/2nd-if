@@ -1,7 +1,7 @@
 {% if works %}
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     {% for work in works %}
-    {% include "components/work_card.html" with title=work.title author=work.author.nickname status=work.get_status_display description=work.description episode_count=work.episodes.count view_count=0 branch_count=0 avg_rating=0 url=work.get_absolute_url %}
+    {% include "components/work_card.html" with title=work.title author=work.author.nickname status=work.get_status_display description=work.description episode_count=work.episode_count view_count=0 branch_count=0 avg_rating=0 url=work.get_absolute_url %}
     {% endfor %}
 </div>
 {% else %}

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import render, aget_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -9,27 +10,36 @@ from ..forms import WorkCreateForm, EpisodeCreateForm
 from ..graph import EpisodeNode
 
 
+async def _get_user(request):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    user_id = await sync_to_async(lambda: request.user.pk)()
+    return await User.objects.aget(pk=user_id)
+
+
 @require_http_methods(["GET"])
 async def htmx_work_list(request):
     """HTMX 작품 목록."""
+    from django.db.models import Count
+
     search = request.GET.get("search", "")
     status_filter = request.GET.get("status", "")
 
-    qs = Work.objects.select_related("author")
+    qs = Work.objects.select_related("author").annotate(episode_count=Count("episodes"))
     if search:
         qs = qs.filter(title__icontains=search)
     if status_filter:
         qs = qs.filter(status=status_filter)
 
-    works = await qs.alist()
+    works = [w async for w in qs]
     return render(request, "stories/partials/work_list.html", {"works": works})
 
 
 @require_http_methods(["GET"])
 async def htmx_episode_list(request, work_pk):
     """HTMX 에피소드 목록."""
-    work = await aget_object_or_404(Work, pk=work_pk)
-    episodes = await Episode.objects.filter(work=work).select_related("author").alist()
+    work = await aget_object_or_404(Work.objects.select_related("author"), pk=work_pk)
+    episodes = [ep async for ep in Episode.objects.filter(work=work).select_related("author")]
     return render(request, "stories/partials/episode_list.html", {
         "work": work,
         "episodes": episodes,
@@ -49,7 +59,7 @@ async def htmx_work_create(request):
         }, status=400)
 
     work = form.instance
-    work.author = request.user
+    work.author = await _get_user(request)
     await work.asave()
 
     response = HttpResponse()
@@ -74,7 +84,7 @@ async def htmx_episode_create(request, work_pk):
 
     episode = form.instance
     episode.work = work
-    episode.author = request.user
+    episode.author = await _get_user(request)
     episode.episode_number = await Episode.objects.filter(work=work).acount() + 1
     await episode.asave()
 
@@ -122,17 +132,15 @@ async def htmx_rate_episode(request, work_pk, episode_number):
     if not 1 <= score <= 5:
         return HttpResponse(status=400)
 
+    user = await _get_user(request)
     rating, created = await Rating.objects.aupdate_or_create(
         episode=episode,
-        user=request.user,
+        user=user,
         defaults={"score": score},
     )
 
     # 별점 평균 갱신
-    from django.db.models import Avg
-    result = await Rating.objects.filter(episode=episode).aaggregate(
-        avg=Avg("score"),
-    )
+    result = await Rating.objects.filter(episode=episode).aaggregate(avg=Avg("score"))
     episode.avg_rating = result["avg"]
     episode.rating_count = await Rating.objects.filter(episode=episode).acount()
     await episode.asave(update_fields=["avg_rating", "rating_count"])
@@ -204,10 +212,10 @@ async def htmx_branch_create(request, work_pk, episode_number):
             "work": origin_work,
         }, status=400)
 
-    # 분기 에피소드 저장 (같은 work에 속함)
+    user = await _get_user(request)
     branch_episode = form.instance
     branch_episode.work = origin_work
-    branch_episode.author = request.user
+    branch_episode.author = user
     branch_episode.episode_number = latest_count + 1
     await branch_episode.asave()
 

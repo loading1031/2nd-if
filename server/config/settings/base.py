@@ -91,5 +91,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# Neo4j configuration
+NEOMODEL_NEO4J_BOLT_URL = os.environ.get(
+    'NEO4J_BOLT_URL',
+    'bolt://neo4j:secondif2024@localhost:7687',
+)
+
 # Editor.js configuration
 EDITORJS_IMAGE_UPLOAD_URL = '/api/upload-image/'
