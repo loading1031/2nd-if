@@ -40,6 +40,6 @@ asyncio_mode = "auto"
 markers = [
     "e2e: End-to-end browser tests (Playwright)",
 ]
-# Unit 테스트: python -m pytest server/tests/ --ignore=server/tests/e2e
+# Unit 테스트: python -m pytest server/apps/
 # E2E 테스트: python -m pytest server/tests/e2e/ -o "asyncio_mode=strict"
 # 전체: 위 두 명령을 순서대로 실행
