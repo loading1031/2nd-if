@@ -13,7 +13,6 @@ server/static/css/output.css
 server/staticfiles/
 server/media/
 server/tailwindcss
-docker/
 docker-compose*.yml
 *.md
 .gitignore
