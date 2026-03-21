@@ -3,8 +3,6 @@ Django settings for project - Production configuration (Railway).
 """
 import os
 
-import dj_database_url
-
 from .base import *
 
 DEBUG = False
@@ -14,13 +12,16 @@ CSRF_TRUSTED_ORIGINS = [
     f"https://{host.strip()}" for host in ALLOWED_HOSTS if host.strip()
 ]
 
-# Database (Railway Postgres — DATABASE_URL auto-set by Railway)
+# Database (SQLite on Railway Volume — /data/db.sqlite3)
 DATABASES = {
-    'default': dj_database_url.config(
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.environ.get('DB_PATH', '/data/db.sqlite3'),
+    }
 }
+
+# Media files on Railway Volume
+MEDIA_ROOT = '/data/media'
 
 # Security
 SECURE_BROWSER_XSS_FILTER = True

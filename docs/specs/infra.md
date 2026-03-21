@@ -31,7 +31,7 @@
 | 서비스 | 호스팅 | 티어 | 월 비용 |
 |--------|--------|------|---------|
 | Django (ASGI) | Railway | Free ($5 크레딧/월) | $0 |
-| PostgreSQL | Railway Postgres | Free ($5 내 포함) | $0 |
+| SQLite | Railway Volume | $0.19/GB/월 (1GB) | $0 |
 | Neo4j (그래프 DB) | Neo4j Aura | Free (200K nodes, 400K rels) | $0 |
 | 메트릭/로그/대시보드 | Grafana Cloud | Free (10K series, 50GB logs) | $0 |
 | 미디어 파일 | Railway Volume | $5 내 포함 | $0 |
@@ -41,7 +41,7 @@
 ### 네트워크 흐름
 ```
 User → Railway (Singapore) → Django (Gunicorn+Uvicorn, 2 workers)
-                              ├── Railway Postgres (SQL, 같은 환경)
+                              ├── SQLite (Railway Volume, /data/db.sqlite3)
                               ├── Neo4j Aura (Graph, 외부)
                               ├── Railway Volume (Media)
                               └── → Grafana Cloud (Metrics/Logs push)
@@ -113,7 +113,7 @@ User → Railway (Singapore) → Django (Gunicorn+Uvicorn, 2 workers)
 | 변수 | 설명 | 예시 | 설정 방법 |
 |------|------|------|----------|
 | SECRET_KEY | Django 시크릿 키 | (자동 생성) | Railway Variables |
-| DATABASE_URL | PostgreSQL 연결 | postgres://... | Railway Postgres 추가 시 자동 설정 |
+| DB_PATH | SQLite 경로 | /data/db.sqlite3 | Railway Variables (기본값 사용 가능) |
 | NEO4J_BOLT_URL | Neo4j Aura 연결 | neo4j+s://...@xxx.databases.neo4j.io | Railway Variables |
 | ALLOWED_HOSTS | 허용 호스트 | .up.railway.app,your-domain.com | Railway Variables |
 | DJANGO_SETTINGS_MODULE | 설정 모듈 | config.settings.prod | Railway Variables |

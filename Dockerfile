@@ -63,12 +63,13 @@ COPY --from=builder /app/server/ ./server/
 # Copy collected static files
 COPY --from=builder /app/server/staticfiles/ ./server/staticfiles/
 
-# Create media directory
-RUN mkdir -p /app/server/media
+# Create data directory (Railway Volume mounts to /data)
+# SQLite DB + media files stored here for persistence
+RUN mkdir -p /data/media
 
 # Create non-root user
 RUN adduser --disabled-password --gecos '' appuser && \
-    chown -R appuser:appuser /app
+    chown -R appuser:appuser /app /data
 USER appuser
 
 WORKDIR /app/server
