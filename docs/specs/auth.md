@@ -55,6 +55,22 @@
 | is_active | BooleanField | O | default=True |
 | created_at | DateTimeField | O | auto_now_add |
 
+### 핑거프린트 관련 모델 ([[copy-protection]] 참조)
+
+#### FingerprintLog
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| user | User (nullable) | 로그인 유저 |
+| fingerprint | string(64) | 브라우저 핑거프린트 |
+| created_at | datetime | 기록 시점 |
+
+#### FingerprintBlacklist
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| fingerprint | string(64) | 차단된 핑거프린트 (unique) |
+| reason | text | 차단 사유 |
+| created_at | datetime | 차단 시점 |
+
 ## 디자인 문서
 - [[design-signup-page]] - 회원가입 페이지
 - [[design-login-page]] - 로그인 페이지

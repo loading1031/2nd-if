@@ -8,6 +8,8 @@
 - [[branch]] - 분기 시스템 (핵심)
 - [[next-episode-ui]] - 다음 화 선택 UI 및 가중치 정렬
 - [[license]] - 콘텐츠 라이선스
+- [[copy-protection]] - 복사 방지 (출처 삽입 + 워터마크 + 핑거프린트)
+- [[font-system]] - 장르별 글씨체 4종
 
 ## 인증
 - [[auth]] - 인증 시스템

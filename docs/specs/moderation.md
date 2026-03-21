@@ -68,11 +68,18 @@
 | created_at | datetime | 신고 시점 |
 | resolved_at | datetime | 처리 시점 |
 
+## 핑거프린트 블랙리스트 연동
+
+제재 시 해당 유저의 핑거프린트를 블랙리스트에 추가 ([[copy-protection]] 참조):
+- FingerprintLog에서 유저의 핑거프린트 목록 조회
+- FingerprintBlacklist에 추가 → 새 계정 가입/로그인 차단
+
 ## 의존성
 - [[auth]] — 신고자/피신고자 식별
 - [[story]] — 신고 대상 에피소드/작품
 - [[branch]] — 분기 관련 표절 신고
 - [[plagiarism]] — 자동 검사와 연동 (승인된 분기 제외)
+- [[copy-protection]] — 핑거프린트 블랙리스트 연동
 
 ## 디자인 문서
 - (설계 진행 후 추가)
