@@ -28,6 +28,27 @@ git checkout dev
 git merge feat/article-crud
 ```
 
+## 커밋 규칙
+
+작업 단위마다 즉시 커밋한다. 밀어두지 않는다.
+
+### 커밋 분리 기준
+
+| 작업 유형 | 커밋 접두어 | 예시 |
+|----------|-----------|------|
+| 기획 문서 | `docs:` | `docs: 분기 시스템 기획 작성` |
+| 디자인 (패턴/템플릿) | `design:` | `design: 다음 화 선택 UI 패턴 추가` |
+| 기능 개발 | `feat:` | `feat: 회원가입 서버 로직 구현` |
+| 버그 수정 | `fix:` | `fix: 로그인 CSRF 토큰 누락` |
+| 리팩토링 | `refactor:` | `refactor: 컴포넌트 include 구조로 전환` |
+| 설정/도구 | `chore:` | `chore: /doc 스킬 추가` |
+
+### 원칙
+
+- **기획/디자인/개발 커밋을 섞지 않는다**
+- 스킬, 규칙 등 도구 변경도 별도 커밋
+- 디펜던시 없는 변경은 발생 즉시 커밋
+
 ## 병렬 작업: Worktree + Subagent
 
 독립적인 작업이 여러 개일 때, **worktree isolation**으로 subagent를 병렬 실행하고 결과를 merge한다.
