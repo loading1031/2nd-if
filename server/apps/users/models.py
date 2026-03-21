@@ -39,3 +39,31 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.nickname
+
+
+class FingerprintLog(models.Model):
+    """브라우저 핑거프린트 로그."""
+
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="fingerprint_logs")
+    fingerprint = models.CharField("핑거프린트", max_length=64, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "fingerprint_logs"
+
+    def __str__(self):
+        return f"{self.fingerprint[:16]}... ({self.user or 'anon'})"
+
+
+class FingerprintBlacklist(models.Model):
+    """차단된 핑거프린트."""
+
+    fingerprint = models.CharField("핑거프린트", max_length=64, unique=True)
+    reason = models.TextField("차단 사유")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "fingerprint_blacklist"
+
+    def __str__(self):
+        return f"{self.fingerprint[:16]}... (차단)"
