@@ -1,0 +1,5 @@
+name: Signup Page (Validation Error)
+context:
+  error_message: ""
+  email_error: "이미 사용 중인 이메일입니다."
+  password_error: "비밀번호가 일치하지 않습니다."

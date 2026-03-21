@@ -1,0 +1,38 @@
+{% extends "patterns/base_page.html" %}
+
+{% block title %}Home - 2nd-if{% endblock %}
+
+{% block nav %}
+<nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="#" class="text-xl font-bold text-gray-900">2nd-if</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-gray-600 hover:text-gray-900">로그인</a>
+                <a href="#" class="btn btn-primary btn-sm">회원가입</a>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to 2nd-if</h1>
+        <p class="text-lg text-gray-600 mb-8">Django Async + HTMX + django-editor-js</p>
+
+        <div class="card max-w-md mx-auto">
+            <h2 class="text-xl font-semibold mb-4">Getting Started</h2>
+            <ul class="text-left text-gray-700 space-y-2">
+                <li>1. Run migrations: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py migrate</code></li>
+                <li>2. Create superuser: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py createsuperuser</code></li>
+                <li>3. Build CSS: <code class="bg-gray-100 px-2 py-1 rounded">npm run dev</code></li>
+                <li>4. Run server: <code class="bg-gray-100 px-2 py-1 rounded">python manage.py runserver</code></li>
+            </ul>
+        </div>
+    </div>
+</main>
+{% endblock %}

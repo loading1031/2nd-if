@@ -1,0 +1,5 @@
+name: Signup Page
+context:
+  error_message: ""
+  email_error: ""
+  password_error: ""

@@ -19,7 +19,22 @@ DATABASES = {
 # Development-specific apps
 INSTALLED_APPS += [
     'django_extensions',
+    'pattern_library',
 ]
 
 # CORS for development
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Pattern library iframe rendering
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# Pattern Library Configuration
+PATTERN_LIBRARY = {
+    "SECTIONS": (
+        ("components", ["patterns/components"]),
+        ("pages", ["patterns/pages"]),
+    ),
+    "TEMPLATE_SUFFIX": ".html",
+    "PATTERN_BASE_TEMPLATE_NAME": "patterns/base.html",
+    "BASE_TEMPLATE_NAMES": ["patterns/base_page.html"],
+}

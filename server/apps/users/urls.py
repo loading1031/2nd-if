@@ -12,6 +12,7 @@ urlpatterns = [
 htmx_urlpatterns = [
     path('htmx/auth/signup/', async_views.htmx_signup, name='htmx_signup'),
     path('htmx/auth/login/', async_views.htmx_login, name='htmx_login'),
+    path('htmx/auth/logout/', async_views.htmx_logout, name='htmx_logout'),
 ]
 
 urlpatterns += htmx_urlpatterns

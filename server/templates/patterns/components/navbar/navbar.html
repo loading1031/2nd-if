@@ -1,0 +1,36 @@
+{# navbar 컴포넌트는 {% url %} 태그를 사용하므로 패턴 라이브러리에서는 직접 마크업으로 보여줌 #}
+<div class="space-y-6">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Navbar (Logged Out)</p>
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#" class="text-xl font-bold text-gray-900">2nd-if</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-gray-900">로그인</a>
+                        <a href="#" class="btn btn-primary btn-sm">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Navbar (Logged In)</p>
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#" class="text-xl font-bold text-gray-900">2nd-if</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-600">user@example.com</span>
+                        <button class="btn btn-ghost btn-sm">로그아웃</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>

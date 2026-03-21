@@ -1,0 +1,64 @@
+<div class="space-y-6 max-w-md">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Text Input</p>
+        {% include "components/form_field.html" with label="이메일 주소" type="email" name="email" placeholder="example@email.com" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Input with Error</p>
+        {% include "components/form_field.html" with label="이메일 주소" type="email" name="email_error" value="invalid" error="올바른 이메일 주소를 입력하세요." %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Password Input</p>
+        {% include "components/form_field.html" with label="비밀번호" type="password" name="password" placeholder="••••••••" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Select</p>
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">카테고리</span>
+            </div>
+            <select class="select select-bordered w-full">
+                <option disabled selected>선택하세요</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+            </select>
+        </label>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Textarea</p>
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">설명</span>
+            </div>
+            <textarea class="textarea textarea-bordered w-full" placeholder="내용을 입력하세요..." rows="3"></textarea>
+        </label>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Checkbox & Toggle</p>
+        <div class="space-y-2">
+            <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" class="checkbox checkbox-primary" checked />
+                <span class="label-text">로그인 상태 유지</span>
+            </label>
+            <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" class="toggle toggle-primary" checked />
+                <span class="label-text">알림 받기</span>
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Input Sizes</p>
+        <div class="space-y-2">
+            {% include "components/form_field.html" with label="" type="text" name="size_xs" placeholder="input-xs" extra_class="input-xs" %}
+            {% include "components/form_field.html" with label="" type="text" name="size_sm" placeholder="input-sm" extra_class="input-sm" %}
+            {% include "components/form_field.html" with label="" type="text" name="size_md" placeholder="input-md" extra_class="input-md" %}
+            {% include "components/form_field.html" with label="" type="text" name="size_lg" placeholder="input-lg" extra_class="input-lg" %}
+        </div>
+    </div>
+</div>

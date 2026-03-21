@@ -1,0 +1,10 @@
+{# 재사용 가능한 알림 컴포넌트
+   사용법: {% include "components/alert.html" with alert_type="error" message="에러 메시지" %}
+   필수: message
+   선택: alert_type (info, success, warning, error), extra_class
+#}
+{% if message %}
+<div class="alert {{ alert_type|default:'' }} {{ extra_class }}" role="alert">
+    <span>{{ message }}</span>
+</div>
+{% endif %}

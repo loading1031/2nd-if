@@ -1,0 +1,24 @@
+name: Button
+context:
+  variants:
+    - label: "btn btn-primary"
+      class: btn-primary
+      text: Primary
+    - label: "btn btn-secondary"
+      class: btn-secondary
+      text: Secondary
+    - label: "btn btn-accent"
+      class: btn-accent
+      text: Accent
+    - label: "btn btn-info"
+      class: btn-info
+      text: Info
+    - label: "btn btn-success"
+      class: btn-success
+      text: Success
+    - label: "btn btn-warning"
+      class: btn-warning
+      text: Warning
+    - label: "btn btn-error"
+      class: btn-error
+      text: Error

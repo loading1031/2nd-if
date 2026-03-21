@@ -10,35 +10,16 @@
                 회원가입
             </h2>
 
-            <form class="space-y-4" hx-post="/htmx/auth/signup/" hx-trigger="submit" hx-swap="innerHTML" hx-target="#content" hx-indicator="#signup-indicator">
+            {% include "components/alert.html" with alert_type="alert-error" message=error_message %}
+
+            <form class="space-y-4" hx-post="{% url 'users:htmx_signup' %}" hx-trigger="submit" hx-swap="innerHTML" hx-target="#content" hx-indicator="#signup-indicator">
                 {% csrf_token %}
 
-                <label class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text">이메일 주소</span>
-                    </div>
-                    <input id="email" name="email" type="email" autocomplete="email" required
-                           placeholder="example@email.com"
-                           class="input input-bordered w-full" />
-                </label>
+                {% include "components/form_field.html" with label="이메일 주소" type="email" name="email" placeholder="example@email.com" autocomplete="email" required=True error=errors.email %}
 
-                <label class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text">비밀번호</span>
-                    </div>
-                    <input id="password" name="password" type="password" autocomplete="new-password" required
-                           placeholder="••••••••"
-                           class="input input-bordered w-full" />
-                </label>
+                {% include "components/form_field.html" with label="비밀번호" type="password" name="password" placeholder="••••••••" autocomplete="new-password" required=True error=errors.password %}
 
-                <label class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text">비밀번호 확인</span>
-                    </div>
-                    <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required
-                           placeholder="••••••••"
-                           class="input input-bordered w-full" />
-                </label>
+                {% include "components/form_field.html" with label="비밀번호 확인" type="password" name="password_confirm" placeholder="••••••••" autocomplete="new-password" required=True error=errors.password_confirm %}
 
                 <button type="submit" class="btn btn-primary w-full mt-2">
                     <span id="signup-indicator" class="loading loading-spinner htmx-indicator"></span>

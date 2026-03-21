@@ -1,0 +1,24 @@
+{# 재사용 가능한 폼 필드 컴포넌트
+   사용법: {% include "components/form_field.html" with label="이메일" type="email" name="email" placeholder="example@email.com" error=error_msg %}
+   필수: label, type, name
+   선택: placeholder, error, required, autocomplete, id, value, extra_class
+#}
+<label class="form-control w-full">
+    <div class="label">
+        <span class="label-text">{{ label }}</span>
+    </div>
+    <input
+        id="{{ id|default:name }}"
+        name="{{ name }}"
+        type="{{ type|default:'text' }}"
+        {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+        {% if value %}value="{{ value }}"{% endif %}
+        {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+        {% if required %}required{% endif %}
+        class="input input-bordered w-full {% if error %}input-error{% endif %} {{ extra_class }}" />
+    {% if error %}
+    <div class="label">
+        <span class="label-text-alt text-error">{{ error }}</span>
+    </div>
+    {% endif %}
+</label>

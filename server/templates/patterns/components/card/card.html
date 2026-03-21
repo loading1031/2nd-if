@@ -1,0 +1,25 @@
+<div class="space-y-6">
+    {% for variant in variants %}
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">{{ variant.label }}</p>
+        <div class="card bg-base-100 shadow-xl {{ variant.extra_class }}" style="max-width: 24rem;">
+            {% if variant.image %}
+            <figure>
+                <div class="bg-gray-300 h-48 w-full flex items-center justify-center text-gray-500">
+                    Image Placeholder
+                </div>
+            </figure>
+            {% endif %}
+            <div class="card-body">
+                <h2 class="card-title">{{ variant.title }}</h2>
+                <p>{{ variant.description }}</p>
+                {% if variant.actions %}
+                <div class="card-actions justify-end">
+                    <button class="btn btn-primary btn-sm">Action</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

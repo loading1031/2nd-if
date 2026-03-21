@@ -1,0 +1,21 @@
+name: Card
+context:
+  variants:
+    - label: "Basic Card"
+      title: Card Title
+      description: A basic card with title and description.
+      actions: true
+      image: false
+      extra_class: ""
+    - label: "Card with Image"
+      title: Card with Image
+      description: Card featuring an image at the top.
+      actions: true
+      image: true
+      extra_class: ""
+    - label: "Compact Card"
+      title: Compact Card
+      description: Less padding for tighter layouts.
+      actions: false
+      image: false
+      extra_class: card-compact

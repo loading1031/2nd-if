@@ -1,0 +1,27 @@
+<div class="space-y-4">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">alert (default)</p>
+        {% include "components/alert.html" with message="Default alert message." %}
+    </div>
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">alert alert-info</p>
+        {% include "components/alert.html" with alert_type="alert-info" message="New update available." %}
+    </div>
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">alert alert-success</p>
+        {% include "components/alert.html" with alert_type="alert-success" message="Operation completed successfully!" %}
+    </div>
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">alert alert-warning</p>
+        {% include "components/alert.html" with alert_type="alert-warning" message="Please check your input." %}
+    </div>
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">alert alert-error</p>
+        {% include "components/alert.html" with alert_type="alert-error" message="Something went wrong." %}
+    </div>
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Empty message (renders nothing)</p>
+        {% include "components/alert.html" with message="" %}
+        <span class="text-xs text-gray-400 italic">← Nothing rendered</span>
+    </div>
+</div>
