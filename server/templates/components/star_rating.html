@@ -1,0 +1,35 @@
+{# 사용법: {% include "components/star_rating.html" with name="rating" current_rating=4 readonly=False %}
+   필수: name
+   선택: current_rating (default: 0), readonly (default: False)
+
+   interactive 모드: 클릭 가능한 별점 (폼 제출용)
+   readonly 모드: 표시 전용 (카드/리스트에서 사용)
+#}
+{% if readonly %}
+{# Readonly 모드: 표시 전용 #}
+<div class="rating rating-half rating-sm" aria-label="별점 {{ current_rating|default:'0' }}점">
+    <input type="radio" class="rating-hidden" disabled {% if not current_rating or current_rating == 0 %}checked{% endif %} />
+    {% with current_rating|default:"0" as cr %}
+    <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled {% if cr == "0.5" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled {% if cr == "1" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled {% if cr == "1.5" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled {% if cr == "2" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled {% if cr == "2.5" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled {% if cr == "3" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled {% if cr == "3.5" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled {% if cr == "4" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-1 bg-warning" disabled {% if cr == "4.5" %}checked{% endif %} />
+    <input type="radio" class="mask mask-star-2 mask-half-2 bg-warning" disabled {% if cr == "5" %}checked{% endif %} />
+    {% endwith %}
+</div>
+{% else %}
+{# Interactive 모드: 클릭 가능 #}
+<div class="rating rating-lg" aria-label="별점 선택">
+    <input type="radio" name="{{ name|default:'rating' }}" value="0" class="rating-hidden" {% if not current_rating or current_rating == 0 %}checked{% endif %} />
+    <input type="radio" name="{{ name|default:'rating' }}" value="1" class="mask mask-star-2 bg-warning" {% if current_rating == 1 %}checked{% endif %} />
+    <input type="radio" name="{{ name|default:'rating' }}" value="2" class="mask mask-star-2 bg-warning" {% if current_rating == 2 %}checked{% endif %} />
+    <input type="radio" name="{{ name|default:'rating' }}" value="3" class="mask mask-star-2 bg-warning" {% if current_rating == 3 %}checked{% endif %} />
+    <input type="radio" name="{{ name|default:'rating' }}" value="4" class="mask mask-star-2 bg-warning" {% if current_rating == 4 %}checked{% endif %} />
+    <input type="radio" name="{{ name|default:'rating' }}" value="5" class="mask mask-star-2 bg-warning" {% if current_rating == 5 %}checked{% endif %} />
+</div>
+{% endif %}

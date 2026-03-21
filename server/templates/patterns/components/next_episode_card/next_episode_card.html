@@ -1,0 +1,21 @@
+<div class="space-y-4 max-w-2xl">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Original (원작 다음 화)</p>
+        {% include "components/next_episode_card.html" with episode_number=31 title="운명의 재회" author="김원작" is_original=True avg_rating="4.2" visit_count="5,678" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Branch - Popular (인기 분기)</p>
+        {% include "components/next_episode_card.html" with episode_number=31 title="다른 결말 - 만약 그때 떠났다면" author="이분기" is_original=False avg_rating="4.5" visit_count="2,100" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Branch - New (신규 분기, 별점/조회 적음)</p>
+        {% include "components/next_episode_card.html" with episode_number=31 title="히든 엔딩" author="박신작" is_original=False avg_rating="3.8" visit_count="42" %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Branch - No Rating (별점 미등록)</p>
+        {% include "components/next_episode_card.html" with episode_number=31 title="만약 그때..." author="최창작" is_original=False visit_count="5" %}
+    </div>
+</div>

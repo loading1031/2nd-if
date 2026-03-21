@@ -53,4 +53,5 @@
 - [[auth]] — 분기 생성자 인증
 
 ## 디자인 문서
-- (설계 진행 후 추가)
+- [[design-episode-reader]] - 에피소드 리더 페이지 (분기 선택 UI 포함)
+- [[design-next-episode-card]] - 다음 화 카드 컴포넌트 (원작/분기 구분)

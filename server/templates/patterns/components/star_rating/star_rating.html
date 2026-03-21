@@ -1,0 +1,42 @@
+<div class="space-y-6">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Empty (0점) - Interactive</p>
+        {% include "components/star_rating.html" with name="rating-empty" current_rating=0 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Partial (3점) - Interactive</p>
+        {% include "components/star_rating.html" with name="rating-partial" current_rating=3 %}
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Full (5점) - Interactive</p>
+        {% include "components/star_rating.html" with name="rating-full" current_rating=5 %}
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Readonly - 4.5점 (half star)</p>
+        <div class="flex items-center gap-2">
+            {% include "components/star_rating.html" with name="rating-ro-half" current_rating="4.5" readonly=True %}
+            <span class="text-sm text-base-content/60">4.5</span>
+        </div>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Readonly - 3점</p>
+        <div class="flex items-center gap-2">
+            {% include "components/star_rating.html" with name="rating-ro-3" current_rating="3" readonly=True %}
+            <span class="text-sm text-base-content/60">3.0</span>
+        </div>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">Readonly - 0점 (미등록)</p>
+        <div class="flex items-center gap-2">
+            {% include "components/star_rating.html" with name="rating-ro-0" current_rating=0 readonly=True %}
+            <span class="text-sm text-base-content/60">-</span>
+        </div>
+    </div>
+</div>

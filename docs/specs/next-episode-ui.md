@@ -83,4 +83,6 @@ engagement_score = visit_count
 - [[auth]] — 읽기 이력 확인 (스포일러 방지)
 
 ## 디자인 문서
-- (설계 진행 후 추가)
+- [[design-episode-reader]] - 에피소드 리더 페이지 (다음 화 선택 UI 포함)
+- [[design-next-episode-card]] - 다음 화 카드 컴포넌트
+- [[design-star-rating]] - 별점 평가 컴포넌트

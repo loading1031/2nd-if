@@ -62,4 +62,5 @@
 - [[point-system]] — 작품별 포인트 풀
 
 ## 디자인 문서
-- (설계 진행 후 추가)
+- [[design-episode-reader]] - 에피소드 리더 페이지
+- [[design-star-rating]] - 별점 평가 컴포넌트
