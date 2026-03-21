@@ -40,10 +40,13 @@ RUN cp -r node_modules server/node_modules
 # Build Tailwind CSS (minified production build)
 RUN cd server && tailwindcss -i static/css/input.css -o static/css/output.css --minify
 
+# Remove source CSS (prevent WhiteNoise post-processing error)
+RUN rm -f server/static/css/input.css
+
 # Collect static files
 ENV DJANGO_SETTINGS_MODULE=config.settings.prod
 ENV SECRET_KEY=build-only-secret-key
-RUN cd server && uv run python manage.py collectstatic --noinput
+RUN cd server && uv run --no-dev python manage.py collectstatic --noinput
 
 # --- Stage 2: Production runtime ---
 FROM python:3.14-slim AS runtime
@@ -78,7 +81,7 @@ EXPOSE 8000
 
 # Run with gunicorn (ASGI mode with uvicorn workers)
 # Railway Free: $5 credit/month, 2 workers
-CMD ["uv", "run", "gunicorn", "config.asgi:application", \
+CMD ["uv", "run", "--no-dev", "gunicorn", "config.asgi:application", \
      "-k", "uvicorn.UvicornWorker", \
      "-b", "0.0.0.0:8000", \
      "--workers", "2", \
