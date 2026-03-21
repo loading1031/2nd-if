@@ -79,10 +79,9 @@ WORKDIR /app/server
 
 EXPOSE 8000
 
-# Run with gunicorn (ASGI mode with uvicorn workers)
-# Railway Free: $5 credit/month, 2 workers
+# Run with gunicorn + uvicorn worker (ASGI)
 CMD ["uv", "run", "--no-dev", "gunicorn", "config.asgi:application", \
-     "-k", "uvicorn.UvicornWorker", \
+     "-k", "uvicorn.workers.UvicornWorker", \
      "-b", "0.0.0.0:8000", \
      "--workers", "2", \
      "--timeout", "120", \
