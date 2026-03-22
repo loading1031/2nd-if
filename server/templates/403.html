@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}접근 권한 없음 - 2nd-if{% endblock %}
+{% block content %}
+<div class="flex items-center justify-center min-h-[60vh]">
+    <div class="text-center">
+        <h1 class="text-9xl font-bold text-warning">403</h1>
+        <p class="text-2xl font-semibold text-gray-800 mt-4">접근 권한이 없습니다</p>
+        <p class="text-gray-600 mt-2 mb-8">이 페이지에 접근할 권한이 없습니다.</p>
+        <div class="flex justify-center gap-4">
+            <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
+            <a href="/users/login/" class="btn btn-outline">로그인</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

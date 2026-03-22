@@ -1,0 +1,79 @@
+{
+  "title": "2nd-if Django",
+  "tags": ["django", "2nd-if"],
+  "timezone": "Asia/Seoul",
+  "panels": [
+    {
+      "title": "Request Rate (req/s)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [{"expr": "rate(django_http_requests_total[5m])", "legendFormat": "{{method}} {{path}} {{status}}"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Response Time (p95)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [{"expr": "histogram_quantile(0.95, rate(django_http_request_duration_seconds_bucket[5m]))", "legendFormat": "p95 {{path}}"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Error Rate (4xx + 5xx)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [{"expr": "rate(django_http_requests_total{status=~\"4..|5..\"}[5m])", "legendFormat": "{{status}} {{path}}"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Active Requests",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 8},
+      "targets": [{"expr": "django_http_requests_active", "legendFormat": "active"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Total Requests",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 8},
+      "targets": [{"expr": "sum(django_http_requests_total)", "legendFormat": "total"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Story Views",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 16},
+      "targets": [{"expr": "app_story_views_total", "legendFormat": "views"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Branch Creations",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 16},
+      "targets": [{"expr": "app_branch_creations_total", "legendFormat": "branches"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "DB Health",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 16},
+      "targets": [{"expr": "app_db_up", "legendFormat": "db"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Neo4j Health",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 16},
+      "targets": [{"expr": "app_neo4j_up", "legendFormat": "neo4j"}],
+      "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"}
+    },
+    {
+      "title": "Django Logs",
+      "type": "logs",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 24},
+      "targets": [{"expr": "{app=\"2nd-if\"}"}],
+      "datasource": {"type": "loki", "uid": "grafanacloud-logs"}
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}

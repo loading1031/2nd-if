@@ -9,6 +9,35 @@
 @source "../../templates/**/*.html";
 @source "../../apps/**/templates/**/*.html";
 
+/* 복사 방지 */
+.novel-reader {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* 시각 워터마크 (유료 에피소드) */
+.novel-reader-watermark {
+    position: relative;
+}
+.novel-reader-watermark::after {
+    content: attr(data-watermark);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 3rem;
+    color: rgba(0, 0, 0, 0.03);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* 장르별 글씨체 */
+.font-default .prose { font-family: 'Pretendard', sans-serif; }
+.font-serif .prose { font-family: 'Noto Serif KR', serif; }
+.font-classic .prose { font-family: 'Gowun Batang', serif; }
+.font-modern .prose { font-family: 'Noto Sans KR', sans-serif; }
+
 /* HTMX indicator styles */
 .htmx-indicator {
     display: none;

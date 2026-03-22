@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}작품 목록 - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold">작품 목록</h1>
+    {% if user.is_authenticated %}
+    <a href="{% url 'stories:work_create' %}" class="btn btn-primary">새 작품 시작하기</a>
+    {% endif %}
+</div>
+
+<div class="mb-6">
+    <input type="text" placeholder="작품 검색..."
+           class="input input-bordered w-full"
+           hx-get="{% url 'stories:htmx_work_list' %}"
+           hx-trigger="keyup changed delay:500ms"
+           hx-target="#work-list"
+           hx-indicator="#search-spinner"
+           name="search" />
+</div>
+
+<div role="tablist" class="tabs tabs-boxed mb-6">
+    <a role="tab" class="tab tab-active"
+       hx-get="{% url 'stories:htmx_work_list' %}"
+       hx-target="#work-list">전체</a>
+    <a role="tab" class="tab"
+       hx-get="{% url 'stories:htmx_work_list' %}?status=ongoing"
+       hx-target="#work-list">연재중</a>
+    <a role="tab" class="tab"
+       hx-get="{% url 'stories:htmx_work_list' %}?status=completed"
+       hx-target="#work-list">완결</a>
+</div>
+
+<div id="work-list"
+     hx-get="{% url 'stories:htmx_work_list' %}"
+     hx-trigger="load"
+     hx-indicator="#search-spinner">
+</div>
+
+<span id="search-spinner" class="loading loading-spinner htmx-indicator"></span>
+{% endblock %}

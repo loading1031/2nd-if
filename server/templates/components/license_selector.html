@@ -1,0 +1,57 @@
+{# 라이선스 선택 컴포넌트 (라디오 카드 그룹) #}
+{# 사용법: include "components/license_selector.html" with name="license" selected="free" #}
+{# 필수: name #}
+{# 선택: selected (free/non-commercial/share-alike/no-branch), error, extra_class #}
+<fieldset class="space-y-3 {{ extra_class }}">
+    <legend class="label">
+        <span class="label-text font-semibold">라이선스 선택</span>
+    </legend>
+
+    <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors
+        {% if selected == 'free' %}border-primary bg-primary/5{% else %}border-base-300 hover:border-primary/50{% endif %}">
+        <input type="radio" name="{{ name }}" value="free"
+            class="radio radio-primary mt-0.5"
+            {% if selected == 'free' %}checked{% endif %} />
+        <div>
+            <p class="font-semibold text-sm">자유 분기 허용</p>
+            <p class="text-xs text-base-content/60 mt-0.5">누구나 분기 가능, 상업적 이용 가능</p>
+        </div>
+    </label>
+
+    <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors
+        {% if selected == 'non-commercial' %}border-primary bg-primary/5{% else %}border-base-300 hover:border-primary/50{% endif %}">
+        <input type="radio" name="{{ name }}" value="non-commercial"
+            class="radio radio-primary mt-0.5"
+            {% if selected == 'non-commercial' %}checked{% endif %} />
+        <div>
+            <p class="font-semibold text-sm">비상업적 분기만 허용</p>
+            <p class="text-xs text-base-content/60 mt-0.5">분기 가능하되 상업적 이용 금지</p>
+        </div>
+    </label>
+
+    <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors
+        {% if selected == 'share-alike' %}border-primary bg-primary/5{% else %}border-base-300 hover:border-primary/50{% endif %}">
+        <input type="radio" name="{{ name }}" value="share-alike"
+            class="radio radio-primary mt-0.5"
+            {% if selected == 'share-alike' %}checked{% endif %} />
+        <div>
+            <p class="font-semibold text-sm">동일 조건 변경 허락</p>
+            <p class="text-xs text-base-content/60 mt-0.5">분기 시 동일한 라이선스 적용 필수</p>
+        </div>
+    </label>
+
+    <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors
+        {% if selected == 'no-branch' %}border-primary bg-primary/5{% else %}border-base-300 hover:border-primary/50{% endif %}">
+        <input type="radio" name="{{ name }}" value="no-branch"
+            class="radio radio-primary mt-0.5"
+            {% if selected == 'no-branch' %}checked{% endif %} />
+        <div>
+            <p class="font-semibold text-sm">분기 금지</p>
+            <p class="text-xs text-base-content/60 mt-0.5">2차 창작 불허 (읽기만 가능)</p>
+        </div>
+    </label>
+
+    {% if error %}
+    <p class="text-sm text-error mt-1">{{ error }}</p>
+    {% endif %}
+</fieldset>

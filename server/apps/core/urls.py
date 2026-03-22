@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import sync_views
 
-app_name = 'core'
+from .views import async_views
+
+app_name = "core"
 
 urlpatterns = [
-    path('', sync_views.index, name='index'),
+    path("", async_views.index, name="index"),
 ]

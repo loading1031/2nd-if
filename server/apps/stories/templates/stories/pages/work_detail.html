@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ work.title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div id="work-detail"
+     hx-get="{% url 'stories:htmx_episode_list' work_id %}"
+     hx-trigger="load"
+     hx-indicator="#detail-spinner">
+    <span id="detail-spinner" class="loading loading-spinner htmx-indicator"></span>
+</div>
+{% endblock %}

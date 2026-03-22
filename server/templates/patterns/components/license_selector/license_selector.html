@@ -1,0 +1,113 @@
+<div class="space-y-8 max-w-lg">
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">기본 (선택 없음)</p>
+        <fieldset class="space-y-3">
+            <legend class="label">
+                <span class="label-text font-semibold">라이선스 선택</span>
+            </legend>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-default" value="free" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">자유 분기 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">누구나 분기 가능, 상업적 이용 가능</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-default" value="non-commercial" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">비상업적 분기만 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 가능하되 상업적 이용 금지</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-default" value="share-alike" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">동일 조건 변경 허락</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 시 동일한 라이선스 적용 필수</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-default" value="no-branch" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">분기 금지</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">2차 창작 불허 (읽기만 가능)</p>
+                </div>
+            </label>
+        </fieldset>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">자유 분기 허용 선택됨</p>
+        <fieldset class="space-y-3">
+            <legend class="label">
+                <span class="label-text font-semibold">라이선스 선택</span>
+            </legend>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-primary bg-primary/5">
+                <input type="radio" name="license-free" value="free" class="radio radio-primary mt-0.5" checked />
+                <div>
+                    <p class="font-semibold text-sm">자유 분기 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">누구나 분기 가능, 상업적 이용 가능</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-free" value="non-commercial" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">비상업적 분기만 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 가능하되 상업적 이용 금지</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-free" value="share-alike" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">동일 조건 변경 허락</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 시 동일한 라이선스 적용 필수</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-free" value="no-branch" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">분기 금지</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">2차 창작 불허 (읽기만 가능)</p>
+                </div>
+            </label>
+        </fieldset>
+    </div>
+
+    <div>
+        <p class="text-sm text-gray-500 mb-2 font-mono">에러 상태</p>
+        <fieldset class="space-y-3">
+            <legend class="label">
+                <span class="label-text font-semibold">라이선스 선택</span>
+            </legend>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-error" value="free" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">자유 분기 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">누구나 분기 가능, 상업적 이용 가능</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-error" value="non-commercial" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">비상업적 분기만 허용</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 가능하되 상업적 이용 금지</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-error" value="share-alike" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">동일 조건 변경 허락</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">분기 시 동일한 라이선스 적용 필수</p>
+                </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors border-base-300 hover:border-primary/50">
+                <input type="radio" name="license-error" value="no-branch" class="radio radio-primary mt-0.5" />
+                <div>
+                    <p class="font-semibold text-sm">분기 금지</p>
+                    <p class="text-xs text-base-content/60 mt-0.5">2차 창작 불허 (읽기만 가능)</p>
+                </div>
+            </label>
+            <p class="text-sm text-error mt-1">라이선스를 선택해주세요.</p>
+        </fieldset>
+    </div>
+</div>

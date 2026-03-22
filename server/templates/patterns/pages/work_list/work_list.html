@@ -1,0 +1,209 @@
+{% extends "patterns/base_page.html" %}
+
+{% block title %}작품 목록 - 2nd-if{% endblock %}
+
+{% block nav %}
+<nav class="navbar bg-base-100 shadow-sm">
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <div class="flex-1">
+            <a href="#" class="text-xl font-bold">2nd-if</a>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="#" class="btn btn-ghost btn-sm">작품 목록</a>
+            <a href="#" class="btn btn-ghost btn-sm">로그인</a>
+            <a href="#" class="btn btn-primary btn-sm">회원가입</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# Page Header #}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h1 class="text-2xl font-bold">작품 목록</h1>
+        <a href="#" class="btn btn-primary btn-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            새 작품 만들기
+        </a>
+    </div>
+
+    {# Search Bar #}
+    <div class="relative mb-6">
+        <input
+            type="text"
+            name="search"
+            placeholder="작품 제목, 작가명으로 검색..."
+            class="input input-bordered w-full pl-10"
+            hx-get="#"
+            hx-trigger="keyup changed delay:500ms"
+            hx-target="#work-list"
+            hx-indicator="#search-spinner" />
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <span id="search-spinner" class="loading loading-spinner loading-sm absolute right-3 top-1/2 -translate-y-1/2 htmx-indicator"></span>
+    </div>
+
+    {# Filter Tabs #}
+    <div role="tablist" class="tabs tabs-bordered mb-8">
+        <a role="tab" class="tab tab-active">전체</a>
+        <a role="tab" class="tab">연재중</a>
+        <a role="tab" class="tab">완결</a>
+        <a role="tab" class="tab">인기순</a>
+    </div>
+
+    {# Work Grid #}
+    <div id="work-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {# Card 1: 달빛 아래의 약속 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">달빛 아래의 약속</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-primary">연재중</span>
+                </div>
+                <p class="text-sm text-base-content/60">김소설</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">평범한 고등학생이 달빛 아래에서 발견한 고대의 책. 그 책을 펼치는 순간, 전혀 다른 세계의 문이 열리고...</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>24화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>15200</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>8 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.5</span>
+                </div>
+            </div>
+        </div>
+        {# Card 2: 시간의 끝에서 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">시간의 끝에서</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-success">완결</span>
+                </div>
+                <p class="text-sm text-base-content/60">이작가</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">시간여행자가 마지막으로 도착한 곳은 모든 것이 시작된 그날이었다.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>120화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>89400</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>42 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.8</span>
+                </div>
+            </div>
+        </div>
+        {# Card 3: 코드네임: 제로 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">코드네임: 제로</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-primary">연재중</span>
+                </div>
+                <p class="text-sm text-base-content/60">박스릴러</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">국가 안보를 위협하는 비밀 조직을 추적하는 첩보원의 이야기.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>56화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>32100</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>15 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.3</span>
+                </div>
+            </div>
+        </div>
+        {# Card 4: 별을 삼킨 소녀 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">별을 삼킨 소녀</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-primary">연재중</span>
+                </div>
+                <p class="text-sm text-base-content/60">최로맨스</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">천문학과 대학원생이 우연히 만난 신비로운 소녀. 그녀의 비밀은 별에 있었다.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>18화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>8700</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>3 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.6</span>
+                </div>
+            </div>
+        </div>
+        {# Card 5: 잊혀진 왕국의 기사 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">잊혀진 왕국의 기사</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-warning">중단</span>
+                </div>
+                <p class="text-sm text-base-content/60">박판타지</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">중세 판타지 세계에서 벌어지는 기사들의 이야기. 왕국의 운명이 걸린 전투가 시작된다.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>35화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>4300</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>2 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>3.9</span>
+                </div>
+            </div>
+        </div>
+        {# Card 6: AI와 나의 동거 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">AI와 나의 동거</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-primary">연재중</span>
+                </div>
+                <p class="text-sm text-base-content/60">정SF</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">인공지능 로봇과 함께 살게 된 프로그래머의 좌충우돌 일상.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>42화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>21500</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>11 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.1</span>
+                </div>
+            </div>
+        </div>
+        {# Card 7: 서울역 던전 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">서울역 던전</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-primary">연재중</span>
+                </div>
+                <p class="text-sm text-base-content/60">한헌터</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">어느 날 갑자기 서울역에 나타난 던전. 평범한 직장인이 각성하여 헌터가 되는 이야기.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>88화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>67200</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>28 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.4</span>
+                </div>
+            </div>
+        </div>
+        {# Card 8: 카페 드 문 #}
+        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <div class="card-body">
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-base"><a href="#" class="hover:text-primary transition-colors">카페 드 문</a></h3>
+                    <span class="badge badge-sm shrink-0 badge-success">완결</span>
+                </div>
+                <p class="text-sm text-base-content/60">윤힐링</p>
+                <p class="text-sm text-base-content/70 line-clamp-2 mt-1">골목 끝 작은 카페에서 벌어지는 따뜻한 이야기들.</p>
+                <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-base-content/50">
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>30화</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>12400</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>6 분기</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-warning stroke-warning" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>4.7</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Pagination #}
+    <div class="flex justify-center mt-8">
+        <div class="join">
+            <button class="join-item btn btn-sm btn-disabled">&laquo;</button>
+            <button class="join-item btn btn-sm btn-active">1</button>
+            <button class="join-item btn btn-sm">2</button>
+            <button class="join-item btn btn-sm">3</button>
+            <button class="join-item btn btn-sm">&raquo;</button>
+        </div>
+    </div>
+</main>
+{% endblock %}

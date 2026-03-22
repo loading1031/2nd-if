@@ -1,0 +1,46 @@
+// Grafana Alloy configuration
+// Scrapes Django /metrics/ → Grafana Cloud Prometheus
+// Tails Django log file → Grafana Cloud Loki
+
+// --- Metrics ---
+prometheus.scrape "django" {
+  targets = [{
+    __address__ = "localhost:8000",
+  }]
+  metrics_path = "/metrics/"
+  scrape_interval = "60s"
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = env("GRAFANA_CLOUD_PROM_URL")
+    basic_auth {
+      username = env("GRAFANA_CLOUD_PROM_USER")
+      password = env("GRAFANA_CLOUD_API_KEY")
+    }
+  }
+}
+
+// --- Logs ---
+local.file_match "django_logs" {
+  path_targets = [{
+    __path__ = "/data/logs/django.log",
+    app      = "2nd-if",
+  }]
+}
+
+loki.source.file "django" {
+  targets    = local.file_match.django_logs.targets
+  forward_to = [loki.write.grafana_cloud.receiver]
+}
+
+loki.write "grafana_cloud" {
+  endpoint {
+    url = env("GRAFANA_CLOUD_LOKI_URL")
+    basic_auth {
+      username = env("GRAFANA_CLOUD_LOKI_USER")
+      password = env("GRAFANA_CLOUD_API_KEY")
+    }
+  }
+}

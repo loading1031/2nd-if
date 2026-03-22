@@ -1,0 +1,94 @@
+{% extends "patterns/base_page.html" %}
+
+{% block title %}새 에피소드 작성 - 2nd-if{% endblock %}
+
+{% block nav %}
+<nav class="navbar bg-base-100 shadow-sm">
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <div class="flex-1">
+            <a href="#" class="text-xl font-bold">2nd-if</a>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-gray-600">user@example.com</span>
+            <button class="btn btn-ghost btn-sm">로그아웃</button>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# Breadcrumb #}
+    <div class="breadcrumbs text-sm mb-6">
+        <ul>
+            <li><a href="#">달빛 아래의 약속</a></li>
+            <li>새 에피소드</li>
+        </ul>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-2xl font-bold mb-6">새 에피소드 작성</h2>
+
+            <form class="space-y-6">
+                {# 에피소드 제목 #}
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text font-medium">에피소드 제목</span>
+                    </div>
+                    <input type="text" name="title" placeholder="제목을 입력하세요"
+                           class="input input-bordered w-full" />
+                </label>
+
+                {# EditorJS 영역 #}
+                <div>
+                    <div class="label">
+                        <span class="label-text font-medium">본문</span>
+                    </div>
+                    <div class="editorjs-container border border-base-300 rounded-lg min-h-[400px] p-6 bg-white">
+                        <p class="text-base-content/40">에디터 영역 (EditorJS가 여기에 초기화됩니다)</p>
+                    </div>
+                </div>
+
+                {# 유료/무료 설정 #}
+                <div class="divider"></div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <label class="label cursor-pointer gap-3">
+                            <span class="label-text font-medium">유료 에피소드</span>
+                            <input type="checkbox" class="toggle toggle-primary" id="is-paid-toggle" />
+                        </label>
+                    </div>
+
+                    <div id="price-section" class="hidden">
+                        <label class="form-control w-full max-w-xs">
+                            <div class="label">
+                                <span class="label-text">코인 가격</span>
+                            </div>
+                            <label class="input input-bordered flex items-center gap-2 w-full max-w-xs">
+                                <input type="number" name="price" placeholder="0" min="0" step="0.01" class="grow" />
+                                <span class="text-base-content/50">코인</span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+
+                {# 액션 버튼 #}
+                <div class="divider"></div>
+
+                <div class="flex justify-end gap-3">
+                    <button type="button" class="btn btn-ghost">임시저장</button>
+                    <button type="submit" class="btn btn-primary">발행</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById('is-paid-toggle')?.addEventListener('change', function() {
+        document.getElementById('price-section')?.classList.toggle('hidden', !this.checked);
+    });
+</script>
+{% endblock %}
