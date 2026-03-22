@@ -1,7 +1,9 @@
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.utils.encoding import force_bytes, force_str
@@ -80,12 +82,14 @@ async def htmx_password_reset_confirm(request, uidb64, token):
             },
         )
 
-    if len(new_password) < 8:
+    try:
+        await sync_to_async(validate_password)(new_password)
+    except ValidationError as e:
         return render(
             request,
             "pages/password_reset_confirm.html",
             {
-                "error_message": "비밀번호는 8자 이상이어야 합니다.",
+                "error_message": e.messages[0],
                 "uidb64": uidb64,
                 "token": token,
             },

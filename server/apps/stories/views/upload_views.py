@@ -2,6 +2,7 @@ import uuid
 from pathlib import Path
 
 from asgiref.sync import sync_to_async
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -10,6 +11,7 @@ ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
+@login_required
 @require_http_methods(["POST"])
 async def upload_image(request):
     """EditorJS 이미지 업로드 엔드포인트"""
