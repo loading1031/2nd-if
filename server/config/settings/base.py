@@ -111,12 +111,18 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 # django-allauth
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "AUTH_PARAMS": {"prompt": "select_account"},
+    },
+}
 
 # Neo4j configuration
 NEOMODEL_NEO4J_BOLT_URL = os.environ.get(
