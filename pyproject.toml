@@ -9,6 +9,7 @@ dependencies = [
     "django-allauth[socialaccount]>=65.15.0",
     "django-editorjs-fields>=0.2.7",
     "django-extensions>=4.1",
+    "httpx>=0.28.1",
     "neomodel>=6.1.0",
     "pillow>=10.0.0",
     "prometheus-client>=0.24.1",
