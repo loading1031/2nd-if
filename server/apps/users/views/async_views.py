@@ -1,5 +1,7 @@
 from asgiref.sync import sync_to_async
 from django.contrib.auth import alogin, alogout, authenticate, get_user_model
+from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
@@ -59,7 +61,17 @@ async def htmx_signup(request):
     data = form.cleaned_data
     user = User(email=data["email"], nickname=data["nickname"])
     user.set_password(data["password"])
-    await user.asave()
+    try:
+        await user.asave()
+    except IntegrityError:
+        return render(
+            request,
+            "pages/signup.html",
+            {
+                "error_message": "이미 사용 중인 이메일입니다.",
+                "errors": {"email": "이미 사용 중인 이메일입니다."},
+            },
+        )
 
     await _log_fingerprint(request, user)
 
@@ -125,6 +137,7 @@ async def htmx_login(request):
     return response
 
 
+@login_required
 @require_http_methods(["POST"])
 async def htmx_logout(request):
     """HTMX 로그아웃 처리."""
