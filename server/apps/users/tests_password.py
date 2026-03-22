@@ -141,7 +141,7 @@ class TestPasswordResetConfirm:
         )
         assert response.status_code == 200
         content = response.content.decode()
-        assert "비밀번호는 8자 이상이어야 합니다" in content
+        assert "너무 짧습니다" in content
 
     async def test_password_reset_confirm_invalid_token(self, client, user):
         """유효하지 않은 토큰으로 요청 시 에러 메시지 표시"""

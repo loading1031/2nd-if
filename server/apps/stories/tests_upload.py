@@ -1,11 +1,19 @@
 import pytest
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import AsyncClient
+
+User = get_user_model()
 
 
 @pytest.fixture
 async def client():
-    return AsyncClient()
+    user = User(email="uploader@example.com", nickname="업로더")
+    user.set_password("testpass123")
+    await user.asave()
+    c = AsyncClient()
+    await c.aforce_login(user)
+    return c
 
 
 @pytest.mark.django_db(transaction=True)
