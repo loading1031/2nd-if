@@ -45,7 +45,7 @@ RUN rm -f server/static/css/input.css
 
 # Collect static files
 ENV DJANGO_SETTINGS_MODULE=config.settings.prod
-ENV SECRET_KEY=build-only-secret-key
+ARG SECRET_KEY=build-only-secret-key
 RUN cd server && uv run --no-dev python manage.py collectstatic --noinput
 
 # --- Stage 2: Production runtime ---

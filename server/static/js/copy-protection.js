@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const visitorId = result.visitorId;
 
         // 쿠키에 저장 (모든 요청에 자동 포함)
-        document.cookie = `_2ndif_fp=${visitorId};path=/;max-age=31536000;SameSite=Lax`;
+        document.cookie = `_2ndif_fp=${visitorId};path=/;max-age=31536000;SameSite=Lax;Secure`;
 
         // HTMX 요청에 헤더로도 전달
         document.body.addEventListener('htmx:configRequest', (e) => {
