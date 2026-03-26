@@ -22,20 +22,7 @@ from apps.stories.models import Episode, Work
 User = get_user_model()
 
 
-# ── Fixtures ────────────────────────────────────────────────────
-
-
-@pytest.fixture
-async def client():
-    return AsyncClient()
-
-
-@pytest.fixture
-async def user():
-    u = User(email="author@test.com", nickname="작가")
-    u.set_password("testpass123")
-    await u.asave()
-    return u
+# ── Fixtures (conftest.py의 client, user, authenticated_client, work 재사용) ──
 
 
 @pytest.fixture
@@ -47,15 +34,6 @@ async def other_user():
 
 
 @pytest.fixture
-async def authenticated_client(client, user):
-    await client.post(
-        "/users/htmx/auth/login/",
-        {"email": "author@test.com", "password": "testpass123"},
-    )
-    return client
-
-
-@pytest.fixture
 async def reader_client(other_user):
     c = AsyncClient()
     await c.post(
@@ -63,16 +41,6 @@ async def reader_client(other_user):
         {"email": "reader@test.com", "password": "testpass123"},
     )
     return c
-
-
-@pytest.fixture
-async def work(user):
-    return await Work.objects.acreate(
-        title="테스트 작품",
-        description="소개",
-        author=user,
-        license=Work.License.FREE,
-    )
 
 
 @pytest.fixture
@@ -207,12 +175,7 @@ class TestEpisodeCreateErrors:
                 {"title": "", "content": "<p>Content</p>"},
             )
 
-    async def test_create_episode_requires_login(self, client, work):
-        response = await client.post(
-            f"/stories/htmx/{work.pk}/episodes/create/",
-            {"title": "Episode", "content": "<p>Content</p>"},
-        )
-        assert response.status_code == 302
+    # test_create_episode_requires_login: tests.py::TestWorkErrors에서 커버
 
 
 # ── 분기 생성 테스트 ─────────────────────────────────────────
@@ -277,19 +240,7 @@ class TestBranchCreate:
         assert response.status_code == 200
         assert "HX-Redirect" in response
 
-    async def test_branch_invalid_form_short_direction(self):
-        """방향 5자 미만이면 BranchCreateForm 검증 실패."""
-        from apps.stories.forms import BranchCreateForm
-
-        form = BranchCreateForm(
-            data={
-                "branch_direction": "Hi",
-                "title": "Branch",
-                "content": "<p>Content</p>",
-            }
-        )
-        assert not form.is_valid()
-        assert "branch_direction" in form.errors
+    # test_branch_invalid_form_short_direction: tests_forms.py::TestBranchCreateForm에서 커버
 
     async def test_branch_requires_login(self, client, work, many_episodes):
         response = await client.post(

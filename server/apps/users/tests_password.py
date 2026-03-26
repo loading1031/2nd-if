@@ -4,7 +4,6 @@ import pytest
 from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.test import AsyncClient
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
@@ -13,16 +12,11 @@ User = get_user_model()
 
 @pytest.fixture
 async def user(db):
-    """테스트용 사용자 생성"""
+    """비밀번호 재설정 테스트용 사용자 (고유 이메일)."""
     u = User(email="test@example.com", nickname="테스트유저")
     u.set_password("testpass123")
     await u.asave()
     return u
-
-
-@pytest.fixture
-def client():
-    return AsyncClient()
 
 
 @pytest.mark.django_db(transaction=True)

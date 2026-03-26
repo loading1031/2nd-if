@@ -1,17 +1,12 @@
 import pytest
 from django.contrib.auth import get_user_model
-from django.test import AsyncClient
 
 User = get_user_model()
 
 
 @pytest.fixture
-async def client():
-    return AsyncClient()
-
-
-@pytest.fixture
 async def user():
+    """핑거프린트 테스트용 사용자 (고유 이메일)."""
     u = User(email="fp@example.com", nickname="핑거유저")
     u.set_password("testpass123")
     await u.asave()

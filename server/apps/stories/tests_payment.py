@@ -8,11 +8,6 @@ User = get_user_model()
 
 
 @pytest.fixture
-async def client():
-    return AsyncClient()
-
-
-@pytest.fixture
 async def author():
     u = User(email="author@example.com", nickname="작가", wallet_address="0x1234567890abcdef1234567890abcdef12345678")
     u.set_password("testpass123")
