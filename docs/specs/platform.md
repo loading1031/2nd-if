@@ -22,7 +22,7 @@
 ## 기술 스택
 - **백엔드**: Django 6.0+ (Native Async ORM)
 - **프론트엔드**: HTMX + DaisyUI + Tailwind CSS v4
-- **에디터**: django-editor-js (에피소드 작성)
+- **에디터**: TipTap vanilla JS (에피소드 작성)
 - **스토리 그래프**: Neo4j + neomodel (분기/가중치/경로)
 - **일반 데이터**: Django ORM (PostgreSQL/SQLite) — 유저, 인증, 라이선스 등
 
@@ -30,7 +30,7 @@
 
 ### 포함
 - [[auth]] — 회원가입/로그인/로그아웃
-- [[story]] — 원작 등록/연재 (editor.js)
+- [[story]] — 원작 등록/연재 (TipTap)
 - [[branch]] — 분기 생성 (20화 이전 제한)
 - [[next-episode-ui]] — 다음 화 선택 UI (가중치 정렬)
 - [[license]] — 라이선스 설정

@@ -1,9 +1,9 @@
-# Django Async + HTMX + django-editor-js 프로젝트 컨벤션
+# Django Async + HTMX + TipTap 프로젝트 컨벤션
 
 ## 기술 스택
 - **Django 6.0+** (Native Async ORM) → [상세 가이드](django.md)
 - **HTMX** → [상세 가이드](htmx.md)
-- **django-editor-js** → [상세 가이드](django-editor-js.md)
+- **TipTap** (소설 에디터) → [상세 가이드](tiptap.md)
 - **Tailwind CSS + DaisyUI** → [Tailwind 가이드](tailwind-css.md) | [DaisyUI 가이드](daisyui.md)
 - **uv** (패키지 관리)
 
@@ -35,13 +35,12 @@
 - 디바운싱 및 최적화
 - 네이밍 컨벤션
 
-### [django-editor-js 컨벤션](django-editor-js.md)
-- 모델 정의
-- 폼 정의
-- HTMX 통합
-- 컨텐츠 렌더링
+### [TipTap 에디터 컨벤션](tiptap.md)
+- 에디터 구성 (버블 메뉴, 슬래시 커맨드)
+- 번들 빌드 (esbuild)
+- 콘텐츠 저장 (HTML + nh3 새니타이징)
 - 이미지 업로드
-- 데이터 검증
+- HTMX 통합
 
 ### [Tailwind CSS 컨벤션](tailwind-css.md)
 - 프로덕션 환경 설정
@@ -144,7 +143,7 @@ project/
 이 프로젝트는 **디자인 우선** 방식으로 개발됩니다.
 
 ```
-1. [UI/디자인] editor-js로 화면 디자인
+1. [UI/디자인] TipTap 에디터로 화면 디자인
    └── 화면 레이아웃 및 UI 컴포넌트 구성
    └── 사용자 흐름 확인
 
@@ -203,9 +202,9 @@ project/
 - [ ] 프로덕션 빌드 사용 (CDN 금지)
 - [ ] 반응형 디자인 적용
 
-#### django-editor-js
+#### TipTap 에디터
 - [ ] 이미지 업로드 검증 (파일 크기, 확장자)
-- [ ] JSON 데이터 검증
+- [ ] HTML 새니타이징 (nh3)
 - [ ] XSS 방지
 
 ## 💡 Claude 작업 가이드
