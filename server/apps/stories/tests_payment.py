@@ -84,6 +84,54 @@ async def free_episode(work, author):
 
 
 @pytest.mark.django_db(transaction=True)
+class TestPaidEpisodeRequiresWallet:
+    """지갑 미등록 작가는 유료 에피소드를 만들 수 없다."""
+
+    async def test_paid_episode_without_wallet_rejected(self, client):
+        """지갑 없는 작가가 유료 에피소드 생성 시 에러."""
+        no_wallet = User(email="nowallet@test.com", nickname="무지갑")
+        no_wallet.set_password("testpass123")
+        await no_wallet.asave()
+
+        c = AsyncClient()
+        await c.post("/users/htmx/auth/login/", {"email": "nowallet@test.com", "password": "testpass123"})
+
+        w = await Work.objects.acreate(title="작품", author=no_wallet, license=Work.License.FREE)
+        response = await c.post(
+            f"/stories/htmx/{w.pk}/episodes/create/",
+            {"title": "유료화", "content": "<p>내용</p>", "is_paid": "on", "price": "1.00"},
+        )
+        assert response.status_code == 400
+        assert not await Episode.objects.filter(work=w, is_paid=True).aexists()
+
+    async def test_paid_episode_with_wallet_allowed(self, author_client, work):
+        """지갑 있는 작가는 유료 에피소드 생성 가능."""
+        response = await author_client.post(
+            f"/stories/htmx/{work.pk}/episodes/create/",
+            {"title": "유료화", "content": "<p>내용</p>", "is_paid": "on", "price": "1.00"},
+        )
+        # Neo4j 없으면 에러나지만, 지갑 검증은 통과해야 함
+        assert response.status_code != 400 or b"\xec\xa7\x80\xea\xb0\x91" not in response.content
+
+    async def test_free_episode_without_wallet_allowed(self, client):
+        """지갑 없어도 무료 에피소드는 생성 가능."""
+        no_wallet = User(email="nowallet2@test.com", nickname="무지갑2")
+        no_wallet.set_password("testpass123")
+        await no_wallet.asave()
+
+        c = AsyncClient()
+        await c.post("/users/htmx/auth/login/", {"email": "nowallet2@test.com", "password": "testpass123"})
+
+        w = await Work.objects.acreate(title="작품2", author=no_wallet, license=Work.License.FREE)
+        response = await c.post(
+            f"/stories/htmx/{w.pk}/episodes/create/",
+            {"title": "무료화", "content": "<p>내용</p>"},
+        )
+        # 지갑 관련 에러가 아님
+        assert b"\xec\xa7\x80\xea\xb0\x91" not in response.content
+
+
+@pytest.mark.django_db(transaction=True)
 class TestPaymentConfirm:
     async def test_missing_tx_hash(self, buyer_client, work, paid_episode):
         response = await buyer_client.post(

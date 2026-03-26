@@ -107,6 +107,11 @@ async def htmx_episode_create(request, work_pk):
     episode = form.instance
     episode.work = work
     episode.author = await _get_user(request)
+
+    # 유료 에피소드는 작가 지갑 필수
+    if episode.is_paid and not episode.author.wallet_address:
+        return HttpResponse("유료 에피소드를 만들려면 먼저 지갑 주소를 등록하세요.", status=400)
+
     episode.episode_number = await Episode.objects.filter(work=work).acount() + 1
     await episode.asave()
 
@@ -345,6 +350,11 @@ async def htmx_branch_create(request, work_pk, episode_number):
     branch_episode = form.instance
     branch_episode.work = origin_work
     branch_episode.author = user
+
+    # 유료 분기는 작가 지갑 필수
+    if branch_episode.is_paid and not user.wallet_address:
+        return HttpResponse("유료 에피소드를 만들려면 먼저 지갑 주소를 등록하세요.", status=400)
+
     branch_episode.episode_number = latest_count + 1
 
     # 임베딩 계산 후 저장
