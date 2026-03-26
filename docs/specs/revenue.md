@@ -107,4 +107,5 @@
 - [[auth]] — 지갑 주소 관리
 
 ## 디자인 문서
-- (설계 진행 후 추가)
+- [[design-payment-modal]] - 결제 모달 (토큰 선택 + MetaMask 연동)
+- [[design-wallet-settings]] - 지갑 주소 설정 UI
