@@ -1,0 +1,36 @@
+#cloud-config
+
+# VM1: Django + Caddy + GitHub Actions Self-hosted Runner
+
+package_update: true
+
+packages:
+  - dnf-utils
+  - git
+  - rsync
+
+runcmd:
+  # Docker 설치
+  - dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  - dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  - systemctl enable --now docker
+
+  # opc 유저를 docker 그룹에 추가
+  - usermod -aG docker opc
+
+  # 앱 디렉토리 생성
+  - mkdir -p /opt/app
+  - chown opc:opc /opt/app
+
+  # 데이터 디렉토리 (로그, 미디어)
+  - mkdir -p /data/logs /data/media
+  - chown -R opc:opc /data
+
+  # GitHub Actions Self-hosted Runner 디렉토리
+  - mkdir -p /opt/actions-runner
+  - chown opc:opc /opt/actions-runner
+
+  # Firewall 포트 오픈
+  - firewall-cmd --permanent --add-port=80/tcp
+  - firewall-cmd --permanent --add-port=443/tcp
+  - firewall-cmd --reload

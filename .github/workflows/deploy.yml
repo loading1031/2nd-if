@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - 'Dockerfile'
+      - 'docker-compose.prod.yml'
+      - 'scripts/**'
+      - 'docker/**'
+      - 'package.json'
+      - 'pyproject.toml'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy files to app directory
+        run: |
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude 'terraform' \
+            --exclude '.env.prod' \
+            ./ /opt/app/
+
+      - name: Blue-Green deploy
+        run: /opt/app/scripts/deploy.sh

@@ -1,0 +1,25 @@
+#cloud-config
+
+# VM2: Dify AI/LLM 서버 초기화
+
+package_update: true
+
+packages:
+  - dnf-utils
+  - git
+
+runcmd:
+  # Docker 설치
+  - dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  - dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  - systemctl enable --now docker
+
+  # opc 유저를 docker 그룹에 추가
+  - usermod -aG docker opc
+
+  # Dify 디렉토리 생성
+  - mkdir -p /opt/dify
+  - chown opc:opc /opt/dify
+
+  # Dify 클론 (opc 유저로)
+  - su - opc -c "git clone https://github.com/langgenius/dify.git /opt/dify"

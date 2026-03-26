@@ -1,0 +1,40 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+  django-blue:
+    image: 2nd-if:latest
+    container_name: django-blue
+    env_file:
+      - .env.prod
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.oci
+    volumes:
+      - app_data:/data
+    restart: unless-stopped
+    profiles: [blue]
+
+  django-green:
+    image: 2nd-if:latest
+    container_name: django-green
+    env_file:
+      - .env.prod
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.oci
+    volumes:
+      - app_data:/data
+    restart: unless-stopped
+    profiles: [green]
+
+volumes:
+  caddy_data:
+  caddy_config:
+  app_data:

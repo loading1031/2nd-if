@@ -1,0 +1,20 @@
+# OCI 인증 (콘솔 → 프로필 → API Keys에서 확인)
+tenancy_ocid     = "ocid1.tenancy.oc1..aaaa..."
+user_ocid        = "ocid1.user.oc1..aaaa..."
+oci_fingerprint  = "aa:bb:cc:dd:..."
+private_key_path = "~/.oci/oci_api_key.pem"
+
+# 리전 (춘천)
+region = "ap-chuncheon-1"
+
+# Compartment (보통 tenancy_ocid와 동일)
+compartment_ocid = "ocid1.tenancy.oc1..aaaa..."
+
+# SSH 공개키 (cat ~/.ssh/id_rsa.pub 또는 id_ed25519.pub)
+ssh_public_key = "ssh-ed25519 AAAA..."
+
+# SSH 접근 허용 IP (본인 IP, https://ifconfig.me 에서 확인)
+admin_cidr = "123.45.67.89/32"
+
+# Autonomous DB 비밀번호 (12-30자, 대소문자+숫자+특수문자 포함)
+adb_admin_password = "MyStr0ng#Pass123"
