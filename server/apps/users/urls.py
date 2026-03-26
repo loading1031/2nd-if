@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import async_views, password_views, sync_views
+from .views import async_views, password_views, sync_views, wallet_views
 
 app_name = "users"
 
@@ -9,6 +9,7 @@ urlpatterns = [
     path("login/", sync_views.login_page, name="login_page"),
     path("password-reset/", password_views.password_reset_page, name="password_reset"),
     path("password-reset/<uidb64>/<token>/", password_views.password_reset_confirm_page, name="password_reset_confirm"),
+    path("wallet/", wallet_views.wallet_settings_page, name="wallet_settings"),
 ]
 
 # HTMX URLs
@@ -22,6 +23,7 @@ htmx_urlpatterns = [
         password_views.htmx_password_reset_confirm,
         name="htmx_password_reset_confirm",
     ),
+    path("htmx/wallet/save/", wallet_views.htmx_save_wallet, name="htmx_save_wallet"),
 ]
 
 urlpatterns += htmx_urlpatterns

@@ -110,3 +110,26 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.user.nickname} → {self.episode}: {self.score}점"
+
+
+class EpisodePurchase(models.Model):
+    """에피소드 구매 기록 (Polygon 스테이블코인 결제)."""
+
+    episode = models.ForeignKey(Episode, on_delete=models.CASCADE, related_name="purchases")
+    buyer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="purchases",
+    )
+    tx_hash = models.CharField("트랜잭션 해시", max_length=66, unique=True)
+    token = models.CharField("토큰", max_length=10)  # "USDC" or "USDT"
+    amount = models.DecimalField("결제 금액", max_digits=20, decimal_places=6)
+    confirmed = models.BooleanField("확인 여부", default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "episode_purchases"
+        unique_together = [("episode", "buyer")]
+
+    def __str__(self):
+        return f"{self.buyer} → {self.episode} ({self.amount} {self.token})"

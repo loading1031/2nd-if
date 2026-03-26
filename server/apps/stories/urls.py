@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import async_views, sync_views
+from .views import async_views, payment_views, sync_views
 
 app_name = "stories"
 
@@ -40,6 +40,11 @@ htmx_urlpatterns = [
         "htmx/<int:work_pk>/episodes/<int:episode_number>/check-similarity/",
         async_views.htmx_check_similarity,
         name="htmx_check_similarity",
+    ),
+    path(
+        "htmx/<int:work_pk>/episodes/<int:episode_number>/pay/",
+        payment_views.htmx_confirm_payment,
+        name="htmx_confirm_payment",
     ),
     path(
         "htmx/<int:work_pk>/episodes/<int:from_number>/visit/<int:to_number>/",
