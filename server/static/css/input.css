@@ -38,6 +38,30 @@
 .font-classic .prose { font-family: 'Gowun Batang', serif; }
 .font-modern .prose { font-family: 'Noto Sans KR', sans-serif; }
 
+/* TipTap 에디터 스타일 */
+.tiptap {
+    outline: none;
+}
+.tiptap p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: oklch(var(--bc) / 0.3);
+    pointer-events: none;
+    height: 0;
+}
+.tiptap img {
+    display: block;
+    margin: 1.5rem auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+}
+.tiptap hr {
+    border: none;
+    border-top: 1px solid oklch(var(--bc) / 0.15);
+    margin: 2rem 0;
+}
+
 /* HTMX indicator styles */
 .htmx-indicator {
     display: none;
