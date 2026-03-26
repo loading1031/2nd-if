@@ -5,10 +5,13 @@ from django.http import HttpResponse
 from django.shortcuts import aget_object_or_404, render
 from django.views.decorators.http import require_http_methods
 
-from ..forms import EpisodeCreateForm, WorkCreateForm
+from ..embedding import cosine_similarity, get_embedding
+from ..forms import BranchCreateForm, EpisodeCreateForm, WorkCreateForm
 from ..graph import EpisodeNode
 from ..models import Episode, Rating, Work
 from ..watermark import embed_watermark
+
+SIMILARITY_THRESHOLD = 0.75
 
 
 async def _get_user(request):
@@ -243,6 +246,49 @@ async def htmx_next_episodes(request, work_pk, episode_number):
 
 @require_http_methods(["POST"])
 @login_required
+async def htmx_check_similarity(request, work_pk, episode_number):
+    """HTMX 분기 방향 유사도 검사."""
+    direction = request.POST.get("direction", "").strip()
+    if len(direction) < 5:
+        return render(request, "stories/partials/similarity_info.html")
+
+    # 같은 에피소드에서 분기된 기존 에피소드들의 임베딩 조회
+    existing = [
+        ep
+        async for ep in Episode.objects.filter(
+            work_id=work_pk,
+            direction_embedding__isnull=False,
+        ).exclude(branch_direction="")
+    ]
+
+    if not existing:
+        return render(request, "stories/partials/similarity_pass.html")
+
+    # 새 방향 임베딩 계산
+    try:
+        new_embedding = await get_embedding(direction)
+    except Exception:
+        return render(request, "stories/partials/similarity_pass.html")
+
+    # 유사도 비교
+    for ep in existing:
+        sim = cosine_similarity(new_embedding, ep.direction_embedding)
+        if sim >= SIMILARITY_THRESHOLD:
+            return render(
+                request,
+                "stories/partials/similarity_warning.html",
+                {
+                    "similar_episode": ep,
+                    "similarity": round(sim * 100),
+                    "work_pk": work_pk,
+                },
+            )
+
+    return render(request, "stories/partials/similarity_pass.html")
+
+
+@require_http_methods(["POST"])
+@login_required
 async def htmx_branch_create(request, work_pk, episode_number):
     """HTMX 분기 생성."""
     origin_work = await aget_object_or_404(Work, pk=work_pk)
@@ -258,16 +304,16 @@ async def htmx_branch_create(request, work_pk, episode_number):
     if episode_number > latest_count - gap:
         return HttpResponse(f"최신 {gap}화 이내에서는 분기할 수 없습니다.", status=403)
 
-    form = EpisodeCreateForm(request.POST)
+    form = BranchCreateForm(request.POST)
     is_valid = await sync_to_async(form.is_valid)()
     if not is_valid:
         return render(
             request,
-            "stories/partials/branch_create_form.html",
+            "stories/pages/branch_create.html",
             {
                 "form": form,
-                "origin_episode": origin_episode,
-                "work": origin_work,
+                "work_id": origin_work.pk,
+                "episode_number": episode_number,
             },
             status=400,
         )
@@ -277,6 +323,13 @@ async def htmx_branch_create(request, work_pk, episode_number):
     branch_episode.work = origin_work
     branch_episode.author = user
     branch_episode.episode_number = latest_count + 1
+
+    # 임베딩 계산 후 저장
+    try:
+        branch_episode.direction_embedding = await get_embedding(branch_episode.branch_direction)
+    except Exception:
+        pass  # 임베딩 실패해도 분기 생성은 진행
+
     await branch_episode.asave()
 
     # Neo4j: 분기 노드 생성 + BRANCHES_FROM + NEXT 연결
