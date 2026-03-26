@@ -1,6 +1,11 @@
 include:
   - path: ../dify/docker/docker-compose.yaml
     env_file: ../dify/docker/.env
+    project_directory: ../dify/docker
+
+# Dify의 db_postgres, weaviate 서비스가 profiles로 관리됨
+# 실행 시: COMPOSE_PROFILES=postgresql,weaviate docker compose -f docker-compose.dev.yml up -d
+# 또는 .env에 COMPOSE_PROFILES=postgresql,weaviate 추가
 
 services:
   django:
