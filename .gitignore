@@ -43,6 +43,12 @@ npm-debug.log
 .env.local
 .env.*.local
 
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate*
+terraform/terraform.tfvars
+terraform/*.pem
+
 # OS
 .DS_Store
 Thumbs.db

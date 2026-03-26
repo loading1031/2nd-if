@@ -26,9 +26,11 @@ RUN uv sync --frozen --no-dev --extra prod
 COPY package.json yarn.lock ./
 RUN npm install --production
 
-# Download Tailwind CSS v4 standalone CLI (linux x64)
-RUN curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && \
-    mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss && \
+# Download Tailwind CSS v4 standalone CLI (ARM/x64 자동 감지)
+ARG TARGETARCH
+RUN TAILWIND_ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x64") && \
+    curl -sLO "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-${TAILWIND_ARCH}" && \
+    mv "tailwindcss-linux-${TAILWIND_ARCH}" /usr/local/bin/tailwindcss && \
     chmod +x /usr/local/bin/tailwindcss
 
 # Copy application code

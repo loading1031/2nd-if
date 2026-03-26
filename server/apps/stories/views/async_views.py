@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 from ..embedding import cosine_similarity, get_embedding
 from ..forms import BranchCreateForm, EpisodeCreateForm, WorkCreateForm
 from ..graph import EpisodeNode
-from ..models import Episode, Rating, Work
+from ..models import Episode, EpisodePurchase, Rating, Work
 from ..watermark import embed_watermark
 
 SIMILARITY_THRESHOLD = 0.75
@@ -131,12 +131,32 @@ async def htmx_episode_read(request, work_pk, episode_number):
         episode_number=episode_number,
     )
 
+    user = await _get_user(request)
+
+    # 유료 에피소드 열람 제어
+    if episode.is_paid:
+        author_id = await sync_to_async(lambda: episode.author_id)()
+        is_author = user.is_authenticated and user.pk == author_id
+        has_purchased = (
+            user.is_authenticated
+            and await EpisodePurchase.objects.filter(episode=episode, buyer=user, confirmed=True).aexists()
+        )
+
+        if not is_author and not has_purchased:
+            return render(
+                request,
+                "stories/partials/episode_paywall.html",
+                {
+                    "episode": episode,
+                    "work_pk": work_pk,
+                },
+            )
+
     # 조회수 증가
     episode.view_count += 1
     await episode.asave(update_fields=["view_count"])
 
     # 워터마크 식별자 결정
-    user = await _get_user(request)
     if user.is_authenticated:
         wm_id = str(user.id)
         wm_label = user.nickname
