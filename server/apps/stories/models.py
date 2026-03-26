@@ -74,6 +74,8 @@ class Episode(models.Model):
         on_delete=models.CASCADE,
         related_name="episodes",
     )
+    branch_direction = models.CharField("분기 방향", max_length=100, blank=True, default="")
+    direction_embedding = models.JSONField("방향 임베딩", null=True, blank=True)
     is_paid = models.BooleanField("유료 여부", default=False)
     price = models.DecimalField("코인 가격", max_digits=10, decimal_places=2, null=True, blank=True)
     view_count = models.PositiveIntegerField("조회수", default=0)

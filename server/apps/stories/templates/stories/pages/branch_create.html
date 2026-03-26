@@ -25,6 +25,36 @@
                   class="space-y-6">
                 {% csrf_token %}
 
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text font-medium">분기 방향 <span class="text-error">*</span></span>
+                        <span class="label-text-alt">이 분기가 원작과 어떻게 달라지는지 한 줄로 설명하세요</span>
+                    </div>
+                    <input type="text" name="branch_direction"
+                           class="input input-bordered w-full"
+                           placeholder="예: 캐릭터 A가 살아남는 루트"
+                           required maxlength="100"
+                           hx-post="{% url 'stories:htmx_check_similarity' work_id episode_number %}"
+                           hx-trigger="keyup changed delay:500ms"
+                           hx-target="#similarity-result"
+                           hx-indicator="#similarity-loading" />
+                    <div class="label">
+                        <span class="label-text-alt text-base-content/50">
+                            예: "빌런 시점에서 다시 보는 이야기", "로맨스 엔딩"
+                        </span>
+                    </div>
+                </label>
+
+                <div id="similarity-result"></div>
+                <div id="similarity-loading" class="htmx-indicator">
+                    <div class="flex items-center gap-2 text-sm text-base-content/60">
+                        <span class="loading loading-spinner loading-sm"></span>
+                        <span>유사 분기 검사 중...</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
                 {% include "components/form_field.html" with label="에피소드 제목" type="text" name="title" placeholder="분기 에피소드 제목을 입력하세요" required=True %}
 
                 <div>

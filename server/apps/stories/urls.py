@@ -37,6 +37,11 @@ htmx_urlpatterns = [
         name="htmx_branch_create",
     ),
     path(
+        "htmx/<int:work_pk>/episodes/<int:episode_number>/check-similarity/",
+        async_views.htmx_check_similarity,
+        name="htmx_check_similarity",
+    ),
+    path(
         "htmx/<int:work_pk>/episodes/<int:from_number>/visit/<int:to_number>/",
         async_views.htmx_visit_episode,
         name="htmx_visit_episode",
