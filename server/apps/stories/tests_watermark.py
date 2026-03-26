@@ -1,4 +1,4 @@
-from apps.stories.watermark import embed_watermark, extract_watermark
+from apps.stories.watermark import _find_text_space, embed_watermark, extract_watermark
 
 
 class TestWatermark:
@@ -52,3 +52,68 @@ class TestWatermark:
         # zero-width 문자 제거 후 비교
         visible = watermarked.replace("\u200b", "").replace("\u200c", "").replace("\u200d", "")
         assert visible == text
+
+
+class TestFindTextSpace:
+    """_find_text_space HTML 대응 테스트."""
+
+    def test_plain_text_space(self):
+        assert _find_text_space("hello world") == 5
+
+    def test_html_tag_space_skipped(self):
+        """HTML 태그 내부의 공백은 무시."""
+        html = '<p class="test">hello world</p>'
+        idx = _find_text_space(html)
+        # 태그 속성 내부 공백(class="test")은 건너뛰고, 텍스트 공백을 찾아야 함
+        assert html[idx] == " "
+        # 공백 앞의 문자가 텍스트여야 함
+        assert html[idx - 1] == "o"  # "hello"의 o
+
+    def test_no_text_space(self):
+        """텍스트 공백이 없으면 -1."""
+        assert _find_text_space("<p>nospace</p>") == -1
+
+    def test_empty_string(self):
+        assert _find_text_space("") == -1
+
+    def test_only_tags(self):
+        assert _find_text_space("<br><hr>") == -1
+
+    def test_multiple_tags_then_text_space(self):
+        html = '<div><span class="x">first second</span></div>'
+        idx = _find_text_space(html)
+        assert html[idx] == " "
+        # "first second" 사이의 공백이어야 함
+        assert html[idx - 1] == "t"
+
+    def test_space_before_tag(self):
+        html = "hello <b>world</b>"
+        idx = _find_text_space(html)
+        assert idx == 5
+        assert html[idx] == " "
+
+
+class TestEmbedWatermarkHtml:
+    """HTML 콘텐츠에 워터마크 삽입 테스트."""
+
+    def test_html_content(self):
+        html = "<p>Hello world</p>"
+        wm_id = "42"
+        result = embed_watermark(html, wm_id)
+        assert extract_watermark(result) == wm_id
+        # 태그 구조는 깨지지 않아야 함
+        assert result.startswith("<p>")
+        assert result.endswith("</p>")
+
+    def test_no_space_appends_to_end(self):
+        text = "nospace"
+        wm_id = "42"
+        result = embed_watermark(text, wm_id)
+        assert extract_watermark(result) == wm_id
+        assert result.startswith("nospace")
+
+    def test_html_with_attributes(self):
+        html = '<p class="prose">First paragraph with text</p>'
+        wm_id = "user:123"
+        result = embed_watermark(html, wm_id)
+        assert extract_watermark(result) == wm_id
