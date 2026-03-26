@@ -106,7 +106,7 @@
 - [[design-episode-list]] - 에피소드 목록 (원작 경로 + 분기 아코디언)
 - [[design-episode-reader]] - 에피소드 리더 페이지 (분기 선택 UI 포함)
 - [[design-next-episode-card]] - 다음 화 카드 컴포넌트 (원작/분기 구분)
-- [[design-branch-create-v2]] - 분기 생성 페이지 (방향 입력 + AI 검사)
+- [[design-branch-create]] - 분기 생성 페이지 (방향 입력 + AI 검사)
 - [[design-branch-similarity-check]] - 유사 분기 검사 컴포넌트
 
 ## 개발 문서
