@@ -127,6 +127,37 @@ function initEditor() {
       attributes: {
         class: 'prose prose-lg max-w-none focus:outline-none min-h-[400px] p-4',
       },
+      handleKeyDown(view, event) {
+        if (!slashActive) return false
+
+        if (event.key === 'ArrowDown') {
+          event.preventDefault()
+          slashFocusIndex = (slashFocusIndex + 1) % SLASH_ITEM_COUNT
+          updateSlashMenuFocus(slashMenu, slashFocusIndex)
+          return true
+        }
+        if (event.key === 'ArrowUp') {
+          event.preventDefault()
+          slashFocusIndex = (slashFocusIndex - 1 + SLASH_ITEM_COUNT) % SLASH_ITEM_COUNT
+          updateSlashMenuFocus(slashMenu, slashFocusIndex)
+          return true
+        }
+        if (event.key === 'Enter') {
+          event.preventDefault()
+          const items = slashMenu.querySelectorAll('.slash-item')
+          const selected = items[slashFocusIndex]
+          if (selected) {
+            executeSlashCommand(selected.dataset.command)
+          }
+          return true
+        }
+        if (event.key === 'Escape') {
+          event.preventDefault()
+          closeSlashMenu()
+          return true
+        }
+        return false
+      },
       handleDrop(view, event, slice, moved) {
         if (moved) return false
         const files = event.dataTransfer?.files
@@ -242,31 +273,6 @@ function initEditor() {
     const btn = e.target.closest('[data-command]')
     if (!btn) return
     executeSlashCommand(btn.dataset.command)
-  })
-
-  // 키보드 네비게이션 (방향키 + Enter + ESC)
-  editor.view.dom.addEventListener('keydown', (e) => {
-    if (!slashActive) return
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      slashFocusIndex = (slashFocusIndex + 1) % SLASH_ITEM_COUNT
-      updateSlashMenuFocus(slashMenu, slashFocusIndex)
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      slashFocusIndex = (slashFocusIndex - 1 + SLASH_ITEM_COUNT) % SLASH_ITEM_COUNT
-      updateSlashMenuFocus(slashMenu, slashFocusIndex)
-    } else if (e.key === 'Enter') {
-      e.preventDefault()
-      const items = slashMenu.querySelectorAll('.slash-item')
-      const selected = items[slashFocusIndex]
-      if (selected) {
-        executeSlashCommand(selected.dataset.command)
-      }
-    } else if (e.key === 'Escape') {
-      e.preventDefault()
-      closeSlashMenu()
-    }
   })
 
   // 클릭 외부 시 닫기
