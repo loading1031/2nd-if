@@ -1,10 +1,11 @@
+{% load static %}
 <article class="max-w-4xl mx-auto">
     <header class="mb-8">
         <h1 class="text-3xl font-bold mb-2">{{ episode.title }}</h1>
         <div class="flex items-center gap-3 text-base-content/60">
             <span>by {{ episode.author.nickname }}</span>
             <span>·</span>
-            <span class="badge badge-warning">유료 {{ episode.price }} USDC</span>
+            <span class="badge badge-warning">유료 {{ price }} USDC</span>
         </div>
     </header>
 
@@ -18,7 +19,7 @@
 
             {% if user.is_authenticated %}
             <button class="btn btn-primary" onclick="document.getElementById('payment-modal').showModal()">
-                {{ episode.price }} USDC로 결제하기
+                {{ price }} USDC로 결제하기
             </button>
 
             {% include "stories/partials/payment_modal.html" %}
@@ -30,3 +31,6 @@
         </div>
     </div>
 </article>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
+<script src="{% static 'js/metamask-payment.js' %}"></script>

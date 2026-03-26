@@ -143,12 +143,15 @@ async def htmx_episode_read(request, work_pk, episode_number):
         )
 
         if not is_author and not has_purchased:
+            author = await sync_to_async(lambda: episode.work.author)()
             return render(
                 request,
                 "stories/partials/episode_paywall.html",
                 {
                     "episode": episode,
                     "work_pk": work_pk,
+                    "author_wallet": author.wallet_address,
+                    "price": episode.price,
                 },
             )
 
