@@ -47,7 +47,7 @@ npm-debug.log
 terraform/.terraform/
 terraform/*.tfstate*
 terraform/terraform.tfvars
-terraform/*.pem
+*.pem
 
 # OS
 .DS_Store

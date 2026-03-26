@@ -159,7 +159,8 @@
             // 성공: tx hash 표시
             var txLink = document.getElementById('payment-tx-link');
             txLink.textContent = txHash;
-            txLink.href = 'https://polygonscan.com/tx/' + txHash;
+            var explorerUrl = (window.POLYGON_CONFIG && window.POLYGON_CONFIG.explorerUrl) || 'https://polygonscan.com';
+            txLink.href = explorerUrl + '/tx/' + txHash;
             showPaymentState('payment-success');
 
             // 서버에 결제 확인 알림 (HTMX)

@@ -63,6 +63,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.stories.context_processors.polygon_config",
             ],
             "builtins": [],
         },
@@ -131,4 +132,12 @@ NEOMODEL_NEO4J_BOLT_URL = os.environ.get(
 
 # 분기 제한 (최신화로부터 N화 이전에서만 분기 가능)
 BRANCH_EPISODE_GAP = 20
-EDITORJS_IMAGE_UPLOAD_URL = "/api/upload-image/"
+
+# Polygon 결제 설정 (프로덕션: Mainnet)
+POLYGON_CHAIN_ID = "0x89"
+POLYGON_CHAIN_NAME = "Polygon Mainnet"
+POLYGON_RPC_URL = "https://polygon-rpc.com"
+POLYGON_EXPLORER_URL = "https://polygonscan.com"
+POLYGON_CURRENCY_SYMBOL = "POL"
+POLYGON_USDC_ADDRESS = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359"
+POLYGON_USDT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"

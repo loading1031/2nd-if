@@ -1,16 +1,19 @@
 """Polygon 트랜잭션 검증 유틸리티."""
 
-import os
 from decimal import Decimal
 
 import httpx
+from django.conf import settings
 
-POLYGON_RPC_URL = os.environ.get("POLYGON_RPC_URL", "https://polygon-rpc.com")
-
-USDC_ADDRESS = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359"
-USDT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
-TOKEN_ADDRESSES = {"USDC": USDC_ADDRESS, "USDT": USDT_ADDRESS}
 TOKEN_DECIMALS = 6  # USDC, USDT 모두 6 decimals
+
+
+def _get_token_addresses():
+    return {
+        "USDC": settings.POLYGON_USDC_ADDRESS,
+        "USDT": settings.POLYGON_USDT_ADDRESS,
+    }
+
 
 # ERC-20 transfer(address,uint256) 함수 시그니처
 TRANSFER_SELECTOR = "0xa9059cbb"
@@ -20,7 +23,7 @@ async def _rpc_call(method: str, params: list) -> dict:
     """Polygon JSON-RPC 호출."""
     async with httpx.AsyncClient(timeout=15.0) as client:
         response = await client.post(
-            POLYGON_RPC_URL,
+            settings.POLYGON_RPC_URL,
             json={
                 "jsonrpc": "2.0",
                 "id": 1,
@@ -79,10 +82,11 @@ async def verify_transaction(
     4. recipient == expected_to (작가 지갑)
     5. amount >= expected_amount
     """
-    if expected_token not in TOKEN_ADDRESSES:
+    token_addresses = _get_token_addresses()
+    if expected_token not in token_addresses:
         return {"valid": False, "error": f"지원하지 않는 토큰: {expected_token}"}
 
-    token_contract = TOKEN_ADDRESSES[expected_token]
+    token_contract = token_addresses[expected_token]
 
     # 1. 트랜잭션 receipt 조회 (성공 여부 확인)
     try:
