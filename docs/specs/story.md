@@ -33,6 +33,7 @@
 | view_count | int | O | 조회수, default=0 |
 | avg_rating | float | X | 별점 평균 (1~5), null=미등록 |
 | rating_count | int | O | 별점 등록 수, default=0 |
+| branch_direction | string | X | 분기 방향 설명 (분기 에피소드만, [[branch]] 참조) |
 
 > `is_branch` 여부는 Neo4j의 `BRANCHES_FROM` 관계로 판단 ([[branch]] 참조). Django 모델에 중복 저장하지 않음.
 
