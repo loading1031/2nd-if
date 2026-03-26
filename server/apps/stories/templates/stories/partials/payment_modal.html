@@ -1,0 +1,187 @@
+{# 결제 모달 partial #}
+{# 사용법: include "stories/partials/payment_modal.html" #}
+{# 필수 컨텍스트: episode (에피소드 객체), author_wallet (작가 지갑 주소), price (가격) #}
+
+<dialog
+    id="payment-modal"
+    class="modal"
+    data-author-wallet="{{ author_wallet }}"
+    data-price="{{ price }}"
+    data-episode-id="{{ episode.id }}"
+    data-episode-title="{{ episode.title }}">
+    <div class="modal-box max-w-md">
+        <h3 class="font-bold text-lg mb-4">에피소드 구매</h3>
+
+        {# 에피소드 정보 #}
+        <div class="bg-base-200 rounded-lg p-4 mb-4">
+            <p class="text-sm text-gray-500">에피소드</p>
+            <p class="font-semibold">{{ episode.title }}</p>
+            <p class="text-lg font-bold mt-2">{{ price }} USD</p>
+        </div>
+
+        {# 기본 상태: 토큰 선택 + 결제 버튼 #}
+        <div id="payment-default">
+            <label class="form-control w-full mb-4">
+                <div class="label">
+                    <span class="label-text">결제 토큰 선택</span>
+                </div>
+                <select id="payment-token-select" class="select select-bordered w-full">
+                    <option value="USDC" selected>USDC (Polygon)</option>
+                    <option value="USDT">USDT (Polygon)</option>
+                </select>
+            </label>
+
+            <button
+                type="button"
+                id="btn-pay-metamask"
+                onclick="handlePayment()"
+                class="btn btn-primary w-full gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                MetaMask로 결제
+            </button>
+
+            {% if not metamask_hint_hidden %}
+            <p class="text-xs text-gray-400 mt-2 text-center">
+                Polygon 네트워크에서 결제됩니다. MetaMask 설치가 필요합니다.
+            </p>
+            {% endif %}
+        </div>
+
+        {# 로딩 상태 #}
+        <div id="payment-loading" class="hidden text-center py-6">
+            <span class="loading loading-spinner loading-lg text-primary"></span>
+            <p class="mt-4 text-gray-600">트랜잭션 처리 중...</p>
+            <p class="text-sm text-gray-400 mt-1">MetaMask에서 승인해주세요.</p>
+        </div>
+
+        {# 성공 상태 #}
+        <div id="payment-success" class="hidden">
+            <div class="alert alert-success mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>결제가 완료되었습니다!</span>
+            </div>
+            <div class="bg-base-200 rounded-lg p-3 mb-4">
+                <p class="text-sm text-gray-500">트랜잭션 해시</p>
+                <a
+                    id="payment-tx-link"
+                    href="#"
+                    target="_blank"
+                    class="link link-primary font-mono text-xs break-all">
+                </a>
+            </div>
+            <button
+                type="button"
+                onclick="closePaymentModal()"
+                class="btn btn-primary w-full">
+                에피소드 읽기
+            </button>
+        </div>
+
+        {# 에러 상태 #}
+        <div id="payment-error" class="hidden">
+            <div class="alert alert-error mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="payment-error-message">결제 중 오류가 발생했습니다.</span>
+            </div>
+            <button
+                type="button"
+                onclick="resetPaymentModal()"
+                class="btn btn-outline w-full">
+                다시 시도
+            </button>
+        </div>
+
+        {# 모달 닫기 #}
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost btn-sm">닫기</button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<script>
+    function showPaymentState(state) {
+        const states = ['payment-default', 'payment-loading', 'payment-success', 'payment-error'];
+        states.forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('hidden', id !== state);
+            }
+        });
+    }
+
+    function resetPaymentModal() {
+        showPaymentState('payment-default');
+    }
+
+    function closePaymentModal() {
+        var modal = document.getElementById('payment-modal');
+        modal.close();
+        resetPaymentModal();
+        // 결제 성공 후 페이지 새로고침으로 에피소드 접근 허용
+        window.location.reload();
+    }
+
+    async function handlePayment() {
+        var modal = document.getElementById('payment-modal');
+        var authorWallet = modal.dataset.authorWallet;
+        var price = modal.dataset.price;
+        var episodeId = modal.dataset.episodeId;
+        var token = document.getElementById('payment-token-select').value;
+
+        // MetaMask 설치 확인
+        if (!window.MetaMaskPayment || !window.MetaMaskPayment.isMetaMaskInstalled()) {
+            document.getElementById('payment-error-message').textContent =
+                'MetaMask가 설치되어 있지 않습니다. metamask.io 에서 설치해주세요.';
+            showPaymentState('payment-error');
+            return;
+        }
+
+        showPaymentState('payment-loading');
+
+        try {
+            var txHash = await window.MetaMaskPayment.payWithMetaMask(
+                authorWallet,
+                token,
+                price
+            );
+
+            // 성공: tx hash 표시
+            var txLink = document.getElementById('payment-tx-link');
+            txLink.textContent = txHash;
+            txLink.href = 'https://polygonscan.com/tx/' + txHash;
+            showPaymentState('payment-success');
+
+            // 서버에 결제 확인 알림 (HTMX)
+            htmx.ajax('POST', '/stories/htmx/episodes/' + episodeId + '/payment-confirm/', {
+                target: '#payment-result-hidden',
+                swap: 'innerHTML',
+                values: {
+                    tx_hash: txHash,
+                    token: token,
+                },
+            });
+        } catch (error) {
+            var errorMsg = error.message || '결제 중 오류가 발생했습니다.';
+            // 사용자가 트랜잭션을 거부한 경우
+            if (error.code === 4001 || (error.info && error.info.error && error.info.error.code === 4001)) {
+                errorMsg = '트랜잭션이 사용자에 의해 거부되었습니다.';
+            }
+            document.getElementById('payment-error-message').textContent = errorMsg;
+            showPaymentState('payment-error');
+        }
+    }
+</script>
+
+{# 서버 결제 확인용 숨김 영역 #}
+<div id="payment-result-hidden" class="hidden"></div>
