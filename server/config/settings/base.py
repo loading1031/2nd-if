@@ -129,5 +129,6 @@ NEOMODEL_NEO4J_BOLT_URL = os.environ.get(
     "bolt://neo4j:secondif2024@localhost:7687",
 )
 
-# Editor.js configuration
+# 분기 제한 (최신화로부터 N화 이전에서만 분기 가능)
+BRANCH_EPISODE_GAP = 20
 EDITORJS_IMAGE_UPLOAD_URL = "/api/upload-image/"

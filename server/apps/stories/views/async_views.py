@@ -217,12 +217,15 @@ async def htmx_next_episodes(request, work_pk, episode_number):
             }
         )
 
-    # 분기 가능 여부 확인 (20화 제한 + 라이선스)
+    # 분기 가능 여부 확인 (N화 제한 + 라이선스)
+    from django.conf import settings
+
     work = await aget_object_or_404(Work, pk=work_pk)
     latest_episode_number = await Episode.objects.filter(work=work).acount()
+    gap = getattr(settings, "BRANCH_EPISODE_GAP", 20)
     can_branch = (
         work.license != Work.License.NO_BRANCH
-        and episode_number <= latest_episode_number - 20
+        and episode_number <= latest_episode_number - gap
         and request.user.is_authenticated
     )
 
@@ -246,11 +249,14 @@ async def htmx_branch_create(request, work_pk, episode_number):
     origin_episode = await aget_object_or_404(Episode, work=origin_work, episode_number=episode_number)
 
     # 분기 가능 여부 검증
+    from django.conf import settings
+
     latest_count = await Episode.objects.filter(work=origin_work).acount()
+    gap = getattr(settings, "BRANCH_EPISODE_GAP", 20)
     if origin_work.license == Work.License.NO_BRANCH:
         return HttpResponse("이 작품은 분기가 금지되어 있습니다.", status=403)
-    if episode_number > latest_count - 20:
-        return HttpResponse("최신 20화 이내에서는 분기할 수 없습니다.", status=403)
+    if episode_number > latest_count - gap:
+        return HttpResponse(f"최신 {gap}화 이내에서는 분기할 수 없습니다.", status=403)
 
     form = EpisodeCreateForm(request.POST)
     is_valid = await sync_to_async(form.is_valid)()

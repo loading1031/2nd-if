@@ -26,6 +26,9 @@ INSTALLED_APPS += [
 # CORS for development
 CORS_ALLOW_ALL_ORIGINS = True
 
+# 분기 제한 완화 (개발용)
+BRANCH_EPISODE_GAP = 0
+
 # Pattern library iframe rendering
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
