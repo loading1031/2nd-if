@@ -39,22 +39,44 @@ async function uploadImage(file) {
   return null
 }
 
-function createSlashCommandDropdown(editor) {
+function createSlashCommandDropdown() {
   const dropdown = document.createElement('div')
   dropdown.id = 'slash-menu'
-  dropdown.className = 'hidden absolute z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg p-1 w-48'
+  dropdown.className = 'hidden absolute z-50 bg-base-100 border border-base-300 rounded-xl shadow-xl p-2 w-56'
   dropdown.innerHTML = `
-    <button type="button" data-command="image" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded hover:bg-base-200">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-      삽화 삽입
+    <p class="text-xs text-base-content/40 px-3 pt-1 pb-2 font-medium">블록 삽입</p>
+    <button type="button" data-command="image" data-index="0" class="slash-item flex items-center gap-3 w-full px-3 py-2.5 text-sm text-left rounded-lg hover:bg-base-200 transition-colors">
+      <span class="w-8 h-8 rounded-lg bg-base-200 flex items-center justify-center flex-shrink-0">
+        <svg class="w-4 h-4 text-base-content/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      </span>
+      <span>
+        <span class="block font-medium">삽화 삽입</span>
+        <span class="block text-xs text-base-content/40">이미지를 업로드합니다</span>
+      </span>
     </button>
-    <button type="button" data-command="divider" class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded hover:bg-base-200">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
-      구분선
+    <button type="button" data-command="divider" data-index="1" class="slash-item flex items-center gap-3 w-full px-3 py-2.5 text-sm text-left rounded-lg hover:bg-base-200 transition-colors">
+      <span class="w-8 h-8 rounded-lg bg-base-200 flex items-center justify-center flex-shrink-0">
+        <svg class="w-4 h-4 text-base-content/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+      </span>
+      <span>
+        <span class="block font-medium">구분선</span>
+        <span class="block text-xs text-base-content/40">장면 전환을 나타냅니다</span>
+      </span>
     </button>
   `
   document.body.appendChild(dropdown)
   return dropdown
+}
+
+function updateSlashMenuFocus(menu, index) {
+  const items = menu.querySelectorAll('.slash-item')
+  items.forEach((item, i) => {
+    if (i === index) {
+      item.classList.add('bg-base-200')
+    } else {
+      item.classList.remove('bg-base-200')
+    }
+  })
 }
 
 function initEditor() {
@@ -155,34 +177,29 @@ function initEditor() {
   // 슬래시 커맨드
   let slashActive = false
   let slashPos = null
+  let slashFocusIndex = 0
+  const SLASH_ITEM_COUNT = 2
 
-  editor.on('update', ({ editor: ed }) => {
-    const { $head } = ed.state.selection
-    const textBefore = $head.parent.textContent.slice(0, $head.parentOffset)
+  function openSlashMenu(ed) {
+    slashActive = true
+    slashPos = ed.state.selection.from - 1
+    slashFocusIndex = 0
 
-    if (textBefore === '/') {
-      slashActive = true
-      slashPos = ed.state.selection.from - 1
+    const coords = ed.view.coordsAtPos(ed.state.selection.from)
+    slashMenu.style.top = `${coords.bottom + window.scrollY + 8}px`
+    slashMenu.style.left = `${coords.left + window.scrollX}px`
+    slashMenu.classList.remove('hidden')
+    updateSlashMenuFocus(slashMenu, 0)
+  }
 
-      // 슬래시 메뉴 위치 계산
-      const coords = ed.view.coordsAtPos(ed.state.selection.from)
-      slashMenu.style.top = `${coords.bottom + window.scrollY + 4}px`
-      slashMenu.style.left = `${coords.left + window.scrollX}px`
-      slashMenu.classList.remove('hidden')
-    } else if (slashActive) {
-      slashMenu.classList.add('hidden')
-      slashActive = false
-    }
-  })
-
-  // 슬래시 메뉴 커맨드 실행
-  slashMenu.addEventListener('click', async (e) => {
-    const btn = e.target.closest('[data-command]')
-    if (!btn) return
-
-    const command = btn.dataset.command
+  function closeSlashMenu() {
     slashMenu.classList.add('hidden')
     slashActive = false
+    slashFocusIndex = 0
+  }
+
+  function executeSlashCommand(command) {
+    closeSlashMenu()
 
     // '/' 문자 삭제
     if (slashPos !== null) {
@@ -207,21 +224,55 @@ function initEditor() {
     } else if (command === 'divider') {
       editor.chain().focus().setHorizontalRule().run()
     }
-  })
+  }
 
-  // 클릭 외부 시 슬래시 메뉴 닫기
-  document.addEventListener('click', (e) => {
-    if (!slashMenu.contains(e.target) && !editorEl.contains(e.target)) {
-      slashMenu.classList.add('hidden')
-      slashActive = false
+  editor.on('update', ({ editor: ed }) => {
+    const { $head } = ed.state.selection
+    const textBefore = $head.parent.textContent.slice(0, $head.parentOffset)
+
+    if (textBefore === '/') {
+      openSlashMenu(ed)
+    } else if (slashActive) {
+      closeSlashMenu()
     }
   })
 
-  // ESC로 슬래시 메뉴 닫기
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && slashActive) {
-      slashMenu.classList.add('hidden')
-      slashActive = false
+  // 클릭으로 커맨드 실행
+  slashMenu.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-command]')
+    if (!btn) return
+    executeSlashCommand(btn.dataset.command)
+  })
+
+  // 키보드 네비게이션 (방향키 + Enter + ESC)
+  editor.view.dom.addEventListener('keydown', (e) => {
+    if (!slashActive) return
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      slashFocusIndex = (slashFocusIndex + 1) % SLASH_ITEM_COUNT
+      updateSlashMenuFocus(slashMenu, slashFocusIndex)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      slashFocusIndex = (slashFocusIndex - 1 + SLASH_ITEM_COUNT) % SLASH_ITEM_COUNT
+      updateSlashMenuFocus(slashMenu, slashFocusIndex)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      const items = slashMenu.querySelectorAll('.slash-item')
+      const selected = items[slashFocusIndex]
+      if (selected) {
+        executeSlashCommand(selected.dataset.command)
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      closeSlashMenu()
+    }
+  })
+
+  // 클릭 외부 시 닫기
+  document.addEventListener('click', (e) => {
+    if (slashActive && !slashMenu.contains(e.target) && !editorEl.contains(e.target)) {
+      closeSlashMenu()
     }
   })
 
