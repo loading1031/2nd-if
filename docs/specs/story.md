@@ -25,7 +25,7 @@
 | work | Work | O | 소속 작품 |
 | episode_number | int | O | 화 번호 |
 | title | string | O | 에피소드 제목 |
-| content | EditorJS JSON | O | editor.js 컨텐츠 |
+| content | HTML (TipTap) | O | 에피소드 본문 HTML |
 | author | User | O | 작성자 |
 | created_at | datetime | O | |
 | is_paid | bool | O | 유료 여부, default=False ([[revenue]] 참조) |
