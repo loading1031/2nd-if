@@ -11,7 +11,8 @@
 - `/pattern-library/` → pages → work_detail
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/pages/work_detail.html`
+- `apps/stories/templates/stories/partials/episode_list.html`
 
 ## 레이아웃
 작품 상세 페이지는 단일 작품의 정보와 에피소드 목록을 보여주는 메인 페이지이다.
@@ -26,4 +27,4 @@
 - `components/episode_row.html` - 에피소드 행 (번호, 제목, 작가, 조회수, 별점, 원작/분기 배지, 유료 배지)
 
 ## 개발
-- (추후 추가)
+- [[dev-story-work-crud]] - 작품 CRUD 서버 로직

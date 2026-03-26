@@ -13,7 +13,8 @@
 - `/pattern-library/` → components → license_selector
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/pages/work_create.html`
+- `apps/stories/templates/stories/partials/work_create_form.html`
 
 ## 레이아웃
 - 중앙 정렬 폼 (`max-w-2xl`)
@@ -35,4 +36,4 @@
 - `components/license_selector.html` - 라이선스 선택 (라디오 카드 그룹)
 
 ## 개발
-- (추후 추가)
+- [[dev-story-work-crud]] - 작품 CRUD 서버 로직

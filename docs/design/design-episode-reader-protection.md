@@ -35,4 +35,4 @@ https://2nd-if.com/stories/{id}/episodes/{n}/
 - CSS `.novel-reader`, `.novel-reader-watermark`
 
 ## 개발
-- (Step 1~4에서 구현)
+- [[dev-story-episode-crud]] - 에피소드 읽기 시 워터마크 삽입

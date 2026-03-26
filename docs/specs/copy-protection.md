@@ -93,3 +93,6 @@ https://2nd-if.com/stories/1/episodes/25/
 
 ## 디자인 문서
 - [[design-episode-reader-protection]] - 출처 삽입 + 시각 워터마크 UI
+
+## 개발 문서
+- [[dev-story-episode-crud]] - 에피소드 읽기 시 워터마크 삽입

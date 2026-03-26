@@ -39,4 +39,4 @@ CSS 클래스가 `.prose` 안의 폰트를 오버라이드.
 - Google Fonts CDN
 
 ## 개발
-- (Step 5에서 구현)
+- [[dev-story-work-crud]] - 작품 생성 시 폰트 선택

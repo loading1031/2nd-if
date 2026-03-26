@@ -12,7 +12,7 @@
 - `/pattern-library/` → components → star_rating
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/partials/rating_result.html`
 
 ## 레이아웃
 DaisyUI `rating` 컴포넌트 기반 두 가지 모드:
@@ -31,4 +31,4 @@ DaisyUI `rating` 컴포넌트 기반 두 가지 모드:
 - `components/star_rating.html`
 
 ## 개발
-- (추후 추가)
+- [[dev-story-rating]] - 별점 평가 서버 로직

@@ -13,7 +13,7 @@
 - `/pattern-library/` → pages → branch_create
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/pages/branch_create.html`
 
 ## 레이아웃
 - Breadcrumb: 작품명 > 원점 에피소드 > 새 분기
@@ -26,4 +26,4 @@
 - DaisyUI: card, input, toggle, btn, breadcrumbs, badge, alert, divider
 
 ## 개발
-- (추후 추가)
+- [[dev-story-branch]] - 분기 생성 서버 로직

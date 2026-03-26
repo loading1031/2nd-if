@@ -12,7 +12,7 @@
 - `/pattern-library/` → components → next_episode_card
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/partials/next_episodes.html`
 
 ## 레이아웃
 DaisyUI `card card-compact` 기반 가로형 카드:
@@ -41,4 +41,4 @@ DaisyUI `card card-compact` 기반 가로형 카드:
 - `components/next_episode_card.html`
 
 ## 개발
-- (추후 추가)
+- [[dev-story-next-episodes]] - 다음 화 목록 서버 로직

@@ -2,7 +2,7 @@
 
 > 기획 문서
 
-## 상태: 기획 중
+## 상태: 기획 완료
 
 ## 개요
 독자/2차 창작자가 원작의 특정 에피소드 지점에서 새로운 스토리라인을 분기하는 핵심 기능.
@@ -57,3 +57,7 @@
 - [[design-episode-reader]] - 에피소드 리더 페이지 (분기 선택 UI 포함)
 - [[design-next-episode-card]] - 다음 화 카드 컴포넌트 (원작/분기 구분)
 - [[design-branch-create]] - 분기 생성 페이지
+
+## 개발 문서
+- [[dev-story-branch]] - 분기 생성 서버 로직
+- [[dev-story-next-episodes]] - 다음 화 목록 서버 로직

@@ -13,7 +13,10 @@
 - `/pattern-library/` → pages → episode_reader
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/pages/episode_read.html`
+- `apps/stories/templates/stories/partials/episode_content.html`
+- `apps/stories/templates/stories/partials/next_episodes.html`
+- `apps/stories/templates/stories/partials/rating_result.html`
 
 ## 레이아웃
 상단부터 순서대로:
@@ -36,4 +39,6 @@
 - `components/next_episode_card.html` - 다음 화 카드 (원작/분기)
 
 ## 개발
-- (추후 추가)
+- [[dev-story-episode-crud]] - 에피소드 CRUD 서버 로직
+- [[dev-story-rating]] - 별점 평가 서버 로직
+- [[dev-story-next-episodes]] - 다음 화 목록 서버 로직

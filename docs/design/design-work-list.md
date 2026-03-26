@@ -12,7 +12,8 @@
 - `/pattern-library/` → components → work_card
 
 ## 프로덕션 템플릿
-- (추후 구현)
+- `apps/stories/templates/stories/pages/work_list.html`
+- `apps/stories/templates/stories/partials/work_list.html`
 
 ## 레이아웃
 - 페이지 헤더: 제목 + "새 작품 만들기" 버튼
@@ -25,4 +26,4 @@
 - `components/work_card.html` - 작품 카드 (title, author, status, description, episode_count, view_count, branch_count, avg_rating)
 
 ## 개발
-- (추후 추가)
+- [[dev-story-work-crud]] - 작품 CRUD 서버 로직

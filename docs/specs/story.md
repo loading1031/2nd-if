@@ -2,7 +2,7 @@
 
 > 기획 문서
 
-## 상태: 기획 중
+## 상태: 기획 완료
 
 ## 개요
 원작자가 작품을 생성하고, 에피소드(화) 단위로 연재하는 시스템.
@@ -86,6 +86,14 @@
 - [[point-system]] — 작품별 포인트 풀
 
 ## 디자인 문서
+- [[design-work-list]] - 작품 목록 페이지
+- [[design-work-create]] - 작품 생성 페이지
+- [[design-work-detail]] - 작품 상세 페이지
+- [[design-episode-write]] - 에피소드 작성 페이지
 - [[design-episode-reader]] - 에피소드 리더 페이지
 - [[design-star-rating]] - 별점 평가 컴포넌트
-- [[design-episode-write]] - 에피소드 작성 페이지
+
+## 개발 문서
+- [[dev-story-work-crud]] - 작품 CRUD 서버 로직
+- [[dev-story-episode-crud]] - 에피소드 CRUD 서버 로직
+- [[dev-story-rating]] - 별점 평가 서버 로직

@@ -2,7 +2,7 @@
 
 > 기획 문서
 
-## 상태: 기획 중
+## 상태: 기획 완료
 
 ## 개요
 독자가 한 화를 다 읽고 "다음 화"로 넘어가는 시점에, 원작 다음 화 + 2차 창작 분기들을 가중치 순으로 보여주는 핵심 UI.
@@ -86,3 +86,7 @@ engagement_score = visit_count
 - [[design-episode-reader]] - 에피소드 리더 페이지 (다음 화 선택 UI 포함)
 - [[design-next-episode-card]] - 다음 화 카드 컴포넌트
 - [[design-star-rating]] - 별점 평가 컴포넌트
+
+## 개발 문서
+- [[dev-story-next-episodes]] - 다음 화 목록 서버 로직
+- [[dev-story-rating]] - 별점 평가 서버 로직

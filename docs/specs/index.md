@@ -15,6 +15,9 @@
 - [[auth]] - 인증 시스템
 - [[social-login]] - 소셜 로그인 (Google + X + Instagram)
 
+## 고객지원
+- [[cs-chat]] - CS 상담 채팅 (Dify AI)
+
 ## 인프라
 - [[infra]] - 인프라 구성 (Railway + Neo4j Aura + Grafana Cloud)
 - [[monitoring]] - 모니터링 시스템 (Alloy + Grafana Cloud)
