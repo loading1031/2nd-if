@@ -2,16 +2,6 @@
 
 {% block title %}새 분기 만들기 - {{ block.super }}{% endblock %}
 
-{% block extra_head %}
-<!-- EditorJS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2/dist/editorjs.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@2/dist/header.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/nested-list@1/dist/nested-list.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@2/dist/quote.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/code@2/dist/code.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2/dist/image.umd.js"></script>
-{% endblock %}
-
 {% block content %}
 <div class="max-w-4xl mx-auto">
     <div class="breadcrumbs text-sm mb-6">
@@ -41,7 +31,7 @@
                     <div class="label">
                         <span class="label-text font-medium">본문</span>
                     </div>
-                    <div id="editorjs" class="border border-base-300 rounded-lg min-h-[400px] p-4 bg-white"></div>
+                    <div id="editor" class="border border-base-300 rounded-lg min-h-[400px] bg-base-100"></div>
                     <input type="hidden" name="content" id="content-input" />
                 </div>
 
@@ -75,7 +65,7 @@
 
 {% block extra_scripts %}
 {% load static %}
-<script src="{% static 'js/editorjs-init.js' %}"></script>
+<script src="{% static 'js/tiptap-bundle.js' %}"></script>
 <script>
     document.getElementById('branch-paid-toggle')?.addEventListener('change', function() {
         document.getElementById('branch-price-section')?.classList.toggle('hidden', !this.checked);
