@@ -29,7 +29,7 @@
 
             {# 지갑 주소 입력 폼 #}
             <form
-                hx-post="{% url 'users:htmx_wallet_save' %}"
+                hx-post="{% url 'users:htmx_save_wallet' %}"
                 hx-target="#wallet-result"
                 hx-swap="innerHTML"
                 hx-indicator="#wallet-save-loading"
