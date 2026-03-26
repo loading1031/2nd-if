@@ -40,15 +40,17 @@ class EpisodeNode(StructuredNode):
         """다음 화 목록을 engagement_score 내림차순으로 반환.
         원작(is_original=True)은 항상 첫 번째."""
         results = []
-        for rel in self.next_episodes.all_relationships():
-            results.append(
-                {
-                    "node": rel.end_node(),
-                    "is_original": rel.is_original,
-                    "visit_count": rel.visit_count,
-                    "engagement_score": rel.engagement_score,
-                }
-            )
+        for target_node in self.next_episodes.all():
+            rel = self.next_episodes.relationship(target_node)
+            if rel:
+                results.append(
+                    {
+                        "node": target_node,
+                        "is_original": rel.is_original,
+                        "visit_count": rel.visit_count,
+                        "engagement_score": rel.engagement_score,
+                    }
+                )
         results.sort(key=lambda x: (-x["is_original"], -x["engagement_score"]))
         return results
 
