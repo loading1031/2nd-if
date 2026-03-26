@@ -11,11 +11,11 @@ import os
 import httpx
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-EMBED_MODEL = os.environ.get("EMBED_MODEL", "nomic-embed-text")
+EMBED_MODEL = os.environ.get("EMBED_MODEL", "bge-m3")
 
 
 async def get_embedding(text: str) -> list[float]:
-    """텍스트를 임베딩 벡터로 변환."""
+    """텍스트를 임베딩 벡터로 변환 (Ollama API)."""
     async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.post(
             f"{OLLAMA_URL}/api/embeddings",

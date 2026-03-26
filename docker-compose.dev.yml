@@ -19,6 +19,7 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.dev
       DJANGO_ALLOW_ASYNC_UNSAFE: "true"
+      OLLAMA_URL: http://host.docker.internal:11434
     volumes:
       - ./server:/app/server
       - media_data:/app/server/media
