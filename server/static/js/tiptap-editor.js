@@ -258,6 +258,9 @@ function initEditor() {
   }
 
   editor.on('update', ({ editor: ed }) => {
+    // 매 변경마다 hidden input 동기화 (HTMX 제출 타이밍 이슈 방지)
+    contentInput.value = ed.getHTML()
+
     const { $head } = ed.state.selection
     const textBefore = $head.parent.textContent.slice(0, $head.parentOffset)
 
