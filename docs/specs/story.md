@@ -90,6 +90,7 @@
 - [[design-work-list]] - 작품 목록 페이지
 - [[design-work-create]] - 작품 생성 페이지
 - [[design-work-detail]] - 작품 상세 페이지
+- [[design-episode-list]] - 에피소드 목록 (원작 경로 + 분기 아코디언)
 - [[design-episode-write]] - 에피소드 작성 페이지
 - [[design-episode-reader]] - 에피소드 리더 페이지
 - [[design-star-rating]] - 별점 평가 컴포넌트
