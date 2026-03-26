@@ -10,10 +10,20 @@
             <div class="flex items-center space-x-4">
                 {% block nav_items %}
                 {% if user.is_authenticated %}
-                    <span class="text-gray-600">{{ user.email }}</span>
-                    <button class="btn btn-ghost btn-sm"
-                            hx-post="{% url 'users:htmx_logout' %}"
-                            hx-target="body">로그아웃</button>
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1">
+                            {{ user.nickname }}
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </div>
+                        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow">
+                            <li><a href="{% url 'users:wallet_settings' %}">지갑 설정</a></li>
+                            <li>
+                                <button hx-post="{% url 'users:htmx_logout' %}" hx-target="body">
+                                    로그아웃
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 {% else %}
                     <a href="{% url 'users:login_page' %}" class="text-gray-600 hover:text-gray-900">로그인</a>
                     <a href="{% url 'users:signup_page' %}" class="btn btn-primary btn-sm">회원가입</a>
