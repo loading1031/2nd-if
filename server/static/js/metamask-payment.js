@@ -40,7 +40,18 @@ const TOKENS = {
  * @returns {boolean}
  */
 function isMetaMaskInstalled() {
-    return typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
+    return typeof window.ethereum !== "undefined" && (window.ethereum.isMetaMask || window.ethereum.providers?.some(p => p.isMetaMask));
+}
+
+/**
+ * MetaMask provider를 가져옵니다.
+ * 여러 지갑이 설치된 경우 MetaMask를 찾아 반환합니다.
+ */
+function getMetaMaskProvider() {
+    if (window.ethereum?.providers) {
+        return window.ethereum.providers.find(p => p.isMetaMask) || window.ethereum;
+    }
+    return window.ethereum;
 }
 
 /**
@@ -55,7 +66,8 @@ async function connectMetaMask() {
         );
     }
 
-    const accounts = await window.ethereum.request({
+    const provider = getMetaMaskProvider();
+    const accounts = await provider.request({
         method: "eth_requestAccounts",
     });
 
@@ -72,7 +84,8 @@ async function connectMetaMask() {
  * @throws {Error} 네트워크 전환 실패 시
  */
 async function switchToPolygon() {
-    const currentChainId = await window.ethereum.request({
+    const provider = getMetaMaskProvider();
+    const currentChainId = await provider.request({
         method: "eth_chainId",
     });
 
@@ -81,14 +94,14 @@ async function switchToPolygon() {
     }
 
     try {
-        await window.ethereum.request({
+        await provider.request({
             method: "wallet_switchEthereumChain",
             params: [{ chainId: POLYGON_CHAIN_ID }],
         });
     } catch (switchError) {
         // 4902: 체인이 MetaMask에 추가되지 않은 경우
         if (switchError.code === 4902) {
-            await window.ethereum.request({
+            await provider.request({
                 method: "wallet_addEthereumChain",
                 params: [POLYGON_NETWORK_PARAMS],
             });
@@ -138,8 +151,9 @@ async function payWithMetaMask(toAddress, token, amount) {
     await switchToPolygon();
 
     // 3. ethers.js Provider + Signer 설정
-    const provider = new window.ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
+    const mmProvider = getMetaMaskProvider();
+    const ethProvider = new window.ethers.BrowserProvider(mmProvider);
+    const signer = await ethProvider.getSigner();
 
     // 4. ERC-20 컨트랙트 인스턴스
     const contract = new window.ethers.Contract(
