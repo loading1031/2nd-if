@@ -172,10 +172,13 @@
                 },
             });
         } catch (error) {
-            var errorMsg = error.message || '결제 중 오류가 발생했습니다.';
-            // 사용자가 트랜잭션을 거부한 경우
+            var errorMsg = '결제 중 오류가 발생했습니다.';
             if (error.code === 4001 || (error.info && error.info.error && error.info.error.code === 4001)) {
-                errorMsg = '트랜잭션이 사용자에 의해 거부되었습니다.';
+                errorMsg = '결제가 취소되었습니다.';
+            } else if (error.reason && error.reason.includes('exceeds balance')) {
+                errorMsg = 'USDC/USDT 잔액이 부족합니다. Polygon 네트워크에서 잔액을 확인해주세요.';
+            } else if (error.code === 'CALL_EXCEPTION') {
+                errorMsg = '토큰 잔액이 부족하거나 전송에 실패했습니다.';
             }
             document.getElementById('payment-error-message').textContent = errorMsg;
             showPaymentState('payment-error');
