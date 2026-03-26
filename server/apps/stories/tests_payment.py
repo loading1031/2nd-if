@@ -220,6 +220,52 @@ class TestWalletSettings:
 
 
 @pytest.mark.django_db(transaction=True)
+class TestEpisodeAccessControl:
+    """유료 에피소드 열람 제어 테스트."""
+
+    async def test_free_episode_accessible(self, client, work, free_episode):
+        """무료 에피소드는 누구나 읽을 수 있다."""
+        response = await client.get(f"/stories/htmx/{work.pk}/episodes/2/")
+        assert response.status_code == 200
+        assert b"<p>" in response.content  # 본문 HTML 포함
+
+    async def test_paid_episode_blocked_without_purchase(self, buyer_client, work, paid_episode):
+        """미구매 유료 에피소드는 본문 대신 결제 안내를 표시한다."""
+        response = await buyer_client.get(f"/stories/htmx/{work.pk}/episodes/1/")
+        assert response.status_code == 200
+        assert b"payment" in response.content or b"\xea\xb2\xb0\xec\xa0\x9c" in response.content  # "결제" 포함
+
+    async def test_paid_episode_accessible_after_purchase(self, buyer_client, work, paid_episode, buyer):
+        """구매한 유료 에피소드는 본문을 볼 수 있다."""
+        await EpisodePurchase.objects.acreate(
+            episode=paid_episode,
+            buyer=buyer,
+            tx_hash="0x" + "a" * 64,
+            token="USDC",
+            amount=0.5,
+            confirmed=True,
+        )
+        response = await buyer_client.get(f"/stories/htmx/{work.pk}/episodes/1/")
+        assert response.status_code == 200
+        # 워터마크(zero-width chars)가 삽입되어 있어도 <p> 태그로 본문 존재 확인
+        assert b"<p>" in response.content
+        assert "결제" not in response.content.decode()
+
+    async def test_paid_episode_accessible_by_author(self, author_client, work, paid_episode):
+        """작가 본인은 구매 없이 유료 에피소드를 볼 수 있다."""
+        response = await author_client.get(f"/stories/htmx/{work.pk}/episodes/1/")
+        assert response.status_code == 200
+        assert b"<p>" in response.content
+        assert "결제" not in response.content.decode()
+
+    async def test_paid_episode_anonymous_blocked(self, client, work, paid_episode):
+        """비로그인 사용자는 유료 에피소드 본문을 볼 수 없다."""
+        response = await client.get(f"/stories/htmx/{work.pk}/episodes/1/")
+        assert response.status_code == 200
+        assert "유료 콘텐츠" not in response.content.decode()
+
+
+@pytest.mark.django_db(transaction=True)
 class TestEpisodePurchaseModel:
     async def test_create_purchase(self, paid_episode, buyer):
         purchase = await EpisodePurchase.objects.acreate(
