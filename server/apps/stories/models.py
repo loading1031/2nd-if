@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django_editorjs_fields import EditorJsJSONField
 
 
 class Work(models.Model):
@@ -69,18 +68,7 @@ class Episode(models.Model):
     work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name="episodes")
     episode_number = models.PositiveIntegerField("화 번호")
     title = models.CharField("제목", max_length=200)
-    content = EditorJsJSONField(
-        plugins=[
-            "@editorjs/paragraph",
-            "@editorjs/header",
-            "@editorjs/list",
-            "@editorjs/image",
-            "@editorjs/code",
-            "@editorjs/quote",
-        ],
-        null=True,
-        blank=True,
-    )
+    content = models.TextField("본문", blank=True, default="")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

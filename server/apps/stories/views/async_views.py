@@ -144,7 +144,7 @@ async def htmx_episode_read(request, work_pk, episode_number):
         wm_label = f"anon-{request.session.session_key[:8]}"
 
     # 콘텐츠에 워터마크 삽입
-    watermarked_content = embed_watermark(str(episode.content or ""), wm_id)
+    watermarked_content = embed_watermark(episode.content or "", wm_id)
 
     return render(
         request,

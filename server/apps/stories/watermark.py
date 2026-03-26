@@ -34,13 +34,27 @@ def _decode(zwc_string: str) -> str | None:
         return None
 
 
+def _find_text_space(html: str) -> int:
+    """HTML 태그 밖의 첫 번째 공백 위치를 찾는다."""
+    inside_tag = False
+    for i, ch in enumerate(html):
+        if ch == "<":
+            inside_tag = True
+        elif ch == ">":
+            inside_tag = False
+        elif ch == " " and not inside_tag:
+            return i
+    return -1
+
+
 def embed_watermark(text: str, identifier: str) -> str:
-    """텍스트 첫 번째 공백 뒤에 zero-width 워터마크 삽입."""
+    """텍스트의 첫 번째 텍스트 공백 뒤에 zero-width 워터마크 삽입.
+    HTML 태그 내부의 공백은 건너뛴다."""
     if not text:
         return ""
 
     encoded = _encode(identifier)
-    space_idx = text.find(" ")
+    space_idx = _find_text_space(text)
     if space_idx == -1:
         return text + encoded
     return text[: space_idx + 1] + encoded + text[space_idx + 1 :]

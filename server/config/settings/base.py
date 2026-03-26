@@ -21,7 +21,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third party
-    "django_editorjs_fields",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",

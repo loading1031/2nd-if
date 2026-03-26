@@ -50,7 +50,7 @@ async def episodes(work, user):
             work=work,
             episode_number=i,
             title=f"테스트 {i}화",
-            content={"blocks": [{"type": "paragraph", "data": {"text": f"내용 {i}"}}]},
+            content=f"<p>내용 {i}</p>",
             author=user,
         )
         eps.append(ep)
