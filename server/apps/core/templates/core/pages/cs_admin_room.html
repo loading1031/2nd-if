@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}{{ room.user.nickname|default:room.user.email }} - CS 관리{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    {# 헤더 #}
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <a href="{% url 'core:cs_admin_list' %}" class="btn btn-ghost btn-sm">&#8592; 목록</a>
+            <h1 class="text-xl font-bold">{{ room.user.nickname|default:room.user.email }}</h1>
+        </div>
+        {# 상태 변경 드롭다운 #}
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-sm btn-outline gap-1">
+                상태: {{ room.status }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </div>
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-40 p-2 shadow">
+                <li>
+                    <button hx-patch="{% url 'core:cs_admin_status' room.id %}"
+                            hx-vals='{"status": "open"}'
+                            hx-target="body" hx-swap="none"
+                            hx-on::after-request="location.reload()">열림</button>
+                </li>
+                <li>
+                    <button hx-patch="{% url 'core:cs_admin_status' room.id %}"
+                            hx-vals='{"status": "resolved"}'
+                            hx-target="body" hx-swap="none"
+                            hx-on::after-request="location.reload()">해결됨</button>
+                </li>
+                <li>
+                    <button hx-patch="{% url 'core:cs_admin_status' room.id %}"
+                            hx-vals='{"status": "closed"}'
+                            hx-target="body" hx-swap="none"
+                            hx-on::after-request="location.reload()">종료</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    {# 채팅 영역 #}
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body p-0">
+            {# 메시지 목록 #}
+            <div id="chat-messages" class="overflow-y-auto p-4 space-y-1" style="height: 500px;">
+                {% for message in messages %}
+                    {% include "core/partials/chat_message.html" with message=message %}
+                {% empty %}
+                    <div id="empty-state" class="flex items-center justify-center h-full">
+                        <p class="text-base-content/40">아직 메시지가 없습니다.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {# 연결 상태 #}
+            <div class="px-4 py-1">
+                <span id="sse-status" class="badge badge-sm badge-success gap-1">
+                    <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+                    연결됨
+                </span>
+            </div>
+
+            {# 답변 입력 #}
+            <div class="border-t border-base-300 p-4">
+                <form id="chat-form"
+                      hx-post="{% url 'core:cs_admin_send' room.id %}"
+                      hx-target="#chat-messages"
+                      hx-swap="beforeend"
+                      hx-on::after-request="this.reset(); scrollToBottom();">
+                    {% csrf_token %}
+                    <div class="flex gap-2">
+                        <input type="text" name="content"
+                               class="input input-bordered flex-1"
+                               placeholder="답변을 입력하세요..."
+                               required autocomplete="off" />
+                        <button type="submit" class="btn btn-primary">전송</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const chatMessages = document.getElementById('chat-messages');
+    const sseStatus = document.getElementById('sse-status');
+    let lastId = {{ last_message_id|default:"0" }};
+
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function connectSSE() {
+        const evtSource = new EventSource("{% url 'core:cs_admin_stream' room.id %}?last_id=" + lastId);
+
+        evtSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.html) {
+                const emptyState = document.getElementById('empty-state');
+                if (emptyState) emptyState.remove();
+                chatMessages.insertAdjacentHTML('beforeend', data.html);
+                lastId = data.id;
+                scrollToBottom();
+            }
+        };
+
+        evtSource.onopen = function() {
+            sseStatus.className = 'badge badge-sm badge-success gap-1';
+            sseStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span> 연결됨';
+        };
+
+        evtSource.onerror = function() {
+            sseStatus.className = 'badge badge-sm badge-error gap-1';
+            sseStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-error"></span> 연결 끊김';
+        };
+    }
+
+    scrollToBottom();
+    connectSSE();
+
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'chat-messages') {
+            const msgs = chatMessages.querySelectorAll('[data-message-id]');
+            if (msgs.length > 0) {
+                lastId = msgs[msgs.length - 1].dataset.messageId;
+            }
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) emptyState.remove();
+        }
+    });
+</script>
+{% endblock %}

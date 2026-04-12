@@ -1,151 +1,109 @@
 {% extends "base.html" %}
-
-{% block title %}CS 상담 - 2nd-if{% endblock %}
+{% block title %}고객 상담{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto">
+<div class="container mx-auto px-4 py-8 max-w-3xl">
     <h1 class="text-2xl font-bold mb-2">고객 상담</h1>
-    <p class="text-gray-500 mb-6 text-sm">궁금한 점을 물어보세요. AI 상담원이 답변해드립니다.</p>
+    <p class="text-base-content/60 mb-6">관리자가 직접 답변합니다. 문의사항을 남겨주세요.</p>
 
-    <!-- 채팅 메시지 영역 -->
-    <div id="chat-messages" class="bg-base-100 rounded-lg shadow-lg p-4 h-[500px] overflow-y-auto space-y-4 mb-4">
-        <!-- 시스템 인사 -->
-        <div class="chat chat-start">
-            <div class="chat-bubble chat-bubble-primary">
-                안녕하세요! 2nd-if 고객 상담입니다. 무엇을 도와드릴까요?
+    <!-- 채팅 영역 -->
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body p-0">
+            <!-- 메시지 목록 -->
+            <div id="chat-messages" class="overflow-y-auto p-4 space-y-1" style="height: 500px;">
+                {% for message in messages %}
+                    {% include "core/partials/chat_message.html" with message=message %}
+                {% empty %}
+                    <div id="empty-state" class="flex items-center justify-center h-full">
+                        <p class="text-base-content/40">메시지를 입력하여 상담을 시작하세요.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- 연결 상태 -->
+            <div class="px-4 py-1">
+                <span id="sse-status" class="badge badge-sm badge-success gap-1">
+                    <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+                    연결됨
+                </span>
+            </div>
+
+            <!-- 메시지 입력 -->
+            <div class="border-t border-base-300 p-4">
+                <form id="chat-form"
+                      hx-post="{% url 'core:cs_chat_send' %}"
+                      hx-target="#chat-messages"
+                      hx-swap="beforeend"
+                      hx-on::after-request="this.reset(); scrollToBottom();">
+                    {% csrf_token %}
+                    <div class="flex gap-2">
+                        <input type="text" name="content"
+                               class="input input-bordered flex-1"
+                               placeholder="메시지를 입력하세요..."
+                               required autocomplete="off" />
+                        <button type="submit" class="btn btn-primary">전송</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
-    <!-- 입력 영역 -->
-    <form id="chat-form" class="flex gap-2">
-        {% csrf_token %}
-        <input
-            type="text"
-            id="chat-input"
-            name="query"
-            placeholder="메시지를 입력하세요..."
-            class="input input-bordered flex-1"
-            autocomplete="off"
-            required>
-        <button type="submit" id="chat-submit" class="btn btn-primary">
-            <span id="send-text">전송</span>
-            <span id="send-loading" class="loading loading-spinner loading-sm hidden"></span>
-        </button>
-    </form>
 </div>
-
-<input type="hidden" id="conversation-id" value="">
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-const chatMessages = document.getElementById('chat-messages');
-const chatForm = document.getElementById('chat-form');
-const chatInput = document.getElementById('chat-input');
-const chatSubmit = document.getElementById('chat-submit');
-const sendText = document.getElementById('send-text');
-const sendLoading = document.getElementById('send-loading');
-const conversationIdInput = document.getElementById('conversation-id');
-const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const chatMessages = document.getElementById('chat-messages');
+    const sseStatus = document.getElementById('sse-status');
+    let lastId = {{ last_message_id|default:"0" }};
 
-function addMessage(content, isUser) {
-    const wrapper = document.createElement('div');
-    wrapper.className = isUser ? 'chat chat-end' : 'chat chat-start';
-
-    const bubble = document.createElement('div');
-    bubble.className = isUser
-        ? 'chat-bubble chat-bubble-secondary'
-        : 'chat-bubble chat-bubble-primary';
-    bubble.textContent = content;
-
-    wrapper.appendChild(bubble);
-    chatMessages.appendChild(wrapper);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return bubble;
-}
-
-function setLoading(loading) {
-    chatInput.disabled = loading;
-    chatSubmit.disabled = loading;
-    sendText.classList.toggle('hidden', loading);
-    sendLoading.classList.toggle('hidden', !loading);
-}
-
-chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const query = chatInput.value.trim();
-    if (!query) return;
-
-    addMessage(query, true);
-    chatInput.value = '';
-    setLoading(true);
-
-    const bubble = addMessage('', false);
-
-    try {
-        const response = await fetch('{% url "core:cs_chat_send" %}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-            },
-            body: JSON.stringify({
-                query: query,
-                conversation_id: conversationIdInput.value,
-            }),
-        });
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let fullText = '';
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
-
-            for (const line of lines) {
-                if (!line.startsWith('data:')) continue;
-
-                const data = line.slice(5).trim();
-                if (!data) continue;
-
-                try {
-                    const parsed = JSON.parse(data);
-
-                    if (parsed.event === 'message' || parsed.event === 'agent_message') {
-                        fullText += parsed.answer || '';
-                        bubble.textContent = fullText;
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
-
-                    if (parsed.conversation_id) {
-                        conversationIdInput.value = parsed.conversation_id;
-                    }
-
-                    if (parsed.event === 'message_end') {
-                        // 대화 종료
-                    }
-                } catch (err) {
-                    // JSON 파싱 실패 무시
-                }
-            }
-        }
-
-        if (!fullText) {
-            bubble.textContent = '응답을 받지 못했습니다. 다시 시도해주세요.';
-        }
-    } catch (err) {
-        bubble.textContent = '연결 오류가 발생했습니다. 다시 시도해주세요.';
-        console.error('Chat error:', err);
-    } finally {
-        setLoading(false);
-        chatInput.focus();
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-});
+
+    // SSE 연결
+    function connectSSE() {
+        const evtSource = new EventSource(`{% url 'core:cs_chat_stream' %}?last_id=${lastId}`);
+
+        evtSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.html) {
+                // 빈 상태 메시지 제거
+                const emptyState = document.getElementById('empty-state');
+                if (emptyState) emptyState.remove();
+
+                chatMessages.insertAdjacentHTML('beforeend', data.html);
+                lastId = data.id;
+                scrollToBottom();
+            }
+        };
+
+        evtSource.onopen = function() {
+            sseStatus.className = 'badge badge-sm badge-success gap-1';
+            sseStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span> 연결됨';
+        };
+
+        evtSource.onerror = function() {
+            sseStatus.className = 'badge badge-sm badge-error gap-1';
+            sseStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-error"></span> 연결 끊김';
+            // EventSource는 자동 재연결됨
+        };
+    }
+
+    // 페이지 로드 시 스크롤 하단으로 + SSE 연결
+    scrollToBottom();
+    connectSSE();
+
+    // HTMX 전송 후 SSE lastId 업데이트
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'chat-messages') {
+            const msgs = chatMessages.querySelectorAll('[data-message-id]');
+            if (msgs.length > 0) {
+                lastId = msgs[msgs.length - 1].dataset.messageId;
+            }
+            // 빈 상태 메시지 제거
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) emptyState.remove();
+        }
+    });
 </script>
 {% endblock %}
