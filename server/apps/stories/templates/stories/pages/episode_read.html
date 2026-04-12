@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}에피소드 - {{ block.super }}{% endblock %}
 
@@ -11,4 +12,8 @@
         <span id="read-spinner" class="loading loading-spinner loading-lg htmx-indicator"></span>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/reader-fx.js' %}"></script>
 {% endblock %}
