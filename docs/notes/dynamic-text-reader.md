@@ -116,10 +116,11 @@
 
 ### Phase 1: 텍스트 효과 (CSS, Pretext 불필요)
 - `data-fx` 속성 파싱 + CSS 애니메이션 적용
-- shake, fade-in, rush, typewriter
+- shake, fade-in, rush, typewriter, float
 - 스크롤 트리거 (Intersection Observer)
 - **의존성**: 없음 (순수 CSS + JS)
 - **작업량**: 소
+- → specs 참조: [[dynamic-reader]]
 
 ### Phase 2: 캐릭터 스프라이트 등장 (Pretext 도입)
 - CharacterSprite 모델 + 이미지 업로드
