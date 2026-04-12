@@ -67,3 +67,47 @@ class FingerprintBlacklist(models.Model):
 
     def __str__(self):
         return f"{self.fingerprint[:16]}... (차단)"
+
+
+class UserAIProvider(models.Model):
+    """사용자 AI 프로바이더 (BYOK)."""
+
+    PROVIDER_CHOICES = [
+        ("openai", "OpenAI"),
+        ("anthropic", "Anthropic"),
+        ("google", "Google Gemini"),
+        ("ollama", "Ollama"),
+    ]
+    user = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="ai_providers",
+    )
+    provider = models.CharField(max_length=20, choices=PROVIDER_CHOICES)
+    display_name = models.CharField(max_length=50)
+    api_key_encrypted = models.BinaryField()
+    base_url = models.URLField(blank=True, default="")
+    model_name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "user_ai_providers"
+        unique_together = ("user", "display_name")
+
+    def __str__(self):
+        return f"{self.display_name} ({self.provider})"
+
+    @property
+    def masked_key(self):
+        """마스킹된 API 키 (앞3자...뒤3자)."""
+        from .crypto import decrypt_key
+
+        try:
+            key = decrypt_key(bytes(self.api_key_encrypted))
+            if len(key) > 6:
+                return f"{key[:3]}...{key[-3:]}"
+            return "***"
+        except Exception:
+            return "***"

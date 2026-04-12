@@ -10,13 +10,11 @@
 - [[license]] - 콘텐츠 라이선스
 - [[copy-protection]] - 복사 방지 (출처 삽입 + 워터마크 + 핑거프린트)
 - [[font-system]] - 장르별 글씨체 4종
+- [[ai-byok]] - AI 연동 (BYOK: 사용자 API 키로 소설 작성 보조)
 
 ## 인증
 - [[auth]] - 인증 시스템
 - [[social-login]] - 소셜 로그인 (Google + X + Instagram)
-
-## 고객지원
-- [[cs-chat]] - CS 상담 채팅 (관리자 1:1)
 
 ## 인프라
 - [[infra]] - 인프라 구성 (Railway + Neo4j Aura + Grafana Cloud)
