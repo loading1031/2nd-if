@@ -1,0 +1,15 @@
+{% if providers %}
+<label class="form-control w-full">
+    <div class="label"><span class="label-text">프로바이더</span></div>
+    <select name="provider_id" class="select select-bordered w-full">
+        {% for p in providers %}
+        <option value="{{ p.id }}">{{ p.display_name }} ({{ p.get_provider_display }})</option>
+        {% endfor %}
+    </select>
+</label>
+{% else %}
+<div class="alert alert-warning">
+    <span>AI 프로바이더를 먼저 등록해주세요.</span>
+    <a href="{% url 'users:ai_settings' %}" class="btn btn-sm btn-ghost">설정 페이지</a>
+</div>
+{% endif %}
