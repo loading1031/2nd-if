@@ -16,7 +16,7 @@
 - [[social-login]] - 소셜 로그인 (Google + X + Instagram)
 
 ## 고객지원
-- [[cs-chat]] - CS 상담 채팅 (Dify AI)
+- [[cs-chat]] - CS 상담 채팅 (관리자 1:1)
 
 ## 인프라
 - [[infra]] - 인프라 구성 (Railway + Neo4j Aura + Grafana Cloud)
