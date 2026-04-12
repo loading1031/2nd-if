@@ -1,0 +1,75 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .chat-container { max-width: 800px; margin: 0 auto; }
+    .chat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 12px 16px; background: var(--body-bg); border: 1px solid var(--hairline-color); border-radius: 8px; }
+    .chat-header h2 { margin: 0; font-size: 18px; color: var(--body-fg); }
+    .chat-messages { border: 1px solid var(--hairline-color); border-radius: 8px; padding: 20px; height: 500px; overflow-y: auto; background: var(--darkened-bg); }
+    .chat-bubble { margin-bottom: 16px; display: flex; }
+    .chat-bubble.admin { justify-content: flex-end; }
+    .chat-bubble .bubble { max-width: 65%; padding: 10px 14px; border-radius: 16px; line-height: 1.5; color: var(--body-fg); }
+    .chat-bubble.user .bubble { background: var(--selected-row); border-bottom-left-radius: 4px; }
+    .chat-bubble.admin .bubble { background: var(--primary); color: var(--header-link-color, #fff); border-bottom-right-radius: 4px; }
+    .chat-meta { font-size: 11px; opacity: 0.6; margin-bottom: 3px; }
+    .chat-input { margin-top: 12px; display: flex; gap: 8px; }
+    .chat-input input { flex: 1; padding: 10px 14px; border: 1px solid var(--hairline-color); border-radius: 8px; font-size: 14px; background: var(--body-bg); color: var(--body-fg); }
+    .chat-input button { padding: 10px 24px; border-radius: 8px; }
+    .status-form { display: inline; }
+    .status-form select { padding: 4px 8px; border-radius: 4px; border: 1px solid var(--hairline-color); font-size: 13px; background: var(--body-bg); color: var(--body-fg); }
+    .empty-chat { text-align: center; color: var(--body-quiet-color); padding: 60px 0; }
+</style>
+{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <div>
+            <a href="{% url 'admin:core_chatroom_changelist' %}">&larr; 목록</a>
+            &nbsp;&nbsp;
+            <h2 style="display:inline;">{{ room.user.nickname|default:room.user.email }}</h2>
+        </div>
+        <form class="status-form" method="post" action="{% url 'admin:core_chatroom_status' room.pk %}">
+            {% csrf_token %}
+            <select name="status" onchange="this.form.submit()">
+                <option value="open" {% if room.status == 'open' %}selected{% endif %}>열림</option>
+                <option value="resolved" {% if room.status == 'resolved' %}selected{% endif %}>해결됨</option>
+                <option value="closed" {% if room.status == 'closed' %}selected{% endif %}>종료</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+        {% for message in messages %}
+        <div class="chat-bubble {% if message.is_admin %}admin{% else %}user{% endif %}">
+            <div class="bubble">
+                <div class="chat-meta">
+                    {% if message.is_admin %}관리자{% else %}{{ message.sender.nickname|default:"사용자" }}{% endif %}
+                    · {{ message.created_at|date:"m/d H:i" }}
+                </div>
+                {{ message.content }}
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-chat">메시지가 없습니다.</div>
+        {% endfor %}
+    </div>
+
+    <form class="chat-input" method="post" action="{% url 'admin:core_chatroom_send' room.pk %}">
+        {% csrf_token %}
+        <input type="text" name="content" placeholder="답변을 입력하세요..." required autocomplete="off">
+        <button type="submit" class="button">전송</button>
+    </form>
+</div>
+
+<script>
+    const el = document.getElementById('chat-messages');
+    el.scrollTop = el.scrollHeight;
+</script>
+{% endblock %}

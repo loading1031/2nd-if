@@ -13,6 +13,8 @@ dependencies = [
     "neomodel>=6.1.0",
     "pillow>=10.0.0",
     "prometheus-client>=0.24.1",
+    "uvicorn>=0.42.0",
+    "whitenoise>=6.12.0",
 ]
 
 [project.optional-dependencies]

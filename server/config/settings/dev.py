@@ -7,6 +7,9 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# WhiteNoise — uvicorn(ASGI)에서도 static 파일 서빙
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
 
 # Database
