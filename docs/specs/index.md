@@ -20,6 +20,10 @@
 - [[infra]] - 인프라 구성 (Railway + Neo4j Aura + Grafana Cloud)
 - [[monitoring]] - 모니터링 시스템 (Alloy + Grafana Cloud)
 
+## 고객지원
+- [[cs-chat]] - CS 상담 채팅 (관리자 1:1)
+- [[cs-faq]] - FAQ 페이지 (자주 묻는 질문)
+
 ## 후속 (MVP 이후)
 - [[revenue]] - 수익 모델 (코인 직접 결제 + 구글 광고)
 - [[point-system]] - 포인트 시스템 (원작자 홍보비 → 2차 창작자 보상)
