@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}CS 관리{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-2xl font-bold mb-6">CS 관리</h1>
+
+    {# 상태 필터 탭 #}
+    <div role="tablist" class="tabs tabs-boxed mb-6">
+        <a role="tab" class="tab {% if status_filter == 'open' %}tab-active{% endif %}"
+           href="?status=open">
+            열림
+            {% if open_count %}<span class="badge badge-sm badge-primary ml-1">{{ open_count }}</span>{% endif %}
+        </a>
+        <a role="tab" class="tab {% if status_filter == 'resolved' %}tab-active{% endif %}"
+           href="?status=resolved">해결됨</a>
+        <a role="tab" class="tab {% if status_filter == 'closed' %}tab-active{% endif %}"
+           href="?status=closed">종료</a>
+    </div>
+
+    {# 대화방 목록 #}
+    <div class="space-y-3">
+        {% for room in rooms %}
+        <a href="{% url 'core:cs_admin_room' room.id %}"
+           class="card bg-base-100 shadow hover:shadow-md transition-shadow cursor-pointer block">
+            <div class="card-body p-4 flex-row items-center justify-between">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-semibold">{{ room.user.nickname|default:room.user.email }}</span>
+                        <span class="badge badge-sm badge-outline">{{ room.status }}</span>
+                    </div>
+                    <p class="text-sm text-base-content/60 truncate">
+                        {{ room.last_message_preview|default:"메시지 없음" }}
+                    </p>
+                </div>
+                <div class="flex flex-col items-end gap-1 ml-4">
+                    <span class="text-xs text-base-content/40">
+                        {{ room.last_message_at|timesince|default:"" }}
+                        {% if room.last_message_at %} 전{% endif %}
+                    </span>
+                    {% if room.unread_count %}
+                    <span class="badge badge-sm badge-primary">{{ room.unread_count }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="text-center py-12">
+            <p class="text-base-content/40 text-lg">상담 내역이 없습니다.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

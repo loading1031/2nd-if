@@ -1,0 +1,15 @@
+{# 사용법: include "core/partials/chat_message.html" with message=message_obj #}
+{# message 객체: id, content, is_admin, sender, created_at #}
+<div class="chat {{ message.is_admin|yesno:'chat-start,chat-end' }}" data-message-id="{{ message.id }}">
+    <div class="chat-header">
+        {% if message.is_admin %}
+            관리자
+        {% else %}
+            {{ message.sender.nickname|default:"사용자" }}
+        {% endif %}
+        <time class="text-xs opacity-50 ml-1">{{ message.created_at|date:"H:i" }}</time>
+    </div>
+    <div class="chat-bubble {% if message.is_admin %}chat-bubble-primary{% endif %}">
+        {{ message.content }}
+    </div>
+</div>

@@ -2,20 +2,13 @@
 Asynchronous views for core app.
 """
 
-import json
-import os
-
-import httpx
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import StreamingHttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from apps.stories.models import Work
-
-DIFY_API_URL = os.environ.get("DIFY_API_URL", "http://localhost/v1")
-DIFY_API_KEY = os.environ.get("DIFY_API_KEY", "")
 
 
 async def index(request):
@@ -37,42 +30,121 @@ async def index(request):
 
 @login_required
 async def cs_chat(request):
-    """CS 상담 채팅 페이지."""
-    return render(request, "core/pages/cs_chat.html")
+    """CS 상담 채팅 페이지 — 채팅방 자동 생성."""
+    from asgiref.sync import sync_to_async
+    from django.contrib.auth import get_user_model
+
+    from apps.core.models import ChatRoom
+
+    User = get_user_model()
+    user_id = await sync_to_async(lambda: request.user.pk)()
+    user = await User.objects.aget(pk=user_id)
+
+    room, _ = await ChatRoom.objects.aget_or_create(user=user)
+    messages = [msg async for msg in room.messages.select_related("sender").order_by("created_at")]
+    last_message_id = messages[-1].id if messages else 0
+
+    return render(
+        request,
+        "core/pages/cs_chat.html",
+        {
+            "room": room,
+            "messages": messages,
+            "last_message_id": last_message_id,
+        },
+    )
 
 
 @login_required
 @require_http_methods(["POST"])
 async def cs_chat_send(request):
-    """Dify Chat API를 호출하고 SSE로 스트리밍 응답."""
-    body = json.loads(request.body)
-    query = body.get("query", "")
-    conversation_id = body.get("conversation_id", "")
+    """사용자 메시지 전송 — DB 저장 후 HTML fragment 반환."""
+    from asgiref.sync import sync_to_async
+    from django.contrib.auth import get_user_model
+    from django.utils import timezone
 
-    user_id = str(request.user.pk)
+    from apps.core.models import ChatMessage, ChatRoom
 
-    async def stream_dify():
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            async with client.stream(
-                "POST",
-                f"{DIFY_API_URL}/chat-messages",
-                headers={
-                    "Authorization": f"Bearer {DIFY_API_KEY}",
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "inputs": {},
-                    "query": query,
-                    "response_mode": "streaming",
-                    "conversation_id": conversation_id,
-                    "user": user_id,
-                },
-            ) as resp:
-                async for line in resp.aiter_lines():
-                    if line.startswith("data:"):
-                        yield f"{line}\n\n"
+    User = get_user_model()
+    user_id = await sync_to_async(lambda: request.user.pk)()
+    user = await User.objects.aget(pk=user_id)
+
+    content = request.POST.get("content", "").strip()
+    if not content:
+        return HttpResponse("", status=400)
+
+    room, _ = await ChatRoom.objects.aget_or_create(user=user)
+    message = await ChatMessage.objects.acreate(
+        room=room,
+        sender=user,
+        is_admin=False,
+        content=content,
+    )
+    # 채팅방 최신 메시지 시간 업데이트
+    room.last_message_at = timezone.now()
+    await room.asave(update_fields=["last_message_at"])
+
+    return render(
+        request,
+        "core/partials/chat_message.html",
+        {
+            "message": message,
+        },
+    )
+
+
+@login_required
+async def cs_chat_stream(request):
+    """SSE 스트림 — 새 메시지를 실시간으로 전달."""
+    import asyncio
+    import json
+
+    from asgiref.sync import sync_to_async
+    from django.contrib.auth import get_user_model
+    from django.template.loader import render_to_string
+
+    from apps.core.models import ChatRoom
+
+    User = get_user_model()
+    user_id = await sync_to_async(lambda: request.user.pk)()
+    user = await User.objects.aget(pk=user_id)
+
+    last_id = int(request.GET.get("last_id", 0))
+
+    async def event_stream():
+        nonlocal last_id
+        try:
+            room = await ChatRoom.objects.aget(user=user)
+        except ChatRoom.DoesNotExist:
+            return
+
+        while True:
+            new_messages = [
+                msg
+                async for msg in room.messages.select_related("sender")
+                .filter(id__gt=last_id, is_admin=True)
+                .order_by("created_at")
+            ]
+            for msg in new_messages:
+                # 읽음 처리
+                msg.is_read = True
+                await msg.asave(update_fields=["is_read"])
+
+                html = await sync_to_async(render_to_string)(
+                    "core/partials/chat_message.html",
+                    {"message": msg},
+                )
+                data = json.dumps({"id": msg.id, "html": html})
+                yield f"data: {data}\n\n"
+                last_id = msg.id
+
+            await asyncio.sleep(2)
 
     return StreamingHttpResponse(
-        stream_dify(),
+        event_stream(),
         content_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
     )
