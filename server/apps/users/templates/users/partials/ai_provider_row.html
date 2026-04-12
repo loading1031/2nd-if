@@ -1,0 +1,26 @@
+{# provider 객체: id, provider, display_name, model_name, masked_key #}
+<tr id="provider-{{ provider.id }}">
+    <td>
+        <span class="badge badge-outline">{{ provider.get_provider_display }}</span>
+    </td>
+    <td>{{ provider.display_name }}</td>
+    <td><code class="text-sm">{{ provider.model_name }}</code></td>
+    <td><code class="text-sm text-base-content/50">{{ provider.masked_key }}</code></td>
+    <td class="flex gap-2">
+        <button class="btn btn-info btn-sm"
+                hx-post="{% url 'users:ai_provider_test' provider.id %}"
+                hx-target="#test-result"
+                hx-swap="innerHTML"
+                hx-indicator="#test-spinner-{{ provider.id }}">
+            <span id="test-spinner-{{ provider.id }}" class="loading loading-spinner loading-xs htmx-indicator"></span>
+            테스트
+        </button>
+        <button class="btn btn-error btn-sm btn-outline"
+                hx-delete="{% url 'users:ai_provider_delete' provider.id %}"
+                hx-target="#provider-{{ provider.id }}"
+                hx-swap="outerHTML"
+                hx-confirm="정말 삭제하시겠습니까?">
+            삭제
+        </button>
+    </td>
+</tr>

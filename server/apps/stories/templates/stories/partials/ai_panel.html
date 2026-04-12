@@ -1,0 +1,128 @@
+{# AI 어시스턴트 패널 -- 에피소드 작성 페이지 하단에 include #}
+<div class="collapse collapse-arrow bg-base-200 mt-6">
+    <input type="checkbox" />
+    <div class="collapse-title text-lg font-medium">
+        AI 어시스턴트
+    </div>
+    <div class="collapse-content">
+        <!-- 프로바이더 선택 -->
+        <div id="ai-provider-area"
+             hx-get="{% url 'stories:htmx_ai_providers' %}"
+             hx-trigger="revealed"
+             hx-swap="innerHTML">
+            <span class="loading loading-spinner loading-sm"></span>
+        </div>
+
+        <!-- 프롬프트 입력 -->
+        <div class="mt-4">
+            <textarea id="ai-prompt"
+                      class="textarea textarea-bordered w-full"
+                      rows="3"
+                      placeholder="이어질 내용을 설명해주세요..."></textarea>
+        </div>
+
+        <!-- 버튼 바 -->
+        <div class="flex gap-2 mt-3">
+            <button id="ai-generate-btn" class="btn btn-primary btn-sm" onclick="startAiGenerate()">
+                <span id="ai-loading" class="loading loading-spinner loading-xs" style="display:none;"></span>
+                생성
+            </button>
+            <button id="ai-cancel-btn" class="btn btn-ghost btn-sm" style="display:none;" onclick="cancelAiGenerate()">
+                취소
+            </button>
+        </div>
+
+        <!-- 생성 결과 -->
+        <div id="ai-result" class="mt-4 p-4 bg-base-100 rounded-lg min-h-[100px]" style="display:none;">
+            <div id="ai-result-text" class="whitespace-pre-wrap"></div>
+        </div>
+
+        <!-- 결과 액션 -->
+        <div id="ai-result-actions" class="flex gap-2 mt-3" style="display:none;">
+            <button class="btn btn-primary btn-sm" onclick="insertToEditor()">에디터에 삽입</button>
+            <button class="btn btn-outline btn-sm" onclick="startAiGenerate()">재생성</button>
+        </div>
+
+        <!-- 미등록 안내 (JS로 토글) -->
+        <div id="ai-no-provider" class="alert alert-warning mt-4" style="display:none;">
+            <span>AI 프로바이더를 먼저 등록해주세요.</span>
+            <a href="{% url 'users:ai_settings' %}" class="btn btn-sm btn-ghost">설정 페이지로 이동</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let aiEventSource = null;
+
+    function startAiGenerate() {
+        const prompt = document.getElementById('ai-prompt').value.trim();
+        const providerSelect = document.querySelector('#ai-provider-area select');
+        if (!prompt || !providerSelect) return;
+
+        const providerId = providerSelect.value;
+        if (!providerId) return;
+
+        // UI 상태 변경
+        document.getElementById('ai-loading').style.display = '';
+        document.getElementById('ai-cancel-btn').style.display = '';
+        document.getElementById('ai-result').style.display = '';
+        document.getElementById('ai-result-text').textContent = '';
+        document.getElementById('ai-result-actions').style.display = 'none';
+
+        // 에디터 컨텍스트 (마지막 2000자)
+        const editorContent = window.tiptapEditor ? window.tiptapEditor.getText().slice(-2000) : '';
+
+        // SSE 연결
+        const params = new URLSearchParams({
+            prompt: prompt,
+            provider_id: providerId,
+            context: editorContent,
+        });
+
+        aiEventSource = new EventSource(`/stories/htmx/ai/generate/?${params}`);
+
+        aiEventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.text) {
+                document.getElementById('ai-result-text').textContent += data.text;
+            }
+            if (data.done) {
+                finishAiGenerate();
+            }
+        };
+
+        aiEventSource.onerror = function() {
+            finishAiGenerate();
+        };
+    }
+
+    function cancelAiGenerate() {
+        if (aiEventSource) {
+            aiEventSource.close();
+            aiEventSource = null;
+        }
+        document.getElementById('ai-loading').style.display = 'none';
+        document.getElementById('ai-cancel-btn').style.display = 'none';
+    }
+
+    function finishAiGenerate() {
+        if (aiEventSource) {
+            aiEventSource.close();
+            aiEventSource = null;
+        }
+        document.getElementById('ai-loading').style.display = 'none';
+        document.getElementById('ai-cancel-btn').style.display = 'none';
+        document.getElementById('ai-result-actions').style.display = '';
+    }
+
+    function insertToEditor() {
+        const text = document.getElementById('ai-result-text').textContent;
+        if (window.tiptapEditor && text) {
+            window.tiptapEditor.commands.insertContent('<p>' + text + '</p>');
+            // 결과 영역 초기화
+            document.getElementById('ai-result').style.display = 'none';
+            document.getElementById('ai-result-actions').style.display = 'none';
+            document.getElementById('ai-prompt').value = '';
+        }
+    }
+</script>

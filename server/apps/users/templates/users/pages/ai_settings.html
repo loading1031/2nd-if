@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}AI 프로바이더 설정{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <h1 class="text-2xl font-bold mb-6">AI 프로바이더 설정</h1>
+
+    <!-- 등록된 프로바이더 목록 -->
+    <div class="card bg-base-100 shadow-xl mb-8">
+        <div class="card-body">
+            <h2 class="card-title mb-4">등록된 프로바이더</h2>
+            <div id="provider-list">
+                <!-- 테이블: DaisyUI table -->
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>프로바이더</th>
+                                <th>별칭</th>
+                                <th>모델</th>
+                                <th>API 키</th>
+                                <th>액션</th>
+                            </tr>
+                        </thead>
+                        <tbody id="provider-tbody">
+                            {% for provider in providers %}
+                                {% include "users/partials/ai_provider_row.html" with provider=provider %}
+                            {% empty %}
+                                <tr id="empty-provider-row">
+                                    <td colspan="5" class="text-center text-base-content/50 py-8">
+                                        등록된 프로바이더가 없습니다.
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 테스트 결과 영역 -->
+    <div id="test-result"></div>
+
+    <!-- 프로바이더 추가 폼 -->
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title mb-4">프로바이더 추가</h2>
+            <form hx-post="{% url 'users:ai_provider_add' %}"
+                  hx-target="#provider-tbody"
+                  hx-swap="beforeend"
+                  hx-on::after-request="if(event.detail.successful) this.reset();">
+                {% csrf_token %}
+                <div class="space-y-4">
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text">프로바이더</span></div>
+                        <select name="provider" class="select select-bordered w-full" required>
+                            <option disabled selected>프로바이더 선택</option>
+                            <option value="openai">OpenAI</option>
+                            <option value="anthropic">Anthropic</option>
+                            <option value="google">Google Gemini</option>
+                            <option value="ollama">Ollama (로컬)</option>
+                        </select>
+                    </label>
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text">별칭</span></div>
+                        <input type="text" name="display_name" class="input input-bordered w-full" placeholder="내 GPT-4" required />
+                    </label>
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text">API 키</span></div>
+                        <input type="password" name="api_key" class="input input-bordered w-full" placeholder="sk-..." required />
+                    </label>
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text">모델명</span></div>
+                        <input type="text" name="model_name" class="input input-bordered w-full" placeholder="gpt-4o" required />
+                    </label>
+                    <label class="form-control w-full" id="base-url-field" style="display: none;">
+                        <div class="label"><span class="label-text">Base URL</span></div>
+                        <input type="url" name="base_url" class="input input-bordered w-full" placeholder="http://localhost:11434" />
+                    </label>
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn btn-primary">추가</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Ollama 선택 시 Base URL 필드 표시
+    document.querySelector('select[name="provider"]').addEventListener('change', function() {
+        const baseUrlField = document.getElementById('base-url-field');
+        const apiKeyInput = document.querySelector('input[name="api_key"]');
+        if (this.value === 'ollama') {
+            baseUrlField.style.display = '';
+            apiKeyInput.removeAttribute('required');
+            apiKeyInput.placeholder = '(불필요)';
+        } else {
+            baseUrlField.style.display = 'none';
+            apiKeyInput.setAttribute('required', '');
+            apiKeyInput.placeholder = 'sk-...';
+        }
+    });
+    // 프로바이더 추가 시 빈 행 제거
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'provider-tbody') {
+            const emptyRow = document.getElementById('empty-provider-row');
+            if (emptyRow) emptyRow.remove();
+        }
+    });
+</script>
+{% endblock %}
