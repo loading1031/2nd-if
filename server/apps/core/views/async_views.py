@@ -13,6 +13,12 @@ from django.views.decorators.http import require_http_methods
 from apps.stories.models import Work
 
 
+async def cs_faq(request):
+    """FAQ 페이지 — 로그인 불필요."""
+    request.user = await aget_user(request)
+    return render(request, "core/pages/cs_faq.html")
+
+
 async def index(request):
     """홈 페이지 — 인기 작품 표시."""
     request.user = await aget_user(request)

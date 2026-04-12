@@ -7,7 +7,8 @@ app_name = "core"
 urlpatterns = [
     # 홈
     path("", async_views.index, name="index"),
-    # 사용자 CS 채팅
+    # CS FAQ + 채팅
+    path("cs/faq/", async_views.cs_faq, name="cs_faq"),
     path("cs/", async_views.cs_chat, name="cs_chat"),
     path("cs/send/", async_views.cs_chat_send, name="cs_chat_send"),
     path("cs/stream/", async_views.cs_chat_stream, name="cs_chat_stream"),

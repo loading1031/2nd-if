@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}자주 묻는 질문{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <h1 class="text-2xl font-bold mb-2">자주 묻는 질문</h1>
+    <p class="text-base-content/60 mb-6">궁금한 점을 찾아보세요.</p>
+
+    <!-- 검색 -->
+    <div class="mb-6">
+        <input type="text" id="faq-search" class="input input-bordered w-full"
+               placeholder="검색어를 입력하세요..." oninput="filterFaq()">
+    </div>
+
+    <!-- 카테고리 탭 -->
+    <div role="tablist" class="tabs tabs-boxed mb-6">
+        <button role="tab" class="tab tab-active" onclick="filterCategory('all', this)">전체</button>
+        <button role="tab" class="tab" onclick="filterCategory('service', this)">서비스</button>
+        <button role="tab" class="tab" onclick="filterCategory('account', this)">계정</button>
+        <button role="tab" class="tab" onclick="filterCategory('read', this)">읽기</button>
+        <button role="tab" class="tab" onclick="filterCategory('write', this)">창작</button>
+        <button role="tab" class="tab" onclick="filterCategory('license', this)">라이선스</button>
+        <button role="tab" class="tab" onclick="filterCategory('payment', this)">결제</button>
+        <button role="tab" class="tab" onclick="filterCategory('tech', this)">기술</button>
+    </div>
+
+    <!-- FAQ 목록 -->
+    <div id="faq-list" class="space-y-3">
+
+        <!-- 서비스 소개 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="service" data-q="2nd-if가 뭔가요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">2nd-if가 뭔가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">2nd-if는 소설 2차 창작 분기 플랫폼입니다. 원작 소설의 특정 지점에서 새로운 스토리를 분기하여 나만의 결말을 만들 수 있습니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="service" data-q="다른 소설 플랫폼이랑 뭐가 다른가요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">다른 소설 플랫폼이랑 뭐가 다른가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">일반 소설 플랫폼은 작가만 글을 쓰지만, 2nd-if에서는 독자도 원작의 특정 지점에서 분기하여 새로운 이야기를 이어갈 수 있습니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="service" data-q="무료인가요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">무료인가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">기본 이용은 무료입니다. 일부 에피소드는 원작자가 유료로 설정할 수 있습니다.</div>
+        </details>
+
+        <!-- 계정 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="account" data-q="회원가입은 어떻게 하나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">회원가입은 어떻게 하나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">이메일과 비밀번호로 가입할 수 있습니다. 비밀번호는 최소 8자 이상이어야 합니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="account" data-q="소셜 로그인 카카오 구글 지원">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">소셜 로그인(카카오, 구글 등)은 지원하나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">현재는 이메일 가입만 지원하며, 소셜 로그인은 추후 지원 예정입니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="account" data-q="비밀번호를 잊어버렸어요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">비밀번호를 잊어버렸어요.</summary>
+            <div class="px-4 pb-4 text-base-content/80">비밀번호 찾기 기능은 현재 준비 중입니다. 고객센터로 문의해주세요.</div>
+        </details>
+
+        <!-- 읽기 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="read" data-q="작품은 어떻게 찾나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">작품은 어떻게 찾나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">홈 화면에서 인기 작품을 확인하거나, 작품 목록에서 장르별로 검색할 수 있습니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="read" data-q="분기가 뭔가요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">분기가 뭔가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">원작 스토리의 특정 지점에서 갈라져 나온 새로운 스토리입니다. "만약 주인공이 그때 다른 선택을 했다면?"이라는 상상을 실제 이야기로 만든 것입니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="read" data-q="다음 화를 고를 때 여러 개가 나오는 이유">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">다음 화를 고를 때 여러 개가 나오는 이유가 뭔가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">원작 다음 화 외에 다른 독자/작가가 만든 분기 에피소드가 있기 때문입니다. 원작은 항상 최상단에 표시되며, 분기는 인기순으로 정렬됩니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="read" data-q="글씨체가 작품마다 다른 이유">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">글씨체가 작품마다 다른 이유는 뭔가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">원작자가 장르에 맞는 글씨체를 선택할 수 있습니다. 판타지는 명조체, 무협은 궁서체 등 분위기에 맞게 설정됩니다.</div>
+        </details>
+
+        <!-- 창작 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="write" data-q="누구나 분기를 만들 수 있나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">누구나 분기를 만들 수 있나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">회원이라면 누구나 만들 수 있습니다. 단, 원작자가 라이선스에서 분기를 허용한 작품에서만 가능합니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="write" data-q="아무 에피소드에서나 분기할 수 있나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">아무 에피소드에서나 분기할 수 있나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">원작의 최신화로부터 20화 이전까지만 분기가 가능합니다. 이는 원작자의 최신 스토리를 보호하기 위한 장치입니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="write" data-q="분기에서 또 분기할 수 있나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">분기에서 또 분기할 수 있나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">네, 가능합니다. 분기된 에피소드에서도 새로운 분기를 만들 수 있습니다.</div>
+        </details>
+
+        <!-- 라이선스 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="license" data-q="라이선스가 뭔가요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">라이선스가 뭔가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">원작자가 자신의 작품에 대해 2차 창작 허용 범위를 설정하는 것입니다. 자유 분기 허용, 비상업적 분기만 허용, 분기 금지 등을 선택할 수 있습니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="license" data-q="분기 금지인 작품에서 분기를 만들 수 있나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">분기 금지인 작품에서 분기를 만들 수 있나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">아니요, 원작자가 분기를 금지한 작품에서는 분기를 만들 수 없습니다.</div>
+        </details>
+
+        <!-- 결제 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="payment" data-q="작품으로 수익을 낼 수 있나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">작품으로 수익을 낼 수 있나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">원작자는 에피소드를 유료로 설정할 수 있으며, 독자가 스테이블코인(USDC/USDT)으로 직접 결제합니다. 코인은 작가 지갑으로 바로 전송되며, 플랫폼은 수수료를 받지 않습니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="payment" data-q="어떤 코인으로 결제하나요 USDC USDT Polygon">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">어떤 코인으로 결제하나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">Polygon 네트워크의 USDC 또는 USDT(스테이블코인)로 결제합니다. 스테이블코인은 1개 = 약 1달러로 가격이 안정적입니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="payment" data-q="MetaMask가 뭔가요 메타마스크">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">MetaMask가 뭔가요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">암호화폐 지갑 브라우저 확장 프로그램입니다. Chrome, Firefox 등에서 설치할 수 있습니다.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="payment" data-q="가스비 수수료가 얼마나 드나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">가스비(수수료)가 얼마나 드나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">Polygon 네트워크는 가스비가 거의 없습니다. 보통 0.01달러 미만으로, 소액 결제에 적합합니다.</div>
+        </details>
+
+        <!-- 기술 -->
+        <details class="bg-base-200 rounded-lg faq-item" data-category="tech" data-q="페이지가 안 열려요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">페이지가 안 열려요.</summary>
+            <div class="px-4 pb-4 text-base-content/80">브라우저 캐시를 삭제하고 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요.</div>
+        </details>
+
+        <details class="bg-base-200 rounded-lg faq-item" data-category="tech" data-q="모바일에서도 사용할 수 있나요">
+            <summary class="cursor-pointer p-4 text-lg font-semibold">모바일에서도 사용할 수 있나요?</summary>
+            <div class="px-4 pb-4 text-base-content/80">네, 모바일 브라우저에서 반응형으로 동작합니다. 별도 앱은 현재 없습니다.</div>
+        </details>
+    </div>
+
+    <!-- 검색 결과 없음 -->
+    <div id="faq-empty" class="alert alert-warning mt-4" style="display: none;">
+        <span>검색 결과가 없습니다. 1:1 채팅으로 문의해주세요.</span>
+    </div>
+
+    <!-- 질문하기 -->
+    <div class="card bg-base-200 mt-8">
+        <div class="card-body text-center">
+            <h2 class="card-title justify-center">해결되지 않았나요?</h2>
+            <p class="text-base-content/60">1:1 채팅으로 직접 문의해주세요.</p>
+            <div class="card-actions justify-center mt-2">
+                <a href="{% url 'core:cs_chat' %}" class="btn btn-primary">1:1 채팅으로 문의하기</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let currentCategory = 'all';
+
+    function filterFaq() {
+        const query = document.getElementById('faq-search').value.toLowerCase();
+        const items = document.querySelectorAll('#faq-list .faq-item');
+        let visible = 0;
+
+        items.forEach(item => {
+            const cat = item.dataset.category;
+            const q = (item.dataset.q || '').toLowerCase();
+            const text = item.textContent.toLowerCase();
+            const matchCategory = currentCategory === 'all' || cat === currentCategory;
+            const matchSearch = !query || q.includes(query) || text.includes(query);
+
+            if (matchCategory && matchSearch) {
+                item.style.display = '';
+                visible++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        document.getElementById('faq-empty').style.display = visible === 0 ? '' : 'none';
+    }
+
+    function filterCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('tab-active'));
+        btn.classList.add('tab-active');
+        filterFaq();
+    }
+</script>
+{% endblock %}
