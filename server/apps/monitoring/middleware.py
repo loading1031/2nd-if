@@ -37,19 +37,14 @@ class PrometheusMetricsMiddleware:
     """Collect per-request Prometheus metrics.
 
     Tracks request count (by method/path/status), latency histogram, and a
-    gauge of currently active requests.
+    gauge of currently active requests. sync/async 양쪽 모두 지원.
     """
 
     def __init__(self, get_response):
-        self.get_response = get_response
-        # Support both sync and async Django middleware
-        if callable(get_response):
-            import asyncio
+        import asyncio
 
-            if asyncio.iscoroutinefunction(get_response):
-                self._is_async = True
-            else:
-                self._is_async = False
+        self.get_response = get_response
+        self._is_async = asyncio.iscoroutinefunction(get_response)
 
     async def __acall__(self, request):
         path = _normalise_path(request.path)
@@ -75,8 +70,6 @@ class PrometheusMetricsMiddleware:
 
     def __call__(self, request):
         if self._is_async:
-            # Let Django's ASGIHandler use __acall__
-
             return self.__acall__(request)
 
         path = _normalise_path(request.path)

@@ -2,6 +2,8 @@
 Asynchronous views for core app.
 """
 
+from asgiref.sync import sync_to_async
+from django.contrib.auth import aget_user
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponse, StreamingHttpResponse
@@ -13,6 +15,7 @@ from apps.stories.models import Work
 
 async def index(request):
     """홈 페이지 — 인기 작품 표시."""
+    request.user = await aget_user(request)
     featured_works = [
         w
         async for w in Work.objects.select_related("author")
@@ -31,7 +34,6 @@ async def index(request):
 @login_required
 async def cs_chat(request):
     """CS 상담 채팅 페이지 — 채팅방 자동 생성."""
-    from asgiref.sync import sync_to_async
     from django.contrib.auth import get_user_model
 
     from apps.core.models import ChatRoom
@@ -59,7 +61,6 @@ async def cs_chat(request):
 @require_http_methods(["POST"])
 async def cs_chat_send(request):
     """사용자 메시지 전송 — DB 저장 후 HTML fragment 반환."""
-    from asgiref.sync import sync_to_async
     from django.contrib.auth import get_user_model
     from django.utils import timezone
 
@@ -80,7 +81,6 @@ async def cs_chat_send(request):
         is_admin=False,
         content=content,
     )
-    # 채팅방 최신 메시지 시간 업데이트
     room.last_message_at = timezone.now()
     await room.asave(update_fields=["last_message_at"])
 
@@ -99,7 +99,6 @@ async def cs_chat_stream(request):
     import asyncio
     import json
 
-    from asgiref.sync import sync_to_async
     from django.contrib.auth import get_user_model
     from django.template.loader import render_to_string
 
@@ -126,7 +125,6 @@ async def cs_chat_stream(request):
                 .order_by("created_at")
             ]
             for msg in new_messages:
-                # 읽음 처리
                 msg.is_read = True
                 await msg.asave(update_fields=["is_read"])
 
