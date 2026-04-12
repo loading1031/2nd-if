@@ -1,6 +1,4 @@
-import json
 import os
-from unittest.mock import AsyncMock, patch
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
@@ -56,7 +54,7 @@ class TestCsChatPage:
         content = response.content.decode()
         assert 'id="chat-messages"' in content
         assert 'id="chat-form"' in content
-        assert 'id="chat-input"' in content
+        assert 'name="content"' in content
 
 
 @pytest.mark.django_db(transaction=True)
@@ -65,50 +63,26 @@ class TestCsChatSend:
 
     async def test_send_requires_login(self, client):
         """미로그인 → 리다이렉트."""
-        response = await client.post(
-            "/cs/chat/",
-            json.dumps({"query": "테스트"}),
-            content_type="application/json",
-        )
+        response = await client.post("/cs/send/", {"content": "테스트"})
         assert response.status_code == 302
 
     async def test_send_rejects_get(self, auth_client):
         """GET 메서드 → 405."""
-        response = await auth_client.get("/cs/chat/")
+        response = await auth_client.get("/cs/send/")
         assert response.status_code == 405
 
-    @patch("apps.core.views.async_views.httpx.AsyncClient")
-    async def test_send_returns_sse(self, mock_client_cls, auth_client):
-        """정상 요청 → SSE 스트리밍 응답."""
-        mock_response = AsyncMock()
-        mock_response.aiter_lines = lambda: _async_iter(
-            [
-                'data: {"event": "message", "answer": "안녕하세요", "conversation_id": "conv-1"}',
-                'data: {"event": "message_end", "conversation_id": "conv-1"}',
-            ]
-        )
-        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
-        mock_response.__aexit__ = AsyncMock(return_value=False)
+    async def test_send_creates_message(self, auth_client):
+        """메시지 전송 → DB에 ChatMessage 생성."""
+        from apps.core.models import ChatMessage
 
-        mock_instance = AsyncMock()
-        mock_instance.stream = AsyncMock(return_value=mock_response)
-        mock_instance.__aenter__ = AsyncMock(return_value=mock_instance)
-        mock_instance.__aexit__ = AsyncMock(return_value=False)
-        mock_client_cls.return_value = mock_instance
-
-        response = await auth_client.post(
-            "/cs/chat/",
-            json.dumps({"query": "로그인이 안돼"}),
-            content_type="application/json",
-        )
+        response = await auth_client.post("/cs/send/", {"content": "로그인이 안돼요"})
         assert response.status_code == 200
-        assert response["Content-Type"] == "text/event-stream"
+        assert await ChatMessage.objects.filter(content="로그인이 안돼요").aexists()
 
-
-async def _async_iter(items):
-    """리스트를 async iterator로 변환."""
-    for item in items:
-        yield item
+    async def test_send_empty_message(self, auth_client):
+        """빈 메시지 → 400."""
+        response = await auth_client.post("/cs/send/", {"content": ""})
+        assert response.status_code == 400
 
 
 # ──────────────────────────────────────────────
