@@ -6,7 +6,6 @@ from .models import Episode, Work
 ALLOWED_TAGS = {"p", "strong", "em", "br", "img", "hr", "h2", "h3", "ul", "ol", "li"}
 ALLOWED_ATTRIBUTES = {
     "img": {"src", "alt"},
-    "p": {"data-fx", "data-delay"},
 }
 
 

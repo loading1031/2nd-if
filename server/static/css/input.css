@@ -46,6 +46,3 @@
 .htmx-request.htmx-indicator {
     display: inline-block;
 }
-
-/* 동적 텍스트 리더 효과 */
-@import "./fx.css";
