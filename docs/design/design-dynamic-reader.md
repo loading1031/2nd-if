@@ -2,107 +2,149 @@
 
 > 디자인 문서
 
-## 상태: 디자인 완료
+## 상태: 재설계 (Pretext 기반 Phase 1)
 
 ## 기획
-- [[dynamic-reader]] - 동적 텍스트 리더 기획
+- [[dynamic-reader]] — 동적 텍스트 리더 기획
 
 ## 프로덕션 템플릿
-- `apps/stories/templates/stories/pages/episode_read.html`
+- `apps/stories/templates/stories/pages/episode_read.html` — 리더 페이지
+- `apps/stories/templates/stories/partials/episode_content.html` — 본문 partial (HTMX로 로드)
+- `apps/stories/templates/stories/pages/episode_write.html` — 에디터 페이지
 
-## 효과 프리셋
+## 핵심 개념
 
-| 효과 | data-fx 값 | CSS 설명 | 예시 텍스트 |
-|------|-----------|---------|------------|
-| 흔들림 | shake | 좌우 진동 keyframes (transform: translateX) | "쾅!" |
-| 페이드인 | fade-in | opacity 0→1 (0.8s ease-in) | "어둠 속에서 눈을 떴다" |
-| 질주 | rush | 우→좌 슬라이드 + 가속 (translateX + ease-in) | "그는 달리기 시작했다" |
-| 타이핑 | typewriter | 글자 하나씩 표시 (clip + steps) | "편지를 읽었다..." |
-| 떠오름 | float | 느린 상하 반복 (translateY infinite) | "구름 위를 걷는 듯" |
-
-## TipTap /effect 메뉴 UI
-
-에디터에서 `/effect` 입력 시 표시되는 슬래시 메뉴:
+본문 HTML 안에 **오브젝트 노드**(`<div data-character="..." data-position="left">`)가 삽입되면, 클라이언트에서 Pretext가 오브젝트 박스를 고려하여 주변 텍스트를 리플로우한다.
 
 ```
-┌──────────────────────────┐
-│ 텍스트 효과               │
-│                          │
-│ 〰️ 흔들림 (shake)        │
-│ 🌅 페이드인 (fade-in)     │
-│ 💨 질주 (rush)           │
-│ ⌨️ 타이핑 (typewriter)   │
-│ ☁️ 떠오름 (float)        │
-└──────────────────────────┘
+일반 DOM:
+  [p]—기사가 동굴 앞에 섰다.—[p]
+  [div.character knight @left]
+  [p]—검을 들어올리자...—[p]
+
+Pretext 적용 후 (리플로우 시뮬레이션):
+  ┌─────────────┐
+  │  🗡️ knight  │  기사가 동굴 앞에 섰다.
+  │   sprite    │  검을 들어올리자 온 세계가
+  │             │  그의 것이었다. 그는 두려움
+  └─────────────┘  없이 발을 내디뎠다.
 ```
 
-- 각 항목: 아이콘 + 효과 이름 (한국어) + data-fx 값 (영어)
-- 선택 시 현재 단락(블록)에 `data-fx` 속성 부여
-- 이미 효과가 있는 단락 재선택 시 효과 교체
+## 오브젝트 노드 마크업
 
-## 에피소드 리더에서의 동작
-
-### Intersection Observer 동작 흐름
-
-```
-1. 페이지 로드 → reader-fx.js 초기화
-2. [data-fx] 요소 수집
-3. 각 요소에 Intersection Observer 등록 (threshold: 0.3)
-4. 요소가 뷰포트 30% 이상 진입 → "fx-active" 클래스 추가
-5. CSS 애니메이션 자동 재생
-6. 한 번 재생된 효과는 재트리거하지 않음 (1회성)
+```html
+<div class="fx-object"
+     data-character="{sprite_id}"     {# 또는 data-object="{asset_id}" #}
+     data-position="left"             {# left / right / center #}
+     data-motion="slide-in">          {# slide-in / fade #}
+    <img src="/media/sprites/knight.webp" alt="기사">
+</div>
 ```
 
-### 효과별 CSS 상세
+- `fx-object` 클래스는 리더 JS가 잡아서 Pretext 레이아웃 대상에 등록
+- 서버는 `<img>`만 렌더 (이미지 URL은 `CharacterSprite.image` 또는 `SkinAsset.image`)
+- `data-character`/`data-object`는 참조용 메타데이터 (ID)
 
-#### shake (흔들림)
-```
-초기 상태: 정적
-활성화: 0.5s 동안 좌우 2px 진동 (3회 반복 후 정지)
-```
+## 장르별 기본 팩 매트릭스 (Phase 1)
 
-#### fade-in (페이드인)
-```
-초기 상태: opacity: 0
-활성화: 0.8s ease-in으로 opacity: 1
-```
+| 장르 | 기본 무료 팩 이름 | 포함 오브젝트 |
+|------|-----------------|-------------|
+| fantasy | 판타지 베이직 팩 | 검, 방패, 마법진, 두루마리 |
+| romance | 로맨스 베이직 팩 | 꽃잎, 하트, 반지 |
+| horror | 공포 베이직 팩 | 그림자, 눈동자, 촛불 |
+| daily | 일상 베이직 팩 | 커피잔, 고양이, 우산 |
+| sf | SF 베이직 팩 | 회로, 홀로그램, 우주선 |
+| mystery | 미스터리 베이직 팩 | 돋보기, 발자국, 열쇠 |
+| history | 역사 베이직 팩 | 두루마리, 붓, 촛대 |
 
-#### rush (질주)
-```
-초기 상태: translateX(100px), opacity: 0
-활성화: 0.6s ease-in으로 원위치 + opacity: 1
-```
+각 오브젝트는 정적 PNG/WebP (투명 배경). 프리미엄 애니메이션은 Phase 2.
 
-#### typewriter (타이핑)
-```
-초기 상태: 텍스트 숨김 (clip)
-활성화: 글자 수 기반 steps()로 한 글자씩 표시 + 커서 깜박임
-```
-
-#### float (떠오름)
-```
-초기 상태: 정적
-활성화: 2s infinite ease-in-out으로 ±5px 상하 반복
-```
-
-### prefers-reduced-motion 처리
+## TipTap `/character` 슬래시 메뉴
 
 ```
-@media (prefers-reduced-motion: reduce) 적용 시:
-- 모든 애니메이션 duration → 0s
-- 모든 요소 즉시 최종 상태로 표시
-- float infinite 반복 → 정지
+┌────────────────────────────────────┐
+│ 캐릭터 / 오브젝트 삽입              │
+│                                    │
+│ [내 캐릭터]                         │
+│   🛡️ 기사        (업로드한 스프라이트) │
+│   🐉 드래곤                         │
+│                                    │
+│ [장르 팩 — 판타지 베이직]            │
+│   ⚔️ 검                             │
+│   🛡️ 방패                           │
+│   ✨ 마법진                          │
+│   📜 두루마리                        │
+│                                    │
+│ [+ 캐릭터 업로드]                   │
+└────────────────────────────────────┘
+```
+
+선택 시 하단에 **위치/모션 선택** 모달:
+
+```
+┌────────────────────────────────┐
+│ 📍 위치: [왼쪽] 오른쪽 중앙     │
+│ 🎬 모션: [슬라이드인] 페이드    │
+│                                │
+│         [취소]  [삽입]          │
+└────────────────────────────────┘
+```
+
+- 기본값: 스프라이트의 `default_position`, `default_motion`
+- "삽입" → 에디터에 `CharacterNode` atom block 삽입 (썸네일 + 삭제 버튼)
+
+## 에디터 내 오브젝트 표시
+
+에디터에서는 실제 리플로우를 하지 않고 **썸네일 카드**로 표시:
+
+```
+…기사가 동굴 앞에 섰다.
+
+┌──────────────────────┐
+│ 🗡️ knight           │
+│ left / slide-in      │
+│                  [×] │
+└──────────────────────┘
+
+검을 들어올리자…
+```
+
+- 삭제 버튼으로 오브젝트 노드 제거
+- 클릭 시 위치/모션 편집 모달 재오픈
+
+## 리더 페이지 렌더링 흐름
+
+```
+1. 서버: 에피소드 HTML + Pretext 번들 script 태그 전송
+2. 클라이언트: DOMContentLoaded
+   └── reader-pretext.js 초기화
+3. [data-character], [data-object] 노드 수집
+4. 각 오브젝트 이미지 preload 완료 대기
+5. Pretext.layout() 호출 → 오브젝트 박스 기준 텍스트 리플로우 계산
+6. IntersectionObserver로 오브젝트 뷰포트 진입 감지
+7. 진입 시 data-motion 대로 fx-enter 클래스 추가 (CSS 트랜지션)
+8. 스크롤/리사이즈 시 디바운스된 재레이아웃
+```
+
+## 진입 모션 CSS (최소 세트)
+
+```
+.fx-object                 { opacity: 0; transition: opacity .6s, transform .6s; }
+.fx-object.fx-enter        { opacity: 1; transform: none; }
+
+.fx-object[data-motion="slide-in"][data-position="left"]  { transform: translateX(-40px); }
+.fx-object[data-motion="slide-in"][data-position="right"] { transform: translateX(40px); }
+.fx-object[data-motion="fade"]                            { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .fx-object { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
 ```
 
 ## 사용 컴포넌트
-
-### DaisyUI
-- 기존 에피소드 리더 컴포넌트 그대로 사용
-- 추가 DaisyUI 컴포넌트 없음 (순수 CSS 애니메이션)
-
-### 신규
-- `reader-fx.js` — Intersection Observer + data-fx 파싱
-- `input.css` @layer components — data-fx 애니메이션 정의
+- 기존 에피소드 리더 DaisyUI 레이아웃 그대로
+- 신규: 에디터용 **오브젝트 썸네일 카드** (`components/fx_object_card.html`)
+- 신규: `/character` 슬래시 메뉴 UI (TipTap 런타임 내부)
 
 ## 개발
-- [[dev-dynamic-reader]] - 동적 텍스트 리더 서버/클라이언트 로직
+- [[dev-dynamic-reader]] — 동적 텍스트 리더 서버/클라이언트 로직
