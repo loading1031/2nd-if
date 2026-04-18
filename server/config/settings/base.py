@@ -124,12 +124,6 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
-# Neo4j configuration
-NEOMODEL_NEO4J_BOLT_URL = os.environ.get(
-    "NEO4J_BOLT_URL",
-    "bolt://neo4j:secondif2024@localhost:7687",
-)
-
 # 분기 제한 (최신화로부터 N화 이전에서만 분기 가능)
 BRANCH_EPISODE_GAP = 20
 

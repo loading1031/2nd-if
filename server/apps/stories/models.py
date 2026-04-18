@@ -75,7 +75,6 @@ class Episode(models.Model):
         related_name="episodes",
     )
     branch_direction = models.CharField("분기 방향", max_length=100, blank=True, default="")
-    direction_embedding = models.JSONField("방향 임베딩", null=True, blank=True)
     is_paid = models.BooleanField("유료 여부", default=False)
     price = models.DecimalField("코인 가격", max_digits=10, decimal_places=2, null=True, blank=True)
     view_count = models.PositiveIntegerField("조회수", default=0)
@@ -133,3 +132,42 @@ class EpisodePurchase(models.Model):
 
     def __str__(self):
         return f"{self.buyer} → {self.episode} ({self.amount} {self.token})"
+
+
+class EpisodeLink(models.Model):
+    """에피소드 간 연결 (그래프 관계)."""
+
+    class LinkType(models.TextChoices):
+        NEXT = "next", "다음 화"
+        BRANCHES_FROM = "branches_from", "분기 원본"
+
+    from_episode = models.ForeignKey(
+        Episode,
+        on_delete=models.CASCADE,
+        related_name="outgoing_links",
+    )
+    to_episode = models.ForeignKey(
+        Episode,
+        on_delete=models.CASCADE,
+        related_name="incoming_links",
+    )
+    link_type = models.CharField(
+        "연결 유형",
+        max_length=20,
+        choices=LinkType.choices,
+    )
+    is_original = models.BooleanField("원작 여부", default=False)
+    visit_count = models.PositiveIntegerField("방문 수", default=0)
+    engagement_score = models.FloatField("참여 점수", default=0.0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "episode_links"
+        unique_together = [("from_episode", "to_episode", "link_type")]
+        indexes = [
+            models.Index(fields=["from_episode", "link_type"]),
+            models.Index(fields=["to_episode", "link_type"]),
+        ]
+
+    def __str__(self):
+        return f"{self.from_episode} → {self.to_episode} ({self.link_type})"

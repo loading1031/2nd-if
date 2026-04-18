@@ -108,10 +108,6 @@ class TestEpisodeCRUD:
         ep = await Episode.objects.aget(work=work, episode_number=1)
         assert ep.view_count == 1
 
-    @pytest.mark.skipif(
-        not __import__("os").environ.get("NEO4J_BOLT_URL"),
-        reason="Neo4j not available in CI",
-    )
     async def test_episode_create(self, authenticated_client, work):
         response = await authenticated_client.post(
             f"/stories/htmx/{work.pk}/episodes/create/",

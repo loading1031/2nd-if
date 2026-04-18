@@ -38,11 +38,6 @@ ACTIVE_USERS_GAUGE = Gauge(
 # Infrastructure metrics
 # ---------------------------------------------------------------------------
 
-NEO4J_UP = Gauge(
-    "app_neo4j_up",
-    "Neo4j connection health (1 = up, 0 = down)",
-)
-
 DB_UP = Gauge(
     "app_db_up",
     "Django default database health (1 = up, 0 = down)",

@@ -6,11 +6,10 @@
 - 작품 생성 시 font 선택
 - 에피소드 생성 유효하지 않은 폼
 - 분기 생성 (htmx_branch_create) — 금지/갭/폼 에러
-- 유사도 검사 (htmx_check_similarity) — mock 임베딩
+- 유사도 검사 (htmx_check_similarity) — pg_trgm
 - 작가 지갑 없을 때 결제 에러
 """
 
-import os
 from decimal import Decimal
 
 import pytest
@@ -222,10 +221,7 @@ class TestBranchCreate:
         )
         assert response.status_code == 403
 
-    @pytest.mark.skipif(
-        not os.environ.get("NEO4J_BOLT_URL"),
-        reason="Neo4j not available in CI",
-    )
+    @override_settings(BRANCH_EPISODE_GAP=0)
     async def test_branch_success(self, reader_client, work, many_episodes):
         """유효한 분기 생성 (ep 1에서 분기, 충분한 갭)."""
         response = await reader_client.post(
@@ -276,13 +272,8 @@ class TestCheckSimilarity:
         )
         assert response.status_code == 200
 
-    @pytest.mark.skipif(
-        not os.environ.get("OLLAMA_URL"),
-        reason="Ollama not available",
-    )
     async def test_similar_direction_warns(self, authenticated_client, work, user):
-        """기존 분기와 유사한 방향이면 경고."""
-        # 유사 임베딩을 가진 기존 에피소드 생성
+        """기존 분기와 유사한 방향이면 경고 (pg_trgm)."""
         await Episode.objects.acreate(
             work=work,
             episode_number=100,
@@ -290,14 +281,11 @@ class TestCheckSimilarity:
             content="<p>existing</p>",
             author=user,
             branch_direction="주인공이 어두운 숲으로 간다",
-            direction_embedding=await __import__("apps.stories.embedding", fromlist=["get_embedding"]).get_embedding(
-                "주인공이 어두운 숲으로 간다"
-            ),
         )
 
         response = await authenticated_client.post(
             f"/stories/htmx/{work.pk}/episodes/1/check-similarity/",
-            {"direction": "주인공이 어두운 숲으로 향한다"},
+            {"direction": "주인공이 어두운 숲으로 간다"},
         )
         assert response.status_code == 200
 

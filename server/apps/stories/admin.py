@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Episode, Rating, Work
+from .models import Episode, EpisodeLink, Rating, Work
 
 
 @admin.register(Work)
@@ -20,3 +20,9 @@ class EpisodeAdmin(admin.ModelAdmin):
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display = ("episode", "user", "score", "created_at")
+
+
+@admin.register(EpisodeLink)
+class EpisodeLinkAdmin(admin.ModelAdmin):
+    list_display = ("from_episode", "to_episode", "link_type", "is_original", "visit_count", "engagement_score")
+    list_filter = ("link_type", "is_original")

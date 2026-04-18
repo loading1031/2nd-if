@@ -111,7 +111,7 @@ async def test_user_send_message(logged_in_client, user):
     assert response.status_code in (200, 201)
 
     # DB에서 메시지 확인 (모델 import는 함수 내부)
-    from server.apps.cs.models import ChatMessage, ChatRoom
+    from apps.core.models import ChatMessage, ChatRoom
 
     # ChatRoom 자동 생성 확인
     room_exists = await ChatRoom.objects.filter(user=user).aexists()
@@ -164,7 +164,7 @@ async def test_admin_reply_message(admin_client, logged_in_client, user):
         HTTP_HX_REQUEST="true",
     )
 
-    from server.apps.cs.models import ChatRoom
+    from apps.core.models import ChatRoom
 
     room = await ChatRoom.objects.filter(user=user).afirst()
     assert room is not None, "ChatRoom이 생성되지 않았습니다."
@@ -182,7 +182,7 @@ async def test_admin_reply_message(admin_client, logged_in_client, user):
     assert response.status_code in (200, 201)
 
     # DB에서 관리자 메시지 확인
-    from server.apps.cs.models import ChatMessage
+    from apps.core.models import ChatMessage
 
     admin_msg = await ChatMessage.objects.filter(room=room, content="답변입니다").afirst()
     assert admin_msg is not None, "관리자 ChatMessage가 저장되지 않았습니다."

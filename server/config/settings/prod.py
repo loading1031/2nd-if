@@ -11,11 +11,15 @@ DEBUG = False
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 CSRF_TRUSTED_ORIGINS = [f"https://{host.strip()}" for host in ALLOWED_HOSTS if host.strip()]
 
-# Database (SQLite on Railway Volume — /data/db.sqlite3)
+# Database — PostgreSQL
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("DB_PATH", "/data/db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("PG_DB", "secondif"),
+        "USER": os.environ.get("PG_USER", "secondif"),
+        "PASSWORD": os.environ.get("PG_PASSWORD", ""),
+        "HOST": os.environ.get("PG_HOST", "postgres"),
+        "PORT": os.environ.get("PG_PORT", "5432"),
     }
 }
 

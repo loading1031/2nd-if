@@ -12,11 +12,15 @@ MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
 
-# Database
+# Database — PostgreSQL (Docker: docker compose up postgres)
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "secondif",
+        "USER": "secondif",
+        "PASSWORD": "secondif2024",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 

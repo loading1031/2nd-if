@@ -1,17 +1,14 @@
 from asgiref.sync import sync_to_async
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import aget_object_or_404, render
 from django.views.decorators.http import require_http_methods
 
-from ..embedding import cosine_similarity, get_embedding
 from ..forms import BranchCreateForm, EpisodeCreateForm, WorkCreateForm
-from ..graph import EpisodeNode
-from ..models import Episode, EpisodePurchase, Rating, Work
+from ..graph_service import aget_or_create_link, get_next_episodes_sorted, increment_visit
+from ..models import Episode, EpisodeLink, EpisodePurchase, Rating, Work
+from ..similarity import find_similar_branches
 from ..watermark import embed_watermark
-
-SIMILARITY_THRESHOLD = 0.75
 
 
 async def _get_user(request):
@@ -115,12 +112,10 @@ async def htmx_episode_create(request, work_pk):
     episode.episode_number = await Episode.objects.filter(work=work).acount() + 1
     await episode.asave()
 
-    # Neo4j 노드 생성 + NEXT 연결
-    node = await sync_to_async(EpisodeNode.get_or_create_node)(episode.pk, work.pk)
+    # NEXT 링크 생성
     if episode.episode_number > 1:
         prev_episode = await Episode.objects.aget(work=work, episode_number=episode.episode_number - 1)
-        prev_node = await sync_to_async(EpisodeNode.get_or_create_node)(prev_episode.pk, work.pk)
-        await sync_to_async(prev_node.add_next)(node, is_original=True)
+        await aget_or_create_link(prev_episode.pk, episode.pk, EpisodeLink.LinkType.NEXT, is_original=True)
 
     response = HttpResponse()
     response["HX-Redirect"] = f"/stories/{work.pk}/episodes/{episode.episode_number}/"
@@ -209,11 +204,8 @@ async def htmx_rate_episode(request, work_pk, episode_number):
         defaults={"score": score},
     )
 
-    # 별점 평균 갱신
-    result = await Rating.objects.filter(episode=episode).aaggregate(avg=Avg("score"))
-    episode.avg_rating = result["avg"]
-    episode.rating_count = await Rating.objects.filter(episode=episode).acount()
-    await episode.asave(update_fields=["avg_rating", "rating_count"])
+    # avg_rating, rating_count는 DB 트리거가 자동 갱신
+    await episode.arefresh_from_db(fields=["avg_rating", "rating_count"])
 
     return render(
         request,
@@ -230,23 +222,16 @@ async def htmx_next_episodes(request, work_pk, episode_number):
     """HTMX 다음 화 목록 (가중치 순 정렬)."""
     episode = await aget_object_or_404(Episode, work_id=work_pk, episode_number=episode_number)
 
-    try:
-        node = await sync_to_async(lambda: EpisodeNode.nodes.get(episode_id=episode.pk))()
-        next_list = await sync_to_async(node.get_next_episodes_sorted)()
-    except EpisodeNode.DoesNotExist:
-        next_list = []
+    links = [link async for link in get_next_episodes_sorted(episode.pk)]
 
-    # Django Episode 정보를 붙여서 전달
-    enriched = []
-    for item in next_list:
-        ep = await Episode.objects.select_related("author").aget(pk=item["node"].episode_id)
-        enriched.append(
-            {
-                "episode": ep,
-                "is_original": item["is_original"],
-                "visit_count": item["visit_count"],
-            }
-        )
+    enriched = [
+        {
+            "episode": link.to_episode,
+            "is_original": link.is_original,
+            "visit_count": link.visit_count,
+        }
+        for link in links
+    ]
 
     # 분기 가능 여부 확인 (N화 제한 + 라이선스)
     from django.conf import settings
@@ -275,42 +260,27 @@ async def htmx_next_episodes(request, work_pk, episode_number):
 @require_http_methods(["POST"])
 @login_required
 async def htmx_check_similarity(request, work_pk, episode_number):
-    """HTMX 분기 방향 유사도 검사."""
+    """HTMX 분기 방향 유사도 검사 (pg_trgm)."""
     direction = request.POST.get("direction", "").strip()
     if len(direction) < 5:
         return render(request, "stories/partials/similarity_info.html")
 
-    # 같은 에피소드에서 분기된 기존 에피소드들의 임베딩 조회
-    existing = [
-        ep
-        async for ep in Episode.objects.filter(
-            work_id=work_pk,
-            direction_embedding__isnull=False,
-        ).exclude(branch_direction="")
-    ]
+    # pg_trgm으로 유사 분기 검색
+    similar = await sync_to_async(
+        lambda: list(find_similar_branches(work_pk, direction).select_related("author")[:1])
+    )()
 
-    if not existing:
-        return render(request, "stories/partials/similarity_pass.html")
-
-    # 새 방향 임베딩 계산
-    try:
-        new_embedding = await get_embedding(direction)
-    except Exception:
-        return render(request, "stories/partials/similarity_pass.html")
-
-    # 유사도 비교
-    for ep in existing:
-        sim = cosine_similarity(new_embedding, ep.direction_embedding)
-        if sim >= SIMILARITY_THRESHOLD:
-            return render(
-                request,
-                "stories/partials/similarity_warning.html",
-                {
-                    "similar_episode": ep,
-                    "similarity": round(sim * 100),
-                    "work_pk": work_pk,
-                },
-            )
+    if similar:
+        ep = similar[0]
+        return render(
+            request,
+            "stories/partials/similarity_warning.html",
+            {
+                "similar_episode": ep,
+                "similarity": round(ep.sim * 100),
+                "work_pk": work_pk,
+            },
+        )
 
     return render(request, "stories/partials/similarity_pass.html")
 
@@ -356,20 +326,11 @@ async def htmx_branch_create(request, work_pk, episode_number):
         return HttpResponse("유료 에피소드를 만들려면 먼저 지갑 주소를 등록하세요.", status=400)
 
     branch_episode.episode_number = latest_count + 1
-
-    # 임베딩 계산 후 저장
-    try:
-        branch_episode.direction_embedding = await get_embedding(branch_episode.branch_direction)
-    except Exception:
-        pass  # 임베딩 실패해도 분기 생성은 진행
-
     await branch_episode.asave()
 
-    # Neo4j: 분기 노드 생성 + BRANCHES_FROM + NEXT 연결
-    origin_node = await sync_to_async(EpisodeNode.get_or_create_node)(origin_episode.pk, origin_work.pk)
-    branch_node = await sync_to_async(EpisodeNode.get_or_create_node)(branch_episode.pk, origin_work.pk)
-    await sync_to_async(origin_node.add_next)(branch_node, is_original=False)
-    await sync_to_async(origin_node.add_branch)(branch_node)
+    # NEXT + BRANCHES_FROM 링크 생성
+    await aget_or_create_link(origin_episode.pk, branch_episode.pk, EpisodeLink.LinkType.NEXT, is_original=False)
+    await aget_or_create_link(origin_episode.pk, branch_episode.pk, EpisodeLink.LinkType.BRANCHES_FROM)
 
     response = HttpResponse()
     response["HX-Redirect"] = f"/stories/{origin_work.pk}/episodes/{branch_episode.episode_number}/"
@@ -382,7 +343,7 @@ async def htmx_visit_episode(request, work_pk, from_number, to_number):
     from_ep = await aget_object_or_404(Episode, work_id=work_pk, episode_number=from_number)
     to_ep = await aget_object_or_404(Episode, work_id=work_pk, episode_number=to_number)
 
-    await sync_to_async(EpisodeNode.increment_visit)(from_ep.pk, to_ep.pk, to_ep.avg_rating)
+    await increment_visit(from_ep.pk, to_ep.pk, to_ep.avg_rating)
 
     response = HttpResponse()
     response["HX-Redirect"] = f"/stories/{work_pk}/episodes/{to_number}/"
