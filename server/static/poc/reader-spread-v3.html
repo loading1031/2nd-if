@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>PoC v3 — 시네마틱 리더 · 잉크 파티클 애니메이션</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #f4eee0;
+            --paper-shadow: #e8dfc8;
+            --ink: #2a1a0a;
+            --ink-bold: #1a0f05;
+            --ink-mute: #6b5940;
+            --rubric: #a42a1c;
+            --frame-bg: #1e1710;
+        }
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; padding: 0;
+            background: var(--frame-bg);
+            color: #cfc2a8;
+            font-family: "Noto Serif KR", "EB Garamond", serif;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #stage { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        #spread-wrapper {
+            position: relative;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55))
+                    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #spread { display: block; background: var(--paper); }
+        #spread-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; bottom: 0; left: 50%; width: 40px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg,
+                rgba(0,0,0,0) 0%, rgba(70,50,30,0.10) 35%,
+                rgba(70,50,30,0.22) 50%,
+                rgba(70,50,30,0.10) 65%, rgba(0,0,0,0) 100%);
+            pointer-events: none; z-index: 2;
+        }
+        #info, #controls {
+            position: fixed;
+            padding: 10px 14px;
+            background: rgba(26, 15, 5, 0.75);
+            border: 1px solid rgba(200, 175, 130, 0.15);
+            border-radius: 4px;
+            font-size: 13px; line-height: 1.6;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+            font-family: "EB Garamond", "Noto Serif KR", serif;
+        }
+        #info { top: 16px; left: 16px; }
+        #controls { bottom: 16px; left: 16px; opacity: 0.85; }
+        #info strong { color: #e8c07a; font-style: italic; }
+        kbd {
+            background: rgba(80, 60, 35, 0.6);
+            border: 1px solid rgba(200, 175, 130, 0.25);
+            padding: 2px 6px; border-radius: 3px; font-size: 12px;
+            color: #e8dfc8;
+        }
+        #error {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #3a1f1f; color: #ff9090;
+            padding: 20px 30px; border-radius: 8px;
+            border: 1px solid #a04040; max-width: 600px;
+            display: none; z-index: 100;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>PoC v3 · <strong>spread <span id="pageNum">1</span> / <span id="totalPages">…</span></strong> · <span id="sceneLabel">靜</span></div>
+        <div>FPS: <span id="fps">—</span> · particles: <span id="particleCount">—</span></div>
+    </div>
+    <div id="controls">
+        <kbd>→</kbd> 다음 (잉크 분산) · <kbd>←</kbd> 이전 · <kbd>R</kbd> 재시작
+    </div>
+    <div id="stage">
+        <div id="spread-wrapper">
+            <canvas id="spread" width="1280" height="800"></canvas>
+        </div>
+    </div>
+    <div id="error"></div>
+
+    <script type="module">
+        const errorEl = document.getElementById('error')
+        function showError(msg) {
+            errorEl.textContent = msg
+            errorEl.style.display = 'block'
+            console.error(msg)
+        }
+
+        let prepareWithSegments, layoutNextLine
+        try {
+            const pretext = await import('https://esm.sh/@chenglou/pretext')
+            prepareWithSegments = pretext.prepareWithSegments
+            layoutNextLine = pretext.layoutNextLine
+        } catch (e) {
+            showError(`Pretext 로드 실패: ${e.message}`); throw e
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 팔레트 / 타이포
+        // ═══════════════════════════════════════════════════════════
+        const PAPER = '#f4eee0', INK = '#2a1a0a', INK_BOLD = '#1a0f05'
+        const INK_MUTE = '#6b5940', RUBRIC = '#a42a1c'
+
+        const FONT_FAMILY = '"Noto Serif KR", "EB Garamond", serif'
+        const FONT_SIZE = 19
+        const LINE_HEIGHT = 36
+        const FONT = `${FONT_SIZE}px ${FONT_FAMILY}`
+        const DROPCAP_SIZE = FONT_SIZE * 3.2
+        const DROPCAP_FONT = `900 ${DROPCAP_SIZE}px ${FONT_FAMILY}`
+        await document.fonts.load(FONT)
+        await document.fonts.load(`700 ${FONT_SIZE}px ${FONT_FAMILY}`)
+        await document.fonts.load(DROPCAP_FONT)
+
+        // ═══════════════════════════════════════════════════════════
+        // 본문
+        // ═══════════════════════════════════════════════════════════
+        const CONTENT = `그 겨울, 구름 사이로 한 마리 용이 내려왔다. 마을 사람들은 누구도 그것을 직접 보지 못했지만, 아침마다 서리 위에 선명한 발자국이 남았다. 발자국은 바람을 따라 사라졌고, 바람은 종이 냄새를 품고 있었다.
+
+노승은 먹을 갈았다. 먹향이 방을 채우자, 창밖의 대나무 그림자가 화선지 위로 길게 드리웠다. 그는 붓을 들어 단 한 획을 그었다. 그 한 획 안에 산과 강이 있었고, 달과 바람이 있었다.
+
+용은 붓끝에서 태어난다. 그가 말했다. 제자는 고개를 끄덕이지 못했다. 제자의 눈에는 아직 한 획이 한 획으로만 보였기 때문이다. 노승은 웃으며 또 한 획을 그었다. 이번에는 그림자 안쪽이었다.
+
+사흘이 지나자, 마을 사람들은 더 이상 서리 위의 발자국을 보지 못했다. 다만 가끔 바람 속에서 먹향이 느껴졌다. 노승의 방에서는, 화선지 한 장 위에 아홉 마리의 용이 구름을 뚫고 나오고 있었다.`
+
+        // ═══════════════════════════════════════════════════════════
+        // 이미지 로드 + InkParticleSprite
+        // ═══════════════════════════════════════════════════════════
+        async function loadImage(src) {
+            const img = new Image()
+            img.src = src
+            await img.decode()
+            return img
+        }
+
+        /**
+         * InkParticleSprite — 정적 래스터를 애니메이션 가능한 파티클 시스템으로 변환.
+         *
+         * 아이디어: 이미지의 어두운 픽셀(먹)만 샘플링해서 입자 배열로 보관.
+         * 평상시엔 drawImage로 빠르게 렌더, 전환 시엔 입자를 변위시켜 수묵의 분산/재응축 표현.
+         */
+        class InkParticleSprite {
+            constructor(img, opts = {}) {
+                this.img = img
+                this.sampleStride = opts.sampleStride || 4
+                this.threshold = opts.threshold || 0.72  // paper 대비 이것보다 어두우면 잉크
+                this.particles = this._sample()
+                this.naturalW = img.width
+                this.naturalH = img.height
+            }
+            _sample() {
+                const off = document.createElement('canvas')
+                off.width = this.img.width
+                off.height = this.img.height
+                const octx = off.getContext('2d')
+                octx.drawImage(this.img, 0, 0)
+                const data = octx.getImageData(0, 0, off.width, off.height).data
+                const particles = []
+                const invThreshold = 1 / this.threshold
+                for (let y = 0; y < off.height; y += this.sampleStride) {
+                    for (let x = 0; x < off.width; x += this.sampleStride) {
+                        const i = (y * off.width + x) * 4
+                        const r = data[i], g = data[i+1], b = data[i+2]
+                        const lum = (0.299*r + 0.587*g + 0.114*b) / 255
+                        if (lum < this.threshold) {
+                            particles.push({
+                                ox: x / off.width,   // 0..1 normalized in source
+                                oy: y / off.height,
+                                r, g, b,
+                                baseAlpha: Math.max(0.25, (this.threshold - lum) * invThreshold)
+                            })
+                        }
+                    }
+                }
+                // Sort by y so redraws are slightly painterly (top-to-bottom)
+                particles.sort((a, b) => a.oy - b.oy)
+                return particles
+            }
+
+            /** fast path — static placement */
+            drawStatic(ctx, bounds, flip = false) {
+                ctx.save()
+                if (flip) {
+                    ctx.translate(bounds.x + bounds.w, bounds.y)
+                    ctx.scale(-1, 1)
+                    ctx.drawImage(this.img, 0, 0, bounds.w, bounds.h)
+                } else {
+                    ctx.drawImage(this.img, bounds.x, bounds.y, bounds.w, bounds.h)
+                }
+                ctx.restore()
+            }
+
+            /**
+             * Animated particle render.
+             * @param getPos — function(p, i) -> {x, y, alpha, size?}
+             */
+            drawParticles(ctx, getPos) {
+                const dotSize = 3
+                // Bucket by rounded color for fewer state changes — but for 20K particles,
+                // just setting globalAlpha + fillRect each is fine on modern GPUs.
+                let lastColor = ''
+                for (let i = 0; i < this.particles.length; i++) {
+                    const p = this.particles[i]
+                    const r = getPos(p, i)
+                    if (!r || r.alpha <= 0) continue
+                    const alpha = p.baseAlpha * r.alpha
+                    if (alpha < 0.05) continue
+                    ctx.globalAlpha = alpha
+                    const col = `rgb(${p.r},${p.g},${p.b})`
+                    if (col !== lastColor) { ctx.fillStyle = col; lastColor = col }
+                    const s = r.size || dotSize
+                    ctx.fillRect(r.x, r.y, s, s)
+                }
+                ctx.globalAlpha = 1
+            }
+        }
+
+        const dragonImg = await loadImage('./assets/dragon.jpg')
+            .catch(e => { showError(`이미지 로드 실패: ${e.message}`); throw e })
+        const dragon = new InkParticleSprite(dragonImg, { sampleStride: 5, threshold: 0.68 })
+        document.getElementById('particleCount').textContent = dragon.particles.length.toLocaleString()
+        console.log(`[PoC v3] particles=${dragon.particles.length}`)
+
+        // ═══════════════════════════════════════════════════════════
+        // 펼침면 레이아웃
+        // ═══════════════════════════════════════════════════════════
+        const SPREAD_W = 1280, SPREAD_H = 800
+        const HALF_W = SPREAD_W / 2
+        const PAD = 64
+
+        // 각 스프레드에서 용이 놓이는 위치(bounds) + flip — 이게 애니메이션의 "프레임"
+        const SPREAD_LAYOUTS = [
+            {
+                illustration: { bounds: { x: 0, y: 80, w: HALF_W, h: SPREAD_H - 160 }, flip: false },
+                text:         { bounds: { x: HALF_W + PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } },
+                dropcap: true,
+            },
+            {
+                illustration: { bounds: { x: HALF_W, y: 0, w: HALF_W, h: SPREAD_H * 0.5 }, flip: true },
+                text_left:    { bounds: { x: PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } },
+                text_right:   { bounds: { x: HALF_W + PAD, y: SPREAD_H * 0.5 + PAD, w: HALF_W - PAD * 2, h: SPREAD_H * 0.5 - PAD * 2 } },
+            },
+            {
+                // 용 없음 — 양면 본문
+                text_left:    { bounds: { x: PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } },
+                text_right:   { bounds: { x: HALF_W + PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } },
+            },
+        ]
+
+        const FULL_CONTENT = (CONTENT + '\n\n' + CONTENT + '\n\n' + CONTENT)
+        const prepared = prepareWithSegments(FULL_CONTENT, FONT)
+        let cursor = { segmentIndex: 0, graphemeIndex: 0 }
+
+        function layoutRegion(region, dropcapIndent = 0) {
+            const lines = []
+            const maxLines = Math.floor(region.bounds.h / LINE_HEIGHT)
+            for (let i = 0; i < maxLines; i++) {
+                const widthAdjust = (dropcapIndent && i < 3) ? dropcapIndent : 0
+                const line = layoutNextLine(prepared, cursor, region.bounds.w - widthAdjust)
+                if (!line) break
+                lines.push({ ...line, indent: widthAdjust })
+                cursor = line.end
+            }
+            return lines
+        }
+
+        const spreads = []
+        for (const layout of SPREAD_LAYOUTS) {
+            const spread = { ...layout, textLines: {} }
+            if (layout.text) {
+                const indent = layout.dropcap ? DROPCAP_SIZE + 12 : 0
+                spread.textLines.text = layoutRegion(layout.text, indent)
+            }
+            if (layout.text_left) spread.textLines.text_left = layoutRegion(layout.text_left)
+            if (layout.text_right) spread.textLines.text_right = layoutRegion(layout.text_right)
+            spreads.push(spread)
+        }
+        document.getElementById('totalPages').textContent = spreads.length
+        console.log(`[PoC v3] spreads=${spreads.length}`)
+
+        // ═══════════════════════════════════════════════════════════
+        // Canvas
+        // ═══════════════════════════════════════════════════════════
+        const canvas = document.getElementById('spread')
+        const ctx = canvas.getContext('2d')
+        const DPR = window.devicePixelRatio || 1
+        canvas.width = SPREAD_W * DPR
+        canvas.height = SPREAD_H * DPR
+        canvas.style.width = SPREAD_W + 'px'
+        canvas.style.height = SPREAD_H + 'px'
+        ctx.scale(DPR, DPR)
+
+        function drawPaper() {
+            ctx.fillStyle = PAPER
+            ctx.fillRect(0, 0, SPREAD_W, SPREAD_H)
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 텍스트 렌더
+        // ═══════════════════════════════════════════════════════════
+        ctx.font = FONT
+        function computeGlyphs(region, lines) {
+            const glyphs = []
+            let y = region.bounds.y + FONT_SIZE
+            for (const line of lines) {
+                const xStart = region.bounds.x + (line.indent || 0)
+                let x = xStart
+                for (const ch of line.text) {
+                    const w = ctx.measureText(ch).width
+                    glyphs.push({ ch, x, y, w })
+                    x += w
+                }
+                y += LINE_HEIGHT
+                if (y > region.bounds.y + region.bounds.h) break
+            }
+            return glyphs
+        }
+
+        function drawDropcap(spread, alpha = 1) {
+            if (!spread.dropcap) return
+            const region = spread.text
+            const lines = spread.textLines.text
+            if (!lines || lines.length === 0) return
+            const firstCh = lines[0].text[0] || ''
+            if (!firstCh) return
+            ctx.save()
+            ctx.font = DROPCAP_FONT
+            ctx.fillStyle = RUBRIC
+            ctx.globalAlpha = alpha
+            ctx.textBaseline = 'alphabetic'
+            ctx.fillText(firstCh, region.bounds.x, region.bounds.y + DROPCAP_SIZE * 0.85)
+            ctx.restore()
+        }
+
+        function renderText(spread, alpha = 1, skipFirstText = true) {
+            ctx.font = FONT
+            ctx.fillStyle = INK
+            ctx.textBaseline = 'alphabetic'
+            ctx.globalAlpha = alpha
+            const drawLines = (region, lines, isDropcapRegion = false) => {
+                const glyphs = computeGlyphs(region, lines)
+                for (let i = 0; i < glyphs.length; i++) {
+                    if (isDropcapRegion && skipFirstText && i === 0) continue
+                    const g = glyphs[i]
+                    ctx.fillText(g.ch, g.x, g.y)
+                }
+            }
+            if (spread.text) drawLines(spread.text, spread.textLines.text, spread.dropcap)
+            if (spread.text_left) drawLines(spread.text_left, spread.textLines.text_left)
+            if (spread.text_right) drawLines(spread.text_right, spread.textLines.text_right)
+            ctx.globalAlpha = 1
+        }
+
+        function drawFolio(idx, alpha = 1) {
+            ctx.save()
+            ctx.font = `italic 13px "EB Garamond", serif`
+            ctx.fillStyle = INK_MUTE
+            ctx.globalAlpha = alpha
+            ctx.textAlign = 'left'
+            ctx.fillText((idx * 2 + 1).toString(), PAD, SPREAD_H - 32)
+            ctx.textAlign = 'right'
+            ctx.fillText((idx * 2 + 2).toString(), SPREAD_W - PAD, SPREAD_H - 32)
+            ctx.restore()
+        }
+
+        function drawStaticSpread(idx) {
+            drawPaper()
+            const s = spreads[idx]
+            if (s.illustration) dragon.drawStatic(ctx, s.illustration.bounds, s.illustration.flip)
+            renderText(s, 1, true)
+            drawDropcap(s)
+            drawFolio(idx)
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 시네마틱: 잉크 파티클 전환
+        // ═══════════════════════════════════════════════════════════
+        let currentSpread = 0
+        let scene = null
+
+        function startCinematicForward() {
+            if (scene) return
+            if (currentSpread >= spreads.length - 1) return
+            const from = spreads[currentSpread]
+            const to = spreads[currentSpread + 1]
+
+            // 텍스트 파편 수집
+            const fragments = []
+            for (const key of ['text', 'text_left', 'text_right']) {
+                if (!from[key]) continue
+                const glyphs = computeGlyphs(from[key], from.textLines[key])
+                for (const g of glyphs) {
+                    fragments.push({
+                        ch: g.ch, ox: g.x, oy: g.y, x: g.x, y: g.y,
+                        vx: 0, vy: 0, rot: 0, vrot: 0,
+                        triggered: false, triggerAt: 0, alpha: 1
+                    })
+                }
+            }
+
+            scene = {
+                type: 'forward',
+                start: performance.now(),
+                duration: 2400,
+                from, to, fragments,
+                // 각 파티클에 부여된 고정 지터 (한 번만 계산)
+                // 너무 많으므로 per-draw에 쓴 Math.random()을 안정화하기 위함
+                nextTextStartAt: 1700,
+            }
+            document.getElementById('sceneLabel').textContent = '墨'
+        }
+
+        function prevSpread() {
+            if (scene) return
+            if (currentSpread <= 0) return
+            currentSpread -= 1
+            document.getElementById('pageNum').textContent = currentSpread + 1
+        }
+
+        const lerp = (a, b, t) => a + (b - a) * t
+        const easeIn = t => t * t
+        const easeOut = t => 1 - (1 - t) * (1 - t)
+        const easeInOut = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
+
+        // ═══════════════════════════════════════════════════════════
+        // 파티클 애니메이션 함수 — 핵심 로직
+        // ═══════════════════════════════════════════════════════════
+        function makeParticleMapper(fromBounds, fromFlip, toBounds, toFlip, t) {
+            // t: 0..1
+            // 3-phase: 0..0.4 disperse, 0.4..0.7 drift, 0.7..1.0 converge
+            // fromBounds null -> 원점에 없음 (그냥 새로 나타남)
+            // toBounds null -> 목적지 없음 (그대로 흩어져 사라짐)
+
+            const phase = t < 0.4 ? 'disperse' : (t < 0.7 ? 'drift' : 'converge')
+
+            // 중심점들
+            const fromCenter = fromBounds
+                ? { x: fromBounds.x + fromBounds.w/2, y: fromBounds.y + fromBounds.h/2 }
+                : null
+            const toCenter = toBounds
+                ? { x: toBounds.x + toBounds.w/2, y: toBounds.y + toBounds.h/2 }
+                : null
+
+            // src / dst 픽셀 위치 계산 (flip 반영)
+            function srcPos(p) {
+                if (!fromBounds) return null
+                const nx = fromFlip ? (1 - p.ox) : p.ox
+                return { x: fromBounds.x + nx * fromBounds.w, y: fromBounds.y + p.oy * fromBounds.h }
+            }
+            function dstPos(p) {
+                if (!toBounds) return null
+                const nx = toFlip ? (1 - p.ox) : p.ox
+                return { x: toBounds.x + nx * toBounds.w, y: toBounds.y + p.oy * toBounds.h }
+            }
+
+            return (p, i) => {
+                const s = srcPos(p)
+                const d = dstPos(p)
+
+                // deterministic per-particle jitter (hash-like from index)
+                const hx = Math.sin(i * 12.9898) * 43758.5453
+                const hy = Math.sin(i * 78.233) * 43758.5453
+                const jx = (hx - Math.floor(hx)) - 0.5
+                const jy = (hy - Math.floor(hy)) - 0.5
+
+                if (phase === 'disperse') {
+                    if (!s) return null
+                    const u = t / 0.4
+                    const ue = easeOut(u)
+                    const angle = fromCenter ? Math.atan2(s.y - fromCenter.y, s.x - fromCenter.x) : 0
+                    const dist = 140 * ue
+                    return {
+                        x: s.x + Math.cos(angle) * dist + jx * 24 * ue,
+                        y: s.y + Math.sin(angle) * dist - 35 * ue + jy * 24 * ue,
+                        alpha: 1 - u * 0.25,
+                    }
+                } else if (phase === 'drift') {
+                    const u = (t - 0.4) / 0.3
+                    // 분산 끝점
+                    let dispX = 0, dispY = 0
+                    if (s && fromCenter) {
+                        const angle = Math.atan2(s.y - fromCenter.y, s.x - fromCenter.x)
+                        dispX = s.x + Math.cos(angle) * 140 + jx * 24
+                        dispY = s.y + Math.sin(angle) * 140 - 35 + jy * 24
+                    }
+                    // 드리프트 중간 지점 (src -> dst 공중 아크)
+                    if (d) {
+                        const midX = s ? (s.x + d.x) / 2 : d.x
+                        const midY = (s ? (s.y + d.y) / 2 : d.y) - 90
+                        return {
+                            x: lerp(dispX || d.x, midX + jx * 12, u),
+                            y: lerp(dispY || d.y, midY + jy * 12, u),
+                            alpha: 0.45 + 0.2 * Math.sin(u * Math.PI),
+                        }
+                    } else {
+                        // 목적지 없음: 오른쪽으로 휩쓸려 나감
+                        return {
+                            x: dispX + 400 * u,
+                            y: dispY + jy * 30,
+                            alpha: (1 - u) * 0.7,
+                        }
+                    }
+                } else {
+                    // converge
+                    const u = (t - 0.7) / 0.3
+                    const ue = easeInOut(u)
+                    if (!d) {
+                        // 흩어져 사라짐
+                        if (!s || !fromCenter) return null
+                        const angle = Math.atan2(s.y - fromCenter.y, s.x - fromCenter.x)
+                        const dispX = s.x + Math.cos(angle) * 140 + jx * 24
+                        const dispY = s.y + Math.sin(angle) * 140 - 35 + jy * 24
+                        return {
+                            x: dispX + (400 + 600 * u) + jx * 80 * u,
+                            y: dispY + jy * 60 * u,
+                            alpha: (1 - u) * 0.5,
+                        }
+                    }
+                    const midX = s ? (s.x + d.x) / 2 : d.x
+                    const midY = (s ? (s.y + d.y) / 2 : d.y) - 90
+                    return {
+                        x: lerp(midX + jx * 12, d.x, ue),
+                        y: lerp(midY + jy * 12, d.y, ue),
+                        alpha: 0.45 + 0.55 * ue,
+                    }
+                }
+            }
+        }
+
+        function renderCinematic(now) {
+            const t = Math.min(1, (now - scene.start) / scene.duration)
+            const ms = now - scene.start
+
+            // 종이 배경
+            drawPaper()
+
+            // 1. 새 스프레드 텍스트 (페이드 인은 나중에)
+            const hasNewIllustration = !!scene.to.illustration
+            const nextTextVisible = ms >= scene.nextTextStartAt
+            if (nextTextVisible) {
+                const nt = Math.min(1, (ms - scene.nextTextStartAt) / (scene.duration - scene.nextTextStartAt))
+                renderText(scene.to, nt, true)
+                if (scene.to.dropcap && nt > 0.4) drawDropcap(scene.to, Math.min(1, (nt - 0.4) / 0.4))
+            }
+
+            // 2. 파티클 - 용이 분해 → 드리프트 → 새 위치에 재응축 (혹은 소멸)
+            const fromIllu = scene.from.illustration
+            const toIllu = scene.to.illustration
+            const mapper = makeParticleMapper(
+                fromIllu ? fromIllu.bounds : null,
+                fromIllu ? fromIllu.flip : false,
+                toIllu ? toIllu.bounds : null,
+                toIllu ? toIllu.flip : false,
+                t
+            )
+            dragon.drawParticles(ctx, mapper)
+
+            // 3. 이전 텍스트 파편 — 파티클 swarm과 부딪히면 흩어짐
+            // 충돌 감지: 분산 페이즈 동안, 파티클이 지나간 x 좌표를 tracking
+            ctx.font = FONT
+            ctx.textBaseline = 'alphabetic'
+            if (fromIllu) {
+                const fc = { x: fromIllu.bounds.x + fromIllu.bounds.w/2,
+                             y: fromIllu.bounds.y + fromIllu.bounds.h/2 }
+                // 파티클 swarm front: center가 오른쪽으로 이동하는 x값
+                const swarmX = t < 0.4
+                    ? fc.x  // 아직 분산 초기
+                    : (t < 0.7
+                        ? lerp(fc.x, toIllu ? (toIllu.bounds.x + toIllu.bounds.w/2) : SPREAD_W + 200, (t - 0.4) / 0.3)
+                        : (toIllu ? (toIllu.bounds.x + toIllu.bounds.w/2) : SPREAD_W + 400))
+                for (const f of scene.fragments) {
+                    if (!f.triggered) {
+                        const distToSwarm = Math.abs(f.x - swarmX)
+                        if (distToSwarm < 120 && t > 0.15) {
+                            f.triggered = true
+                            f.triggerAt = now
+                            const dx = f.x - fc.x, dy = f.y - fc.y
+                            const angle = Math.atan2(dy, dx)
+                            const speed = 3 + Math.random() * 5
+                            f.vx = Math.cos(angle) * speed + 2
+                            f.vy = Math.sin(angle) * speed - 1.5
+                            f.vrot = (Math.random() - 0.5) * 0.25
+                        } else {
+                            // 아직 파괴 안 됨
+                            const holdAlpha = Math.max(0, 1 - easeIn(Math.max(0, (t - 0.3) / 0.35)))
+                            if (holdAlpha <= 0) continue
+                            ctx.globalAlpha = holdAlpha
+                            ctx.fillStyle = INK
+                            ctx.fillText(f.ch, f.x, f.y)
+                            continue
+                        }
+                    }
+                    // 움직이는 파편
+                    f.x += f.vx
+                    f.y += f.vy
+                    f.vy += 0.32
+                    f.rot += f.vrot
+                    const dt = (now - f.triggerAt) / 1000
+                    f.alpha = Math.max(0, 1 - dt * 1.0)
+                    if (f.alpha <= 0) continue
+                    ctx.save()
+                    ctx.translate(f.x, f.y)
+                    ctx.rotate(f.rot)
+                    ctx.globalAlpha = f.alpha
+                    ctx.fillStyle = dt < 0.3 ? INK_BOLD : INK
+                    ctx.fillText(f.ch, 0, 0)
+                    ctx.restore()
+                }
+                ctx.globalAlpha = 1
+            } else {
+                // 이전 스프레드에 illustration 없음 — 그냥 페이드 아웃
+                const holdAlpha = Math.max(0, 1 - easeIn(t))
+                if (holdAlpha > 0) renderText(scene.from, holdAlpha, true)
+            }
+
+            // 4. 폴리오
+            if (t >= 0.7) {
+                drawFolio(currentSpread + 1, Math.min(1, (t - 0.7) / 0.3))
+            }
+
+            if (t >= 1) {
+                currentSpread += 1
+                scene = null
+                document.getElementById('pageNum').textContent = currentSpread + 1
+                document.getElementById('sceneLabel').textContent = '靜'
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 메인 루프
+        // ═══════════════════════════════════════════════════════════
+        function loop(time) {
+            if (scene) renderCinematic(time)
+            else drawStaticSpread(currentSpread)
+            updateFps(time)
+            requestAnimationFrame(loop)
+        }
+        let fpsLast = 0, fpsFrames = 0
+        function updateFps(time) {
+            fpsFrames++
+            if (time - fpsLast > 500) {
+                document.getElementById('fps').textContent = Math.round(fpsFrames * 1000 / (time - fpsLast))
+                fpsLast = time; fpsFrames = 0
+            }
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') startCinematicForward()
+            else if (e.key === 'ArrowLeft') prevSpread()
+            else if (e.key.toLowerCase() === 'r') location.reload()
+        })
+        canvas.addEventListener('click', e => {
+            const rect = canvas.getBoundingClientRect()
+            const x = e.clientX - rect.left
+            if (x > rect.width * 0.5) startCinematicForward()
+            else prevSpread()
+        })
+
+        document.getElementById('pageNum').textContent = currentSpread + 1
+        requestAnimationFrame(loop)
+    </script>
+</body>
+</html>

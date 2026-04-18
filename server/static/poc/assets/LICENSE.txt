@@ -1,0 +1,12 @@
+Source image: dragon.jpg
+
+Derived from "Nine Dragons" (九龍圖 / Jiulongtu) by Chen Rong (陳容, c. 1200 – after 1266),
+Southern Song dynasty, dated 1244 CE.
+Original held by the Museum of Fine Arts, Boston (accession no. 17.1697).
+
+Source URL: https://commons.wikimedia.org/wiki/File:Chen_Rong_-_Nine_Dragons.jpg
+License: Public Domain (PD-old-100 / US-PD).
+Processing: tight crop of the single-dragon section from the full scroll,
+tone-mapped to the 2nd-if paper palette (#f4eee0 ↔ #2a1a0a).
+
+This asset may be redistributed under Public Domain.

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>PoC v2 — 시네마틱 리더</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; padding: 0;
+            background: #0c0c10;
+            color: #ccc;
+            font-family: -apple-system, 'Noto Sans KR', sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #stage { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        #spread-wrapper {
+            position: relative;
+            filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.7));
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        #spread { display: block; background: #f5efe0; }
+        #spread-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%; width: 24px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg,
+                rgba(0,0,0,0) 0%, rgba(0,0,0,0.18) 40%,
+                rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0) 100%);
+            pointer-events: none; z-index: 2;
+        }
+        #info, #controls {
+            position: fixed; padding: 10px 14px;
+            background: rgba(0,0,0,0.7); border-radius: 6px;
+            font-size: 13px; line-height: 1.6; z-index: 10;
+            backdrop-filter: blur(8px);
+        }
+        #info { top: 16px; left: 16px; }
+        #controls { bottom: 16px; left: 16px; opacity: 0.85; }
+        #info strong { color: #ffb560; }
+        kbd { background: #333; border: 1px solid #555; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+        #error {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #3a1f1f; color: #ff9090;
+            padding: 20px 30px; border-radius: 8px;
+            border: 1px solid #a04040; max-width: 600px;
+            display: none; z-index: 100;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>PoC v2 · <strong>spread <span id="pageNum">1</span> / <span id="totalPages">…</span></strong> · <span id="sceneLabel">정적</span></div>
+        <div>FPS: <span id="fps">—</span> · heat: <span id="heatStatus">ON</span></div>
+    </div>
+    <div id="controls">
+        <kbd>→</kbd> 다음 (시네마틱) · <kbd>←</kbd> 이전 (즉시) · <kbd>H</kbd> heat · <kbd>R</kbd> 재시작
+    </div>
+    <div id="stage">
+        <div id="spread-wrapper">
+            <canvas id="spread" width="1280" height="800"></canvas>
+        </div>
+    </div>
+    <div id="error"></div>
+
+    <script type="module">
+        const errorEl = document.getElementById('error')
+        function showError(msg) {
+            errorEl.textContent = msg
+            errorEl.style.display = 'block'
+            console.error(msg)
+        }
+
+        let prepareWithSegments, layoutNextLine
+        try {
+            const pretext = await import('https://esm.sh/@chenglou/pretext')
+            prepareWithSegments = pretext.prepareWithSegments
+            layoutNextLine = pretext.layoutNextLine
+        } catch (e) {
+            showError(`Pretext 로드 실패: ${e.message}`)
+            throw e
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 본문
+        // ═══════════════════════════════════════════════════════════
+        const CONTENT = `그날 밤, 하늘에서 불꽃이 떨어졌다. 소년은 창가에 서서 그것을 오래도록 바라봤다. 붉은 빛이 산 너머에서 솟아올랐고, 바람이 매캐한 냄새를 실어왔다. 마을 어른들은 당황한 표정으로 서로를 바라볼 뿐, 아무도 무슨 일인지 설명하지 못했다.
+
+그때 하늘을 가로지르는 거대한 그림자가 보였다. 날개 소리가 들릴 만큼 가까워졌다. 소년은 숨을 참았다. 어둠 속에서 눈동자가 빛났다. 그것은 분명 드래곤이었다.
+
+기사는 검을 들어올렸다. 물러나라, 괴물아. 목소리는 떨리고 있었지만 검끝은 흔들리지 않았다. 검에 새겨진 문양이 희미하게 빛났다. 드래곤은 고개를 기울였다. 인간의 언어를 이해하는 것처럼. 잠시 정적이 흘렀다. 그리고 불이 토해졌다.
+
+불길은 마을을 반으로 갈랐다. 지붕들이 무너지고, 나무들이 숯이 되었다. 기사는 검을 쥐고 돌진했다. 불꽃 속으로, 한 번도 돌아본 적 없는 발걸음으로. 그가 달린 자리에는 새로운 이야기가 열리고 있었다.`
+
+        const FONT_FAMILY = '"Noto Serif KR", serif'
+        const FONT_SIZE = 19
+        const FONT = `${FONT_SIZE}px ${FONT_FAMILY}`
+        const LINE_HEIGHT = 34
+
+        await document.fonts.load(FONT)
+        await document.fonts.load(`700 ${FONT_SIZE}px ${FONT_FAMILY}`)
+
+        // ═══════════════════════════════════════════════════════════
+        // 펼침면 레이아웃
+        // ═══════════════════════════════════════════════════════════
+        const SPREAD_W = 1280, SPREAD_H = 800
+        const HALF_W = SPREAD_W / 2
+        const PAD = 56
+
+        const SPREAD_LAYOUTS = [
+            // 0: 좌=드래곤, 우=본문
+            [
+                { role: 'illustration', kind: 'dragon', bounds: { x: 0, y: 0, w: HALF_W, h: SPREAD_H } },
+                { role: 'text', bounds: { x: HALF_W + PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } }
+            ],
+            // 1: 좌=기사(이전 씬에서 돌진해 들어옴), 우=본문
+            [
+                { role: 'illustration', kind: 'knight', bounds: { x: 0, y: 0, w: HALF_W, h: SPREAD_H } },
+                { role: 'text', bounds: { x: HALF_W + PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } }
+            ],
+            // 2: 양면 본문
+            [
+                { role: 'text', bounds: { x: PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } },
+                { role: 'text', bounds: { x: HALF_W + PAD, y: PAD, w: HALF_W - PAD * 2, h: SPREAD_H - PAD * 2 } }
+            ]
+        ]
+
+        // 본문을 3회 반복해서 여러 펼침면에 확실히 분할되게
+        const FULL_CONTENT = (CONTENT + '\n\n' + CONTENT + '\n\n' + CONTENT)
+        const prepared = prepareWithSegments(FULL_CONTENT, FONT)
+        let cursor = { segmentIndex: 0, graphemeIndex: 0 }
+        const spreads = []
+        for (const layout of SPREAD_LAYOUTS) {
+            const spread = { regions: [] }
+            for (const region of layout) {
+                const r = { ...region }
+                if (region.role === 'text') {
+                    r.lines = []
+                    const maxLines = Math.floor(region.bounds.h / LINE_HEIGHT)
+                    for (let i = 0; i < maxLines; i++) {
+                        const line = layoutNextLine(prepared, cursor, region.bounds.w)
+                        if (!line) break
+                        r.lines.push(line)
+                        cursor = line.end
+                    }
+                }
+                spread.regions.push(r)
+            }
+            spreads.push(spread)
+        }
+        document.getElementById('totalPages').textContent = spreads.length
+        console.log(`[PoC] spreads=${spreads.length}`, spreads.map((s, i) =>
+            `${i}: ${s.regions.map(r => r.role === 'text' ? `text(${r.lines.length}lines)` : r.kind).join(', ')}`
+        ))
+
+        // ═══════════════════════════════════════════════════════════
+        // 스프라이트 그리기
+        // ═══════════════════════════════════════════════════════════
+        function drawBackgroundGradient(ctx, b, type) {
+            const g = ctx.createRadialGradient(
+                b.x + b.w * 0.5, b.y + b.h * 0.5, 10,
+                b.x + b.w * 0.5, b.y + b.h * 0.5, Math.max(b.w, b.h) * 0.75
+            )
+            if (type === 'fire') {
+                g.addColorStop(0, '#fff4d6'); g.addColorStop(0.35, '#ffa648')
+                g.addColorStop(0.75, '#8a1a1a'); g.addColorStop(1, '#1a0404')
+            } else if (type === 'dusk') {
+                g.addColorStop(0, '#ffc99d'); g.addColorStop(0.5, '#5a3a5a')
+                g.addColorStop(1, '#0e0822')
+            } else {
+                g.addColorStop(0, '#f5efe0'); g.addColorStop(1, '#d9cfb5')
+            }
+            ctx.fillStyle = g
+            ctx.fillRect(b.x, b.y, b.w, b.h)
+        }
+
+        // 드래곤 — 파라메터(x, y, scale, rotation, mouthOpen 0-1)
+        function drawDragon(ctx, x, y, scale, rotation = 0, mouthOpen = 0) {
+            ctx.save()
+            ctx.translate(x, y)
+            ctx.rotate(rotation)
+            ctx.scale(scale, scale)
+            ctx.fillStyle = '#0c0202'
+            const s = 120
+            ctx.beginPath()
+            // body
+            ctx.moveTo(-s * 0.2, s * 0.1)
+            ctx.bezierCurveTo(-s * 0.8, s * 0.6, -s * 1.1, -s * 0.3, -s * 0.5, -s * 0.6)
+            // head
+            ctx.bezierCurveTo(-s * 0.2, -s * 0.85, s * 0.1, -s * 0.85, s * 0.25 + mouthOpen * s * 0.3, -s * 0.55)
+            // mouth opens: extend forward
+            if (mouthOpen > 0.05) {
+                ctx.lineTo(s * 0.55 + mouthOpen * s * 0.5, -s * 0.35)
+                ctx.lineTo(s * 0.25, -s * 0.35)
+            }
+            // wing
+            ctx.bezierCurveTo(s * 0.7, -s * 0.9, s * 1.2, -s * 0.2, s * 0.6, s * 0.3)
+            // tail
+            ctx.bezierCurveTo(s * 0.3, s * 0.6, s * 0.1, s * 0.5, -s * 0.2, s * 0.1)
+            ctx.closePath()
+            ctx.fill()
+
+            // 눈
+            ctx.fillStyle = '#ffbf40'
+            ctx.beginPath()
+            ctx.arc(-s * 0.1, -s * 0.6, s * 0.05, 0, Math.PI * 2)
+            ctx.fill()
+            ctx.restore()
+        }
+
+        // 기사 — 파라메터(x, y, scale, lean = 돌진 정도 -1~1)
+        function drawKnight(ctx, x, y, scale, lean = 0) {
+            ctx.save()
+            ctx.translate(x, y)
+            ctx.scale(scale, scale)
+            const s = 90
+            // 망토 (lean에 따라 뒤로)
+            ctx.fillStyle = '#8a1f2a'
+            ctx.beginPath()
+            ctx.moveTo(-s * 0.2, -s * 0.3)
+            ctx.quadraticCurveTo(-s * 0.6 - lean * s * 0.3, s * 0.2, -s * 0.4 - lean * s * 0.2, s * 0.8)
+            ctx.lineTo(s * 0.1, s * 0.7)
+            ctx.quadraticCurveTo(s * 0.1, 0, s * 0.2, -s * 0.25)
+            ctx.closePath()
+            ctx.fill()
+
+            // 몸통 (갑옷)
+            ctx.fillStyle = '#8a8a9a'
+            ctx.beginPath()
+            ctx.ellipse(lean * s * 0.15, s * 0.15, s * 0.25, s * 0.4, 0, 0, Math.PI * 2)
+            ctx.fill()
+
+            // 머리 + 투구
+            ctx.fillStyle = '#6a6a7a'
+            ctx.beginPath()
+            ctx.arc(lean * s * 0.2, -s * 0.3, s * 0.17, 0, Math.PI * 2)
+            ctx.fill()
+            // 투구 슬릿
+            ctx.fillStyle = '#0a0a0a'
+            ctx.fillRect(lean * s * 0.2 - s * 0.12, -s * 0.32, s * 0.24, s * 0.04)
+
+            // 다리 (달리는 자세)
+            ctx.fillStyle = '#4a4a5a'
+            ctx.fillRect(lean * s * 0.05 - s * 0.15, s * 0.5, s * 0.12, s * 0.4)
+            ctx.fillRect(lean * s * 0.05 + s * 0.03, s * 0.5, s * 0.12, s * 0.4)
+
+            // 검 (앞으로 뻗음)
+            ctx.save()
+            ctx.translate(s * 0.3 + lean * s * 0.3, -s * 0.1)
+            ctx.rotate(-0.3 + lean * 0.5)
+            // 검날
+            const swordGrad = ctx.createLinearGradient(0, 0, s * 0.8, 0)
+            swordGrad.addColorStop(0, '#dcdcf0')
+            swordGrad.addColorStop(0.5, '#ffffff')
+            swordGrad.addColorStop(1, '#aaaac0')
+            ctx.fillStyle = swordGrad
+            ctx.fillRect(0, -s * 0.04, s * 0.8, s * 0.08)
+            // 손잡이
+            ctx.fillStyle = '#3a2a1a'
+            ctx.fillRect(-s * 0.12, -s * 0.03, s * 0.12, s * 0.06)
+            // 십자가드
+            ctx.fillStyle = '#c9a849'
+            ctx.fillRect(-s * 0.02, -s * 0.1, s * 0.04, s * 0.2)
+            ctx.restore()
+            ctx.restore()
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 렌더 컨텍스트
+        // ═══════════════════════════════════════════════════════════
+        const canvas = document.getElementById('spread')
+        const ctx = canvas.getContext('2d')
+        const DPR = window.devicePixelRatio || 1
+        canvas.width = SPREAD_W * DPR
+        canvas.height = SPREAD_H * DPR
+        canvas.style.width = SPREAD_W + 'px'
+        canvas.style.height = SPREAD_H + 'px'
+        ctx.scale(DPR, DPR)
+
+        // ═══════════════════════════════════════════════════════════
+        // 텍스트 렌더 — 글자별로 컴퓨트된 좌표 리스트 생성
+        // (정적 렌더, 효과 렌더, 파편화 모두 동일 좌표 기반)
+        // ═══════════════════════════════════════════════════════════
+        ctx.font = FONT
+        function computeGlyphs(region) {
+            const glyphs = []
+            let y = region.bounds.y + FONT_SIZE
+            for (const line of region.lines) {
+                let x = region.bounds.x
+                for (const ch of line.text) {
+                    const w = ctx.measureText(ch).width
+                    glyphs.push({ ch, x, y, w })
+                    x += w
+                }
+                y += LINE_HEIGHT
+                if (y > region.bounds.y + region.bounds.h) break
+            }
+            return glyphs
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 시네마틱 상태
+        // ═══════════════════════════════════════════════════════════
+        let currentSpread = 0
+        let heatEnabled = true
+        let scene = null // 시네마틱 전환 중일 때 객체
+
+        // ═══════════════════════════════════════════════════════════
+        // 정적 배경 — 각 spread의 일러스트
+        // ═══════════════════════════════════════════════════════════
+        function paintIllustration(ctx, region, heatCenterOut) {
+            const b = region.bounds
+            if (region.kind === 'dragon') {
+                drawBackgroundGradient(ctx, b, 'fire')
+                const cx = b.x + b.w * 0.55, cy = b.y + b.h * 0.5
+                drawDragon(ctx, cx, cy, 1.1, 0, 0)
+                if (heatCenterOut) { heatCenterOut.x = cx; heatCenterOut.y = cy }
+            } else if (region.kind === 'knight') {
+                drawBackgroundGradient(ctx, b, 'dusk')
+                const cx = b.x + b.w * 0.5, cy = b.y + b.h * 0.55
+                drawKnight(ctx, cx, cy, 1.5, 0)
+            } else {
+                drawBackgroundGradient(ctx, b, 'paper')
+            }
+        }
+
+        // heat wobble
+        function heatOffset(x, y, center, radius, time) {
+            const dx = x - center.x, dy = y - center.y
+            const dist = Math.hypot(dx, dy)
+            if (dist > radius) return { dx: 0, dy: 0 }
+            const intensity = 1 - (dist / radius)
+            return {
+                dx: Math.cos(time * 0.004 + y * 0.03) * intensity * 2.5,
+                dy: Math.sin(time * 0.005 + x * 0.04 + y * 0.02) * intensity * 7
+            }
+        }
+
+        function drawStaticSpread(spreadIdx, time) {
+            // 배경
+            ctx.fillStyle = '#f5efe0'
+            ctx.fillRect(0, 0, SPREAD_W, SPREAD_H)
+            const spread = spreads[spreadIdx]
+            const heatCenter = { x: 0, y: 0, active: false }
+
+            // 일러스트
+            for (const r of spread.regions) {
+                if (r.role !== 'illustration') continue
+                const hc = { x: 0, y: 0 }
+                paintIllustration(ctx, r, r.kind === 'dragon' ? hc : null)
+                if (r.kind === 'dragon') {
+                    heatCenter.x = hc.x; heatCenter.y = hc.y; heatCenter.active = true
+                }
+            }
+
+            // 텍스트
+            ctx.font = FONT
+            ctx.fillStyle = '#2a2418'
+            ctx.textBaseline = 'alphabetic'
+            for (const r of spread.regions) {
+                if (r.role !== 'text') continue
+                const glyphs = computeGlyphs(r)
+                for (const g of glyphs) {
+                    let dx = 0, dy = 0
+                    if (heatCenter.active && heatEnabled) {
+                        const off = heatOffset(g.x, g.y, heatCenter, 720, time)
+                        dx = off.dx; dy = off.dy
+                    }
+                    ctx.fillText(g.ch, g.x + dx, g.y + dy)
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 시네마틱 트랜지션: Spread N → N+1
+        // (drag-forward 장면 — 드래곤 돌진 + 텍스트 파괴 + 기사 등장)
+        // ═══════════════════════════════════════════════════════════
+        function startCinematicForward() {
+            if (scene) return
+            if (currentSpread >= spreads.length - 1) return
+
+            const fromSpread = spreads[currentSpread]
+            const toSpread = spreads[currentSpread + 1]
+
+            // 기존(떠나는) 텍스트 글자들을 파편으로 수집
+            const fragments = []
+            for (const r of fromSpread.regions) {
+                if (r.role !== 'text') continue
+                const glyphs = computeGlyphs(r)
+                for (const g of glyphs) {
+                    fragments.push({
+                        ch: g.ch, x: g.x, y: g.y,
+                        vx: 0, vy: 0, rot: 0, vrot: 0,
+                        alpha: 1, triggered: false, triggerAt: 0
+                    })
+                }
+            }
+
+            // 드래곤 초기 위치 (from spread의 left region 중앙)
+            const dragonRegion = fromSpread.regions.find(r => r.kind === 'dragon')
+            const dragonStart = dragonRegion
+                ? { x: dragonRegion.bounds.x + dragonRegion.bounds.w * 0.55, y: dragonRegion.bounds.y + dragonRegion.bounds.h * 0.5 }
+                : { x: HALF_W * 0.5, y: SPREAD_H * 0.5 }
+
+            // 불꽃 파티클
+            const flames = []
+
+            scene = {
+                type: 'forward',
+                start: performance.now(),
+                duration: 2400,
+                fromSpread, toSpread,
+                fragments, flames, dragonStart,
+                nextTextStartAt: 1700  // 새 텍스트가 드러나기 시작하는 시점 (ms)
+            }
+            document.getElementById('sceneLabel').textContent = '🔥 시네마틱'
+        }
+
+        // backward — 단순 즉시 전환 (PoC는 forward만 시네마틱)
+        function prevSpread() {
+            if (scene) return
+            if (currentSpread <= 0) return
+            currentSpread -= 1
+            document.getElementById('pageNum').textContent = currentSpread + 1
+        }
+
+        // easing
+        const easeIn = t => t * t
+        const easeOut = t => 1 - (1 - t) * (1 - t)
+        const easeInOut = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
+
+        function renderCinematic(now) {
+            const t = Math.min(1, (now - scene.start) / scene.duration)
+            const ms = now - scene.start
+
+            // ─── 배경 (새 spread의 배경을 뒤에 깔아두고, 앞면이 파괴되며 드러남)
+            // 새 spread 일러스트를 완전 투명에서 점차 보이게
+            const newRevealAlpha = Math.max(0, (t - 0.55) / 0.3)
+
+            // 1단계 — 기존 spread 배경
+            ctx.fillStyle = '#f5efe0'
+            ctx.fillRect(0, 0, SPREAD_W, SPREAD_H)
+            for (const r of scene.fromSpread.regions) {
+                if (r.role === 'illustration') paintIllustration(ctx, r, null)
+            }
+
+            // 2단계 — 새 spread가 드러남 (오른쪽에서 왼쪽으로 wipe)
+            if (newRevealAlpha > 0) {
+                ctx.save()
+                const wipeX = SPREAD_W * (1 - easeOut((t - 0.55) / 0.35))
+                ctx.beginPath()
+                ctx.rect(wipeX, 0, SPREAD_W - wipeX, SPREAD_H)
+                ctx.clip()
+                ctx.fillStyle = '#f5efe0'
+                ctx.fillRect(0, 0, SPREAD_W, SPREAD_H)
+                for (const r of scene.toSpread.regions) {
+                    if (r.role === 'illustration') paintIllustration(ctx, r, null)
+                }
+                ctx.restore()
+            }
+
+            // ─── 새 텍스트 (t >= 0.75부터 글자별 페이드 인)
+            if (ms >= scene.nextTextStartAt) {
+                const nt = (ms - scene.nextTextStartAt) / (scene.duration - scene.nextTextStartAt)
+                ctx.font = FONT
+                ctx.fillStyle = '#2a2418'
+                for (const r of scene.toSpread.regions) {
+                    if (r.role !== 'text') continue
+                    const glyphs = computeGlyphs(r)
+                    for (let i = 0; i < glyphs.length; i++) {
+                        const g = glyphs[i]
+                        // 왼쪽→오른쪽 순차 등장
+                        const progress = Math.max(0, Math.min(1, nt * 1.8 - (g.x - r.bounds.x) / r.bounds.w * 0.5))
+                        if (progress <= 0) continue
+                        const rise = (1 - progress) * 12
+                        ctx.globalAlpha = progress
+                        ctx.fillText(g.ch, g.x, g.y + rise)
+                    }
+                    ctx.globalAlpha = 1
+                }
+            }
+
+            // ─── 드래곤 돌진 (0 ~ 0.55)
+            // Phase A (0~0.15): 뒤로 차징 (살짝 왼쪽 + 스케일 업)
+            // Phase B (0.15~0.4): 오른쪽으로 돌진 (mouth open), 중앙 gutter 넘김
+            // Phase C (0.4~0.55): 화면 밖으로 퇴장
+            if (t < 0.6) {
+                let dx, dy, scale, rot, mouth
+                if (t < 0.15) {
+                    const u = t / 0.15
+                    dx = scene.dragonStart.x - 30 * easeIn(u)
+                    dy = scene.dragonStart.y
+                    scale = 1.1 + 0.15 * easeIn(u)
+                    rot = -0.05 * u
+                    mouth = 0
+                } else if (t < 0.4) {
+                    const u = (t - 0.15) / 0.25
+                    dx = scene.dragonStart.x - 30 + (SPREAD_W - scene.dragonStart.x + 300) * easeIn(u)
+                    dy = scene.dragonStart.y + Math.sin(u * Math.PI) * -60
+                    scale = 1.25 - 0.1 * u
+                    rot = -0.05 + 0.2 * u
+                    mouth = Math.min(1, u * 2.5)
+                } else {
+                    const u = (t - 0.4) / 0.2
+                    dx = scene.dragonStart.x - 30 + (SPREAD_W - scene.dragonStart.x + 300) + 400 * easeIn(u)
+                    dy = scene.dragonStart.y - 60 + 80 * u
+                    scale = 1.15 - 0.3 * u
+                    rot = 0.15
+                    mouth = 1 - u
+                }
+                drawDragon(ctx, dx, dy, scale, rot, mouth)
+
+                // Phase B, C — 입에서 불 분사
+                if (t > 0.22 && t < 0.55) {
+                    const intensity = t < 0.4 ? 1 : (1 - (t - 0.4) / 0.15)
+                    // 분사 방향은 오른쪽 아래 약간
+                    for (let i = 0; i < 3; i++) {
+                        scene.flames.push({
+                            x: dx + 120, y: dy - 30,
+                            vx: 8 + Math.random() * 6,
+                            vy: -2 + Math.random() * 6,
+                            life: 1,
+                            size: 12 + Math.random() * 10,
+                            hue: 20 + Math.random() * 30
+                        })
+                    }
+
+                    // 파편 트리거 — 불길이 닿은 글자부터 흩날림
+                    const flameFrontX = dx + 120
+                    for (const f of scene.fragments) {
+                        if (!f.triggered && f.x < flameFrontX && f.x > dx) {
+                            f.triggered = true
+                            f.triggerAt = now
+                            const angle = Math.atan2(f.y - dy, f.x - dx) + (Math.random() - 0.5) * 0.3
+                            const speed = 4 + Math.random() * 8
+                            f.vx = Math.cos(angle) * speed + 3
+                            f.vy = Math.sin(angle) * speed - 2
+                            f.vrot = (Math.random() - 0.5) * 0.3
+                        }
+                    }
+                }
+            }
+
+            // ─── 불꽃 파티클 업데이트/렌더
+            for (let i = scene.flames.length - 1; i >= 0; i--) {
+                const fl = scene.flames[i]
+                fl.x += fl.vx
+                fl.y += fl.vy
+                fl.vy += 0.15
+                fl.life -= 0.025
+                fl.size *= 0.97
+                if (fl.life <= 0) { scene.flames.splice(i, 1); continue }
+                ctx.globalAlpha = fl.life * 0.85
+                ctx.fillStyle = `hsl(${fl.hue}, 100%, ${50 + fl.life * 20}%)`
+                ctx.beginPath()
+                ctx.arc(fl.x, fl.y, fl.size * fl.life, 0, Math.PI * 2)
+                ctx.fill()
+            }
+            ctx.globalAlpha = 1
+
+            // ─── 파편 렌더 (트리거된 글자만)
+            ctx.font = FONT
+            ctx.fillStyle = '#3a1e0a'
+            for (const f of scene.fragments) {
+                if (!f.triggered) {
+                    // 아직 파괴 안 된 글자 — 원위치에 그림, heat wobble 강화
+                    ctx.fillStyle = '#2a2418'
+                    ctx.fillText(f.ch, f.x, f.y)
+                    continue
+                }
+                f.x += f.vx
+                f.y += f.vy
+                f.vy += 0.4 // gravity
+                f.rot += f.vrot
+                const dt = (now - f.triggerAt) / 1000
+                f.alpha = Math.max(0, 1 - dt * 0.8)
+                if (f.alpha <= 0) continue
+                ctx.save()
+                ctx.translate(f.x, f.y)
+                ctx.rotate(f.rot)
+                ctx.globalAlpha = f.alpha
+                ctx.fillStyle = dt < 0.3 ? '#d94820' : '#3a1e0a' // 초기엔 불타는 색
+                ctx.fillText(f.ch, 0, 0)
+                ctx.restore()
+            }
+            ctx.globalAlpha = 1
+
+            // ─── 기사 등장 (0.55 ~ 1.0) — 왼쪽에서 오른쪽으로 돌진
+            if (t > 0.55) {
+                const u = (t - 0.55) / 0.45
+                const kx = -100 + (SPREAD_W + 200) * easeInOut(u)
+                const ky = SPREAD_H * 0.55 + Math.sin(u * Math.PI * 4) * 6  // 달리는 진동
+                const kscale = 1.8
+                drawKnight(ctx, kx, ky, kscale, 0.8) // lean forward
+                // 잔상
+                ctx.globalAlpha = 0.2
+                drawKnight(ctx, kx - 40, ky + 3, kscale * 0.95, 0.75)
+                ctx.globalAlpha = 0.1
+                drawKnight(ctx, kx - 80, ky + 6, kscale * 0.9, 0.7)
+                ctx.globalAlpha = 1
+            }
+
+            // ─── 종료
+            if (t >= 1) {
+                currentSpread += 1
+                scene = null
+                document.getElementById('pageNum').textContent = currentSpread + 1
+                document.getElementById('sceneLabel').textContent = '정적'
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 메인 루프
+        // ═══════════════════════════════════════════════════════════
+        function loop(time) {
+            if (scene) {
+                renderCinematic(time)
+            } else {
+                drawStaticSpread(currentSpread, time)
+            }
+            updateFps(time)
+            requestAnimationFrame(loop)
+        }
+
+        let fpsLast = 0, fpsFrames = 0
+        function updateFps(time) {
+            fpsFrames++
+            if (time - fpsLast > 500) {
+                document.getElementById('fps').textContent = Math.round(fpsFrames * 1000 / (time - fpsLast))
+                fpsLast = time; fpsFrames = 0
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 입력
+        // ═══════════════════════════════════════════════════════════
+        window.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') startCinematicForward()
+            else if (e.key === 'ArrowLeft') prevSpread()
+            else if (e.key.toLowerCase() === 'h') {
+                heatEnabled = !heatEnabled
+                document.getElementById('heatStatus').textContent = heatEnabled ? 'ON' : 'OFF'
+            } else if (e.key.toLowerCase() === 'r') location.reload()
+        })
+
+        document.getElementById('pageNum').textContent = currentSpread + 1
+        requestAnimationFrame(loop)
+    </script>
+</body>
+</html>

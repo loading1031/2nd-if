@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>PoC v4 — 고요한 리더 · breathing + reflow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #f4eee0;
+            --ink: #2a1a0a;
+            --ink-mute: #6b5940;
+            --rubric: #a42a1c;
+            --frame-bg: #1e1710;
+        }
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; padding: 0;
+            background: var(--frame-bg);
+            color: #cfc2a8;
+            font-family: "Noto Serif KR", "EB Garamond", serif;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #stage { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        #spread-wrapper {
+            position: relative;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55))
+                    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #spread { display: block; background: var(--paper); }
+        #spread-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; bottom: 0; left: 50%; width: 40px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg,
+                rgba(0,0,0,0) 0%, rgba(70,50,30,0.10) 35%,
+                rgba(70,50,30,0.22) 50%,
+                rgba(70,50,30,0.10) 65%, rgba(0,0,0,0) 100%);
+            pointer-events: none; z-index: 2;
+        }
+        #info, #controls {
+            position: fixed; padding: 8px 12px;
+            background: rgba(26, 15, 5, 0.72);
+            border: 1px solid rgba(200, 175, 130, 0.12);
+            border-radius: 3px;
+            font-size: 12px; line-height: 1.5;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+            font-family: "EB Garamond", "Noto Serif KR", serif;
+            opacity: 0.7;
+        }
+        #info { top: 14px; left: 14px; }
+        #controls { bottom: 14px; left: 14px; }
+        #info strong { color: #e8c07a; font-style: italic; font-weight: 500; }
+        kbd {
+            background: rgba(80, 60, 35, 0.6);
+            border: 1px solid rgba(200, 175, 130, 0.2);
+            padding: 1px 5px; border-radius: 2px; font-size: 11px;
+            color: #e8dfc8;
+        }
+        #error {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #3a1f1f; color: #ff9090;
+            padding: 20px 30px; border-radius: 8px;
+            border: 1px solid #a04040; max-width: 600px;
+            display: none; z-index: 100;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        PoC v4 · <strong>spread <span id="pageNum">1</span>/<span id="totalPages">…</span></strong>
+        · <span id="fps">—</span> fps
+    </div>
+    <div id="controls"><kbd>→</kbd> <kbd>←</kbd> 페이지 · <kbd>R</kbd> 재시작</div>
+    <div id="stage">
+        <div id="spread-wrapper">
+            <canvas id="spread" width="1280" height="800"></canvas>
+        </div>
+    </div>
+    <div id="error"></div>
+
+    <script type="module">
+        const errorEl = document.getElementById('error')
+        function showError(msg) {
+            errorEl.textContent = msg
+            errorEl.style.display = 'block'
+            console.error(msg)
+        }
+
+        let prepareWithSegments, layoutNextLine
+        try {
+            const pretext = await import('https://esm.sh/@chenglou/pretext')
+            prepareWithSegments = pretext.prepareWithSegments
+            layoutNextLine = pretext.layoutNextLine
+        } catch (e) { showError(`Pretext: ${e.message}`); throw e }
+
+        // ═══════════════════════════════════════════════════════════
+        // 팔레트 / 타이포
+        // ═══════════════════════════════════════════════════════════
+        const PAPER = '#f4eee0', INK = '#2a1a0a'
+        const INK_MUTE = '#6b5940', RUBRIC = '#a42a1c'
+
+        const FONT_FAMILY = '"Noto Serif KR", "EB Garamond", serif'
+        const FONT_SIZE = 19
+        const LINE_HEIGHT = 36
+        const FONT = `${FONT_SIZE}px ${FONT_FAMILY}`
+        const DROPCAP_SIZE = FONT_SIZE * 3.4
+        const DROPCAP_FONT = `900 ${DROPCAP_SIZE}px ${FONT_FAMILY}`
+
+        await document.fonts.load(FONT)
+        await document.fonts.load(DROPCAP_FONT)
+
+        // ═══════════════════════════════════════════════════════════
+        // 본문
+        // ═══════════════════════════════════════════════════════════
+        const CONTENT = `그 겨울, 구름 사이로 한 마리 용이 내려왔다. 마을 사람들은 누구도 그것을 직접 보지 못했지만, 아침마다 서리 위에 선명한 발자국이 남았다. 발자국은 바람을 따라 사라졌고, 바람은 종이 냄새를 품고 있었다. 노승은 그때 먹을 갈고 있었다. 먹향이 방을 채우자, 창밖의 대나무 그림자가 화선지 위로 길게 드리웠다. 그는 붓을 들어 단 한 획을 그었다. 그 한 획 안에 산과 강이 있었고, 달과 바람이 있었다. 용은 붓끝에서 태어난다. 그가 말했다. 제자는 고개를 끄덕이지 못했다. 제자의 눈에는 아직 한 획이 한 획으로만 보였기 때문이다. 노승은 웃으며 또 한 획을 그었다. 이번에는 그림자 안쪽이었다. 사흘이 지나자, 마을 사람들은 더 이상 서리 위의 발자국을 보지 못했다. 다만 가끔 바람 속에서 먹향이 느껴졌다. 노승의 방에서는, 화선지 한 장 위에 아홉 마리의 용이 구름을 뚫고 나오고 있었다. 제자는 스승을 돌아보며 물었다. 이것이 완성입니까. 스승은 붓을 내려놓았다. 완성은 없다. 다만 그만둘 수 있을 뿐이다.`
+
+        // PoC 분량 확보 위해 3회 반복 (2 spread × ~25라인)
+        const FULL_CONTENT = CONTENT + '\n\n' + CONTENT + '\n\n' + CONTENT
+        const prepared = prepareWithSegments(FULL_CONTENT, FONT)
+
+        // ═══════════════════════════════════════════════════════════
+        // 이미지 로드
+        // ═══════════════════════════════════════════════════════════
+        async function loadImage(src) {
+            const img = new Image(); img.src = src; await img.decode(); return img
+        }
+        const dragonImg = await loadImage('./assets/dragon.jpg')
+            .catch(e => { showError(`이미지 로드: ${e.message}`); throw e })
+
+        // ═══════════════════════════════════════════════════════════
+        // 스프레드 정의
+        // illustration: 화면에 그려지는 이미지 배치
+        // obstacleRatios: 그 이미지 안에서 "용 몸통"이 차지하는 비율 (텍스트가 피해야 할 영역)
+        // dragon.jpg는 가로 2300, 세로 1005. 용 몸통이 대략 35~75% x, 30~75% y에 있음.
+        // ═══════════════════════════════════════════════════════════
+        const SPREAD_W = 1280, SPREAD_H = 800
+        const HALF_W = SPREAD_W / 2
+        const PAD = 64
+
+        // 용 이미지는 2300×1005 (≈2.29:1 와이드). 종횡비 유지해서 배치.
+        // 장애물(텍스트가 피할 rect) = 일러스트 bounds 전체 — PoC에선 이미지의 구름/파도 획까지
+        // 모두 피하도록 보수적으로 처리. 실제 프로덕션에선 투명 PNG로 용 실루엣만 장애물로.
+        const SPREADS = [
+            // Spread 1: 용 이미지가 페이지 중앙에 가로로 드리움 (좌상~우중).
+            //   드롭캡은 상단, 본문은 드래곤 위쪽 + 오른쪽 + 아래쪽으로 흘러감.
+            {
+                illustration: { x: 0, y: 240, w: 760, h: 332, flip: false, alpha: 0.93 },
+                dropcap: true,
+            },
+            // Spread 2: 용이 하단 우측에 flip. 본문은 위쪽 + 왼쪽으로.
+            {
+                illustration: { x: HALF_W - 20, y: SPREAD_H - 380, w: 780, h: 340, flip: true, alpha: 0.93 },
+                dropcap: false,
+            },
+        ]
+
+        // ═══════════════════════════════════════════════════════════
+        // 캔버스
+        // ═══════════════════════════════════════════════════════════
+        const canvas = document.getElementById('spread')
+        const ctx = canvas.getContext('2d')
+        const DPR = window.devicePixelRatio || 1
+        canvas.width = SPREAD_W * DPR
+        canvas.height = SPREAD_H * DPR
+        canvas.style.width = SPREAD_W + 'px'
+        canvas.style.height = SPREAD_H + 'px'
+        ctx.scale(DPR, DPR)
+
+        // ═══════════════════════════════════════════════════════════
+        // 호흡 — 용 몸이 수직으로 ±4px, 주기 3.5초. 완만한 사인파.
+        // ═══════════════════════════════════════════════════════════
+        const BREATH_AMPLITUDE = 4
+        const BREATH_PERIOD_MS = 3500
+        function breathOffset(time) {
+            return Math.sin((time / BREATH_PERIOD_MS) * 2 * Math.PI) * BREATH_AMPLITUDE
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 장애물 = 일러스트 bounds (breath 반영 — y만 미세 이동)
+        // ═══════════════════════════════════════════════════════════
+        function computeObstacle(spread, time) {
+            const illu = spread.illustration
+            // 이미지 가장자리의 얕은 잉크가 텍스트에 너무 가까이 가지 않도록
+            // 좌우에 약간의 inset(=음수, 외곽을 조금 더 넓게 치는 효과 방지)
+            return {
+                x: illu.x, y: illu.y + breathOffset(time),
+                w: illu.w, h: illu.h,
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // Pretext 레이아웃 (매 프레임 재계산 — breath가 라인 폭에 영향)
+        //
+        // 각 라인의 y가 obstacle과 겹치면 → 그 라인은 obstacle 오른쪽에서 시작
+        // (1번째 스프레드는 왼쪽 용이라 텍스트는 오른쪽으로 밀림.
+        //  2번째 스프레드는 오른쪽 하단 용이라 그 줄들만 왼쪽에서 끊김.)
+        // ═══════════════════════════════════════════════════════════
+        function layoutSpread(spread, time, startCursor) {
+            const obs = computeObstacle(spread, time)
+            const regionX = PAD
+            const regionY = PAD
+            const regionW = SPREAD_W - PAD * 2
+            const regionH = SPREAD_H - PAD * 2
+
+            const dropcapIndent = spread.dropcap ? DROPCAP_SIZE + 14 : 0
+
+            const cursor = { ...startCursor }
+            const lines = []
+            let y = regionY + FONT_SIZE
+            let lineNum = 0
+
+            while (y < regionY + regionH - 4) {
+                let lineX = regionX
+                let lineW = regionW
+
+                // 드롭캡 indent (처음 3줄)
+                if (dropcapIndent && lineNum < 3) {
+                    lineX += dropcapIndent
+                    lineW -= dropcapIndent
+                }
+
+                // 용 장애물 — 줄의 수직 범위(해당 라인의 대략 상단~하단)이 장애물 범위와 겹치면
+                // 줄의 수평 폭을 장애물 중심 기준 "덜 차지한 쪽"으로 밀어줌.
+                const lineTop = y - FONT_SIZE * 0.8
+                const lineBottom = y + FONT_SIZE * 0.2
+                const intersectsY = lineBottom >= obs.y && lineTop <= obs.y + obs.h
+                if (intersectsY) {
+                    const obsLeft = obs.x
+                    const obsRight = obs.x + obs.w
+                    const obsCenterX = (obsLeft + obsRight) / 2
+                    const lineCenterX = lineX + lineW / 2
+                    const GAP = 20
+
+                    // 장애물이 줄의 오른쪽을 아예 덮지 않으면(완전히 왼쪽 밖) skip
+                    if (obsRight < lineX || obsLeft > lineX + lineW) {
+                        // no-op
+                    } else if (obsCenterX < lineCenterX) {
+                        // 장애물이 왼쪽 절반에 치우침 → 줄 시작을 장애물 오른쪽 너머로 밀기
+                        const newX = obsRight + GAP
+                        const lostWidth = newX - lineX
+                        lineX = newX
+                        lineW -= lostWidth
+                    } else {
+                        // 장애물이 오른쪽 절반에 치우침 → 줄 폭을 장애물 왼쪽까지로 제한
+                        const newRight = obsLeft - GAP
+                        lineW = newRight - lineX
+                    }
+                }
+
+                if (lineW < 80) { y += LINE_HEIGHT; lineNum++; continue }
+
+                const line = layoutNextLine(prepared, cursor, lineW)
+                if (!line) break
+                lines.push({ text: line.text, x: lineX, y })
+                Object.assign(cursor, line.end)
+                y += LINE_HEIGHT
+                lineNum++
+            }
+            return { lines, endCursor: cursor, obstacle: obs }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 각 스프레드의 시작 커서를 초기 한 번 계산 (breath=0 기준)
+        // ═══════════════════════════════════════════════════════════
+        SPREADS[0].startCursor = { segmentIndex: 0, graphemeIndex: 0 }
+        {
+            const r0 = layoutSpread(SPREADS[0], 0, SPREADS[0].startCursor)
+            SPREADS[1].startCursor = r0.endCursor
+        }
+
+        document.getElementById('totalPages').textContent = SPREADS.length
+        console.log(`[PoC v4] spreads=${SPREADS.length}`)
+
+        // ═══════════════════════════════════════════════════════════
+        // 정적 렌더 (스프레드 한 장)
+        // offsetX: 전환 중 슬라이드 오프셋
+        // ═══════════════════════════════════════════════════════════
+        function drawSpread(spreadIdx, time, offsetX = 0, alpha = 1) {
+            const spread = SPREADS[spreadIdx]
+
+            ctx.save()
+            if (offsetX !== 0 || alpha !== 1) {
+                ctx.translate(offsetX, 0)
+                ctx.globalAlpha = alpha
+            }
+
+            // 양피지 배경
+            ctx.fillStyle = PAPER
+            ctx.fillRect(0, 0, SPREAD_W, SPREAD_H)
+
+            // 용 이미지 (breath에 따라 y 미세 이동)
+            const illu = spread.illustration
+            const breathY = breathOffset(time)
+            ctx.save()
+            ctx.globalAlpha = illu.alpha * alpha
+            if (illu.flip) {
+                ctx.translate(illu.x + illu.w, illu.y + breathY)
+                ctx.scale(-1, 1)
+                ctx.drawImage(dragonImg, 0, 0, illu.w, illu.h)
+            } else {
+                ctx.drawImage(dragonImg, illu.x, illu.y + breathY, illu.w, illu.h)
+            }
+            ctx.restore()
+
+            // 텍스트 레이아웃 (breath 반영)
+            const layout = layoutSpread(spread, time, spread.startCursor)
+
+            // 본문 텍스트
+            ctx.font = FONT
+            ctx.fillStyle = INK
+            ctx.textBaseline = 'alphabetic'
+            const isSkipFirstForDropcap = spread.dropcap
+            for (let i = 0; i < layout.lines.length; i++) {
+                const l = layout.lines[i]
+                if (isSkipFirstForDropcap && i === 0) {
+                    // 드롭캡 대상 글자는 본문에서 스킵
+                    const firstCh = l.text[0] || ''
+                    if (firstCh) {
+                        const charW = ctx.measureText(firstCh).width
+                        ctx.fillText(l.text.slice(1), l.x + charW, l.y)
+                        continue
+                    }
+                }
+                ctx.fillText(l.text, l.x, l.y)
+            }
+
+            // 드롭캡 — 첫 줄의 실제 lineX를 기준으로 (드래곤 옆으로 밀린 경우 대응).
+            // 호흡 영향 없음 (고정 위치) — 움직이면 읽기 방해.
+            if (spread.dropcap && layout.lines.length > 0) {
+                const firstLine = layout.lines[0]
+                const firstCh = firstLine.text[0] || ''
+                if (firstCh) {
+                    ctx.save()
+                    ctx.font = DROPCAP_FONT
+                    ctx.fillStyle = RUBRIC
+                    ctx.textBaseline = 'alphabetic'
+                    ctx.fillText(firstCh, firstLine.x, firstLine.y + DROPCAP_SIZE * 0.05)
+                    ctx.restore()
+                }
+            }
+
+            // 폴리오 (페이지 번호)
+            ctx.save()
+            ctx.font = `italic 12px "EB Garamond", serif`
+            ctx.fillStyle = INK_MUTE
+            ctx.textAlign = 'left'
+            ctx.fillText((spreadIdx * 2 + 1).toString(), PAD, SPREAD_H - 28)
+            ctx.textAlign = 'right'
+            ctx.fillText((spreadIdx * 2 + 2).toString(), SPREAD_W - PAD, SPREAD_H - 28)
+            ctx.restore()
+
+            ctx.restore()
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 페이지 전환 — 500ms 가로 슬라이드 + 크로스페이드
+        // ═══════════════════════════════════════════════════════════
+        const TRANSITION_MS = 500
+        const easeInOut = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
+
+        let currentSpread = 0
+        let transition = null
+
+        function startTransition(direction) {
+            if (transition) return
+            const next = currentSpread + direction
+            if (next < 0 || next >= SPREADS.length) return
+            transition = {
+                start: performance.now(),
+                direction,
+                toIdx: next,
+            }
+        }
+
+        function renderTransition(now) {
+            const t = Math.min(1, (now - transition.start) / TRANSITION_MS)
+            const tE = easeInOut(t)
+            const dir = transition.direction
+
+            // direction > 0 (next): current slides left, next slides in from right
+            // direction < 0 (prev): current slides right, prev slides in from left
+            const currOffset = -dir * SPREAD_W * tE
+            const nextOffset = dir * SPREAD_W * (1 - tE)
+
+            // Clear
+            ctx.fillStyle = PAPER
+            ctx.fillRect(0, 0, SPREAD_W, SPREAD_H)
+
+            // 크로스페이드: 현재 알파가 1→0.3, 다음 알파가 0.3→1 (겹침 구간)
+            const currAlpha = 1 - tE * 0.7
+            const nextAlpha = 0.3 + tE * 0.7
+
+            drawSpread(currentSpread, now, currOffset, currAlpha)
+            drawSpread(transition.toIdx, now, nextOffset, nextAlpha)
+
+            if (t >= 1) {
+                currentSpread = transition.toIdx
+                transition = null
+                document.getElementById('pageNum').textContent = currentSpread + 1
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // 메인 루프
+        // ═══════════════════════════════════════════════════════════
+        function loop(time) {
+            if (transition) renderTransition(time)
+            else drawSpread(currentSpread, time)
+            updateFps(time)
+            requestAnimationFrame(loop)
+        }
+        let fpsLast = 0, fpsFrames = 0
+        function updateFps(time) {
+            fpsFrames++
+            if (time - fpsLast > 500) {
+                document.getElementById('fps').textContent = Math.round(fpsFrames * 1000 / (time - fpsLast))
+                fpsLast = time; fpsFrames = 0
+            }
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') startTransition(+1)
+            else if (e.key === 'ArrowLeft') startTransition(-1)
+            else if (e.key.toLowerCase() === 'r') location.reload()
+        })
+        canvas.addEventListener('click', e => {
+            const rect = canvas.getBoundingClientRect()
+            const x = e.clientX - rect.left
+            startTransition(x > rect.width * 0.5 ? +1 : -1)
+        })
+
+        document.getElementById('pageNum').textContent = currentSpread + 1
+        requestAnimationFrame(loop)
+    </script>
+</body>
+</html>
