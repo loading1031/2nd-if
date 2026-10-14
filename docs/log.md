@@ -3,6 +3,11 @@
 > LLM Wiki 패턴: 문서 변경 이력을 시간순으로 기록한다.
 > `/doc` 스킬 실행 시 자동으로 항목이 추가된다.
 
+## 2026-10-14 update | 장면 레이어 기획 반영
+- `specs/dynamic-reader.md`: 장면 레이어 추가 — ambient 루프 장면 Phase 1, 3D 탐색 모먼트 Phase 2. 요구사항·데이터 모델(`asset_type=scene`, `video_mp4`, `data-scene`)·플로우 갱신, [[dev-reader-scene-pipeline]] 링크
+- `dev/dev-reader-scene-pipeline.md`: 기획 범위 주의 → Phase 배치 확정으로 교체
+- 충돌 감지: `design/design-dynamic-reader.md`, `dev/dev-dynamic-reader.md`에 장면 블록·`/scene`·`data-scene` 미반영 → 디자인 문서 갱신 필요
+
 ## 2026-10-14 ingest | 리더 장면 파이프라인 개발 문서
 - `dev/dev-reader-scene-pipeline.md`: Blender → webm/glb → three.js 아키텍처 흐름, PoC 결과 정리 (신규)
 - `design/design-dynamic-reader.md`: `## 개발`에 역링크 추가

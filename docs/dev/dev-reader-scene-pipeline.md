@@ -10,9 +10,8 @@
 ## 기획
 - [[dynamic-reader]] — 동적 텍스트 리더 기획
 
-> **기획 범위 주의**: 현재 기획/디자인의 Phase 1은 "정적 PNG 오브젝트 + Pretext 리플로우"이고 애니메이션은 Phase 2로 미뤄져 있다.
-> 이 문서의 "움직이는 장면(ambient 루프 / 실시간 3D 탐색)"은 기획에 아직 반영되지 않은 레이어다.
-> 프로덕션 연동 전에 기획 문서에 장면 레이어와 Phase 배치를 먼저 확정해야 한다.
+> **Phase 배치 (2026-10-14 확정)**: ambient 루프 장면(webm) = Phase 1, 3D 탐색 모먼트(glb) = Phase 2.
+> 장면 전용 디자인(배경/삽화 모드 레이아웃, `/scene` 메뉴)은 아직 디자인 문서에 없음.
 
 ## 개요
 
@@ -124,5 +123,4 @@ python3 -m http.server 8765 --directory blender   # → http://localhost:8765/we
 - `scene.json` 스키마, 비율별 렌더, mp4 폴백, 프로덕션 번들 미구현
 
 ## 선행 작업
-- [[dynamic-reader]] 기획에 장면 레이어(ambient 루프 / 탐색 모먼트)와 Phase 배치 확정
 - 장면 전용 디자인 문서 (`design-reader-scene` 등) 작성
