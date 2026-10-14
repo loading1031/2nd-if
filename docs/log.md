@@ -3,6 +3,11 @@
 > LLM Wiki 패턴: 문서 변경 이력을 시간순으로 기록한다.
 > `/doc` 스킬 실행 시 자동으로 항목이 추가된다.
 
+## 2026-10-14 ingest | 리더 장면 파이프라인 개발 문서
+- `dev/dev-reader-scene-pipeline.md`: Blender → webm/glb → three.js 아키텍처 흐름, PoC 결과 정리 (신규)
+- `design/design-dynamic-reader.md`: `## 개발`에 역링크 추가
+- 충돌 감지: 기획/디자인 Phase 1은 정적 PNG 오브젝트, 애니메이션은 Phase 2 → 장면 레이어가 `specs/dynamic-reader.md`에 미반영. 기획 확정 필요
+
 ## 2026-04-12 lint | Dify 참조 정리
 - `specs/index.md`: cs-chat 설명에서 "(Dify AI)" → "(관리자 1:1)" 변경
 - `specs/branch.md`: AI 유사도 검사에서 "Dify Chatflow 또는" 제거

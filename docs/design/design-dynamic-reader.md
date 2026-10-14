@@ -148,3 +148,4 @@ Pretext 적용 후 (리플로우 시뮬레이션):
 
 ## 개발
 - [[dev-dynamic-reader]] — 동적 텍스트 리더 서버/클라이언트 로직
+- [[dev-reader-scene-pipeline]] — 움직이는 장면 파이프라인 (Blender → webm/glb → three.js), PoC
