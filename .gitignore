@@ -55,3 +55,7 @@ Thumbs.db
 
 # Tailwind (keep output.css for production)
 # static/css/output.css
+
+# --- Blender ---
+blender/out/
+*.blend1
