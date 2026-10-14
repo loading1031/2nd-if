@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>candle_room · 실시간 3D PoC</title>
+<style>
+    html, body { margin: 0; height: 100%; background: #0d0a08; overflow: hidden; }
+    canvas { display: block; }
+    .text {
+        position: fixed; top: 0; left: 0; bottom: 0; width: min(34rem, 46vw);
+        padding: 18vh 3rem 0 8vw; box-sizing: border-box;
+        color: #e9dfd2; font: 1.15rem/2 "Noto Serif KR", "AppleMyungjo", serif;
+        background: linear-gradient(90deg, rgba(13,10,8,.9) 0%, rgba(13,10,8,.6) 70%, rgba(13,10,8,0) 100%);
+        transition: opacity .8s ease, transform .8s ease;
+        pointer-events: none;
+    }
+    .text p { margin: 0 0 1.4em; }
+    body.exploring .text { opacity: 0; transform: translateX(-1.5rem); }
+    .hint {
+        position: fixed; right: 2rem; bottom: 1.6rem;
+        color: #8a7d70; font: 12px/1.6 ui-monospace, monospace; letter-spacing: .04em; text-align: right;
+    }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="text">
+    <p>초는 이제 손가락 한 마디만큼 남아 있었다.</p>
+    <p>그녀는 편지를 접었다 다시 펼쳤다. 쓰지 못한 마지막 줄이 불빛에 흔들렸다.</p>
+    <p>창밖에서 아무 소리도 들리지 않는다는 게, 오늘따라 이상하게 무거웠다.</p>
+</div>
+<div class="hint">촛불 클릭 → 다가가기<br>빈 곳 클릭 → 물러나기 / 돌아오기</div>
+<script type="module" src="./candle_room.js"></script>
+</body>
+</html>
