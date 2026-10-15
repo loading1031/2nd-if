@@ -1,0 +1,24 @@
+name: Git policy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify policy tests
+        run: python3 -m unittest discover -s scripts/tests -p 'test_git_policy.py'
+      - name: Check PR target and new commit messages
+        run: >-
+          python3 scripts/check_git_policy.py pr "$GITHUB_EVENT_PATH"
+          --legacy-base 6e998bd57bd0fae0db997e2413a50b45f6697f5f
+          --legacy-base 77ad0301342b552f145f7b36f4a2c5d343770d97
