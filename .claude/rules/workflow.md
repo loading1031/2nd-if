@@ -31,6 +31,7 @@
 
 - 메시지 검사: `python3 scripts/check_git_policy.py commit <message-file> --branch <branch>`.
 - 로컬 설치: `python3 scripts/install_git_hooks.py`. 현재 checkout의 hooks 디렉터리에 `commit-msg`만 설치하며 기존 pre-commit을 유지한다. 알 수 없는 기존 commit-msg가 있으면 덮어쓰지 않는다.
+- 일시적인 Git 인덱스 잠금 생성 실패는 `python3 scripts/commit_with_retry.py`를 통해 최대 30초간 대기·재시도한다. 대상 `index.lock`의 경합성 생성 오류만 재시도하며, 그 외 오류는 반환한다. 기존 훅은 유지하고 커밋 명령을 래핑한다.
 - CI: `.github/workflows/git-policy.yml`이 PR base·새 커밋 메시지를 검사한다. GitHub required check 지정은 별도 저장소 설정이며 자동으로 완료됐다고 보고하지 않는다.
 - 브랜치 접두어를 과거 이력에 소급하지 않는다. 이미 base에 있는 커밋과 Git 병합 커밋은 메시지 검사 대상에서 제외한다. 이관 시점 dev `6e998bd57bd0fae0db997e2413a50b45f6697f5f`와 OCI `77ad0301342b552f145f7b36f4a2c5d343770d97`의 과거 이력도 고정 SHA 기준으로 제외한다. 기준 이후 새 커밋에는 규칙을 적용하며, 릴리스 PR에서도 새 커밋의 Refs를 검사한다.
 - 로컬 훅은 이 checkout에서 설치해야 실행된다. Claude 전용 실행 전 훅이 Codex에서도 실행된다고 가정하지 않는다. 대량 스테이징 금지는 에이전트 지침이며 메시지 훅의 검사 항목이 아니다.
