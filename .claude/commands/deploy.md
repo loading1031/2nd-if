@@ -1,91 +1,13 @@
-# /deploy — Railway 배포 관리
+# /deploy — 배포 대상 확인 후 작업
 
-Railway 배포 관련 작업을 수행한다.
+먼저 `.claude/rules/workflow.md`와 관련 인프라 이슈를 읽는다. 현재 배포 대상은 오래된 Railway 문서만으로 확정하지 않는다. OCI 후속 작업은 GitHub 이슈 #16에 있다.
 
-## 사용법
+`/deploy status|logs|vars|run <command>`:
 
-```
-/deploy status — 배포 상태 확인
-/deploy logs — 실시간 로그 확인
-/deploy vars — 환경변수 확인
-/deploy run <command> — 프로덕션에서 명령 실행
-```
+1. 저장소 설정·CI·배포 문서·관련 이슈에서 실제 대상과 필요한 CLI/접속 권한을 확인한다. 확인할 수 없으면 모르는 상태를 보고한다.
+2. status/logs는 해당 대상의 읽기 전용 명령을 실행하고 관측 시각과 결과를 기록한다. 지속 로그 스트림 대신 범위를 제한한다.
+3. vars는 값이 아닌 변수명·설정 유무를 우선 확인한다. 비밀값이 도구 출력이나 이슈에 노출되도록 전체 환경변수를 출력하지 않는다.
+4. run은 실행 위치를 검증한다. Railway run은 로컬 프로세스에 원격 변수를 주입하는 명령일 수 있으므로 원격 서버 실행으로 단정하지 않는다. 운영 데이터 변경·마이그레이션·재시작은 그 작업에 대한 명시적 사용자 승인이 있을 때만 실행한다.
+5. 이슈에 관측 결과와 남은 일을 기록한다. 실패를 이유로 자동 재배포·롤백·재시작하지 않는다.
 
-## 실행 절차
-
-### 0. 전제조건 체크
-
-모든 하위 명령 실행 전 아래 항목을 순서대로 확인:
-
-1. **Railway CLI 설치 확인**:
-```bash
-$(yarn global bin)/railway version
-```
-- 실패 시: "Railway CLI가 설치되지 않았습니다. `yarn global add @railway/cli`로 설치하세요." 안내 후 종료
-
-2. **로그인 상태 확인**:
-```bash
-$(yarn global bin)/railway whoami
-```
-- 실패 시: "Railway에 로그인되지 않았습니다. `railway login`을 실행하세요." 안내 후 종료
-
-3. **프로젝트 연결 확인**:
-```bash
-$(yarn global bin)/railway status
-```
-- 연결된 프로젝트가 없으면: "Railway 프로젝트가 연결되지 않았습니다. `railway link`로 프로젝트를 연결하세요." 안내 후 종료
-
-### status
-```bash
-$(yarn global bin)/railway status
-```
-
-### logs
-```bash
-$(yarn global bin)/railway logs
-```
-
-### vars
-```bash
-$(yarn global bin)/railway variables
-```
-
-**시크릿 마스킹**: 출력에서 다음 변수는 값을 `***`로 마스킹하여 표시:
-- `SECRET_KEY`, `DATABASE_URL`, `REDIS_URL`
-- `_KEY`, `_SECRET`, `_TOKEN`, `_PASSWORD`가 포함된 변수명
-- 사용자에게 보여줄 때 변수명만 표시하고 값은 마스킹
-
-### run
-```bash
-$(yarn global bin)/railway run <사용자가 지정한 명령>
-```
-
-**안전 장치**: `railway run` 실행 전 반드시 사용자 확인 요청:
-- 실행할 명령을 출력하고 "이 명령을 프로덕션 환경에서 실행합니다. 진행할까요?" 확인
-- 특히 위험한 명령 (migrate, flush, shell, 데이터 삭제 관련) 시 추가 경고:
-  "이 명령은 프로덕션 데이터에 영향을 줄 수 있습니다. 정말 실행할까요?"
-
-### 배포 실패 시 대응
-
-배포 실패가 확인되면 다음 순서로 대응:
-
-1. **로그 확인**:
-```bash
-$(yarn global bin)/railway logs --tail 50
-```
-
-2. **일반적인 실패 원인 점검**:
-   - 빌드 에러: 로그에서 `error`, `failed` 키워드 확인
-   - 환경변수 누락: `railway variables`로 필수 변수 확인
-   - 헬스체크 실패: `/health/` 엔드포인트 응답 확인
-
-3. **롤백 안내**:
-   - "Railway 대시보드에서 이전 배포로 롤백할 수 있습니다."
-   - Railway 대시보드 URL: `https://railway.com/dashboard` → 프로젝트 → Deployments → 이전 배포 선택 → Rollback
-
-## 주의사항
-- `railway login`이 안 되어 있으면 먼저 로그인 안내
-- `railway link`가 안 되어 있으면 프로젝트 연결 안내
-- 환경변수 변경은 Railway 대시보드에서 직접 수행 (CLI로 하지 않음)
-- 배포는 git push로 자동 트리거 (수동 배포: `railway up`)
-- `railway run`은 프로덕션 환경에서 실행되므로 반드시 사용자 확인 후 실행
+이번 문서 전환은 배포 환경을 확정하거나 실제 배포를 수행한 것이 아니다.

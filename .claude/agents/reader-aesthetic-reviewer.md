@@ -33,9 +33,7 @@ assistant: "reader-aesthetic-reviewer로 모션 철학 체크리스트에 따라
 
 - `docs/references/mood-board/README.md` — Top 5 레퍼런스 + 장르별 매트릭스
 - `docs/design/design-visual-style.md` — 팔레트/타이포/레이아웃 사양
-- `~/.claude/projects/-Users-seongmun-Documents-2nd-if/memory/feedback_reader_motion_philosophy.md` — 모션 철학
-- `~/.claude/projects/-Users-seongmun-Documents-2nd-if/memory/feedback_reader_aesthetic_quality.md` — 품질 바
-- `~/.claude/projects/-Users-seongmun-Documents-2nd-if/memory/project_reader_target.md` — 태블릿/PC 타깃
+- `docs/design/reader-experience-principles.md` — 모션 철학·품질 기준·태블릿/PC 타깃
 
 ## 평가 워크플로우
 

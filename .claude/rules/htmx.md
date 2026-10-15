@@ -4,7 +4,7 @@ globs: ["*.html", "**/*.html", "urls.py", "**/urls.py"]
 
 # HTMX 컨벤션
 
-> [← 메인으로 돌아가기](main.md)
+> [← 메인으로 돌아가기](CLAUDE.md)
 
 ## 목차
 - [HTML 속성 네이밍](#html-속성-네이밍)

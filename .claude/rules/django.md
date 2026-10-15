@@ -4,7 +4,7 @@ globs: ["*.py", "**/*.py"]
 
 # Django 6.0+ Native Async ORM 컨벤션
 
-> [← 메인으로 돌아가기](main.md)
+> [← 메인으로 돌아가기](CLAUDE.md)
 
 ## 목차
 - [비동기 뷰 정의](#비동기-뷰-정의)
