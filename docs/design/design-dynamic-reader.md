@@ -2,10 +2,12 @@
 
 > 디자인 문서
 
-## 상태: 재설계 (Pretext 기반 Phase 1)
+## 상태: 이전 제안 (최신 독서 방향에 맞춘 재설계 필요)
+
+> #26의 현재 방향은 페이지 단위 독서, 설정집 항목을 작품별로 채택·매핑하는 편집기 우측 패널, 표현을 눌렀을 때 열리는 선택형 시각 에셋이다. 독자는 시각 요소 표시를 끌 수 있다. 아래 Pretext 리플로우, 작품별 업로드, 장르 기본 팩은 이전 시안이며 최신 요구사항으로 확정된 디자인이 아니다. 현재 기준은 [페이지 리더](../specs/dynamic-reader.md), [설정집과 시각 에셋](../specs/setting-book.md)이다.
 
 ## 기획
-- [[dynamic-reader]] — 동적 텍스트 리더 기획
+- [페이지 리더](../specs/dynamic-reader.md) — 동적 텍스트 리더 기획
 
 ## 프로덕션 템플릿
 - `apps/stories/templates/stories/pages/episode_read.html` — 리더 페이지
