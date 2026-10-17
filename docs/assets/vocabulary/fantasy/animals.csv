@@ -1,0 +1,12 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+판타지,동물,animals,늑대,wolf,/static/assets/svg/shared/animals/wolf-monochrome.svg,ready
+판타지,동물,animals,이리,wolf,/static/assets/svg/shared/animals/wolf-monochrome.svg,ready
+판타지,동물,animals,여우,판타지-039,/static/assets/svg/fantasy/animals/판타지-039.svg,planned
+판타지,동물,animals,사자,판타지-040,/static/assets/svg/fantasy/animals/판타지-040.svg,planned
+판타지,동물,animals,곰,판타지-041,/static/assets/svg/fantasy/animals/판타지-041.svg,planned
+판타지,동물,animals,독수리,판타지-042,/static/assets/svg/fantasy/animals/판타지-042.svg,planned
+판타지,동물,animals,올빼미,판타지-043,/static/assets/svg/fantasy/animals/판타지-043.svg,planned
+판타지,동물,animals,박쥐,판타지-044,/static/assets/svg/fantasy/animals/판타지-044.svg,planned
+판타지,동물,animals,뱀,판타지-045,/static/assets/svg/fantasy/animals/판타지-045.svg,planned
+판타지,동물,animals,거미,판타지-046,/static/assets/svg/fantasy/animals/판타지-046.svg,planned
+판타지,동물,animals,도마뱀,판타지-047,/static/assets/svg/fantasy/animals/판타지-047.svg,planned

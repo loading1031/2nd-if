@@ -1,0 +1,4 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+판타지,물약,potions,물약,판타지-015,/static/assets/svg/fantasy/potions/판타지-015.svg,planned
+판타지,물약,potions,치유물약,판타지-016,/static/assets/svg/fantasy/potions/판타지-016.svg,planned
+판타지,물약,potions,독약,판타지-017,/static/assets/svg/fantasy/potions/판타지-017.svg,planned

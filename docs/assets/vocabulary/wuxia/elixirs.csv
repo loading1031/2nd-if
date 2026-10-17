@@ -1,0 +1,7 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+무협,영약·단약,elixirs,공청석유,무협-공청석유,/static/assets/svg/wuxia/elixirs/무협-공청석유-monochrome.svg,ready
+무협,영약·단약,elixirs,천년석유,무협-천년석유,/static/assets/svg/wuxia/elixirs/무협-천년석유.svg,planned
+무협,영약·단약,elixirs,대환단,무협-대환단,/static/assets/svg/wuxia/elixirs/무협-대환단-monochrome.svg,ready
+무협,영약·단약,elixirs,소환단,무협-소환단,/static/assets/svg/wuxia/elixirs/무협-소환단-monochrome.svg,ready
+무협,영약·단약,elixirs,단약,무협-055,/static/assets/svg/wuxia/elixirs/무협-055.svg,planned
+무협,영약·단약,elixirs,환약,무협-056,/static/assets/svg/wuxia/elixirs/무협-056.svg,planned

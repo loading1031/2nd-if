@@ -1,0 +1,5 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+무협,옥패·장신구,jade-accessories,백옥패,무협-백옥패,/static/assets/svg/wuxia/jade-accessories/무협-백옥패.svg,planned
+무협,옥패·장신구,jade-accessories,청옥패,무협-청옥패,/static/assets/svg/wuxia/jade-accessories/무협-청옥패-monochrome.svg,ready
+무협,옥패·장신구,jade-accessories,비녀,무협-049,/static/assets/svg/wuxia/jade-accessories/무협-049.svg,planned
+무협,옥패·장신구,jade-accessories,옥패,무협-050,/static/assets/svg/wuxia/jade-accessories/무협-050.svg,planned

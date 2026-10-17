@@ -1,0 +1,10 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+판타지,무기,weapons,검,판타지-001,/static/assets/svg/fantasy/weapons/판타지-001.svg,planned
+판타지,무기,weapons,성검,판타지-002,/static/assets/svg/fantasy/weapons/판타지-002.svg,planned
+판타지,무기,weapons,마검,판타지-003,/static/assets/svg/fantasy/weapons/판타지-003.svg,planned
+판타지,무기,weapons,단검,판타지-004,/static/assets/svg/fantasy/weapons/판타지-004.svg,planned
+판타지,무기,weapons,창,판타지-005,/static/assets/svg/fantasy/weapons/판타지-005.svg,planned
+판타지,무기,weapons,활,판타지-030,/static/assets/svg/fantasy/weapons/판타지-030.svg,planned
+판타지,무기,weapons,화살,판타지-031,/static/assets/svg/fantasy/weapons/판타지-031.svg,planned
+판타지,무기,weapons,화살통,판타지-032,/static/assets/svg/fantasy/weapons/판타지-032.svg,planned
+판타지,무기,weapons,쇠뇌,판타지-033,/static/assets/svg/fantasy/weapons/판타지-033.svg,planned

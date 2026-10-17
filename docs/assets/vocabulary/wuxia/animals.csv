@@ -1,0 +1,5 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+무협,동물,animals,말,무협-091,/static/assets/svg/wuxia/animals/무협-091.svg,planned
+무협,동물,animals,학,무협-098,/static/assets/svg/wuxia/animals/무협-098.svg,planned
+무협,동물,animals,호랑이,무협-099,/static/assets/svg/wuxia/animals/무협-099.svg,planned
+무협,동물,animals,늑대,wolf,/static/assets/svg/shared/animals/wolf-monochrome.svg,ready
