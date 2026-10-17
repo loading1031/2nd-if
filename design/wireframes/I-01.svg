@@ -16,40 +16,55 @@
 <text x="54" y="334" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">지표 공개 설정</text>
 <text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">독서 인사이트</text>
 <rect x="796" y="167" width="122" height="32" rx="6" fill="white" stroke="#dedee5"/>
-<text x="808" y="188" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">전체 회차 선택</text>
+<text x="808" y="188" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">1화 선택</text>
 <rect x="930" y="167" width="138" height="32" rx="6" fill="white" stroke="#dedee5"/>
 <text x="942" y="188" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">최근 30일 선택</text>
-<rect x="228" y="221" width="198" height="104" rx="10" fill="white" stroke="#dedee5"/>
-<text x="242" y="248" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">읽기 시작</text>
-<text x="242" y="290" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">2,714</text>
-<rect x="442" y="221" width="198" height="104" rx="10" fill="white" stroke="#dedee5"/>
-<text x="456" y="248" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">완독 판정</text>
-<text x="456" y="290" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">1,936</text>
-<rect x="656" y="221" width="198" height="104" rx="10" fill="white" stroke="#dedee5"/>
-<text x="670" y="248" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">회차 이탈률</text>
-<text x="670" y="290" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">22.0%</text>
-<rect x="870" y="221" width="198" height="104" rx="10" fill="white" stroke="#dedee5"/>
-<text x="884" y="248" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">분기 경유 합류</text>
-<text x="884" y="290" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">184</text>
-<rect x="228" y="347" width="406" height="259" rx="10" fill="white" stroke="#dedee5"/>
-<text x="246" y="376" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">회차별 읽기</text>
-<text x="246" y="407" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">회차          판정 완료       이탈률</text>
-<text x="246" y="434" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">1화           1,000회          18.2%</text>
-<text x="246" y="461" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">2화             800회          22.5%</text>
-<text x="246" y="488" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">3화             681회          26.9%</text>
-<rect x="652" y="347" width="416" height="259" rx="10" fill="white" stroke="#dedee5"/>
-<text x="670" y="376" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">페이지 전환 시간 · 1화</text>
-<text x="670" y="410" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">1쪽</text>
-<rect x="707" y="399" width="182" height="7" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
-<rect x="707" y="399" width="126" height="7" rx="3" fill="#422ad5" stroke="#422ad5"/>
-<text x="912" y="410" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">42초 · 756건</text>
-<text x="670" y="466" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">2쪽</text>
-<rect x="707" y="455" width="182" height="7" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
-<rect x="707" y="455" width="87" height="7" rx="3" fill="#422ad5" stroke="#422ad5"/>
-<text x="912" y="466" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">29초 · 742건</text>
-<text x="670" y="522" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">3쪽</text>
-<rect x="707" y="511" width="182" height="7" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
-<rect x="707" y="511" width="174" height="7" rx="3" fill="#422ad5" stroke="#422ad5"/>
-<text x="912" y="522" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">58초 · 736건</text>
-<text x="228" y="641" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">판정 중 233회는 이탈률에서 제외 · 마지막 페이지의 전환 시간은 집계하지 않습니다.</text>
+<rect x="228" y="218" width="120" height="32" rx="6" fill="#422ad5" stroke="#422ad5"/>
+<text x="240" y="239" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="white">읽기 흐름</text>
+<rect x="358" y="218" width="186" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="370" y="239" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">내 작품 유입 · I-02</text>
+<rect x="554" y="218" width="178" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="566" y="239" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">공용 합계 · I-02</text>
+<rect x="890" y="218" width="178" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="902" y="239" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">공개 설정 · I-03</text>
+<rect x="228" y="269" width="198" height="86" rx="10" fill="white" stroke="#dedee5"/>
+<text x="242" y="294" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">읽기 시작</text>
+<text x="242" y="333" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">2,714</text>
+<rect x="442" y="269" width="198" height="86" rx="10" fill="white" stroke="#dedee5"/>
+<text x="456" y="294" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">완독 판정</text>
+<text x="456" y="333" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">1,936</text>
+<rect x="656" y="269" width="198" height="86" rx="10" fill="white" stroke="#dedee5"/>
+<text x="670" y="294" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">회차 이탈률</text>
+<text x="670" y="333" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">22.0%</text>
+<rect x="870" y="269" width="198" height="86" rx="10" fill="white" stroke="#dedee5"/>
+<text x="884" y="294" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">분기 경유 합류</text>
+<text x="884" y="333" font-family="Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700" fill="#25252b">184</text>
+<rect x="228" y="374" width="406" height="232" rx="10" fill="white" stroke="#dedee5"/>
+<text x="246" y="403" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">회차별 읽기</text>
+<text x="246" y="433" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">회차 선택             판정 완료 / 이탈률</text>
+<rect x="246" y="447" width="114" height="32" rx="6" fill="#422ad5" stroke="#422ad5"/>
+<text x="258" y="468" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="white">1화 보기 →</text>
+<text x="384" y="469" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">1,000회 / 18.2%</text>
+<rect x="246" y="493" width="114" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="258" y="514" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">2화 보기 →</text>
+<text x="384" y="515" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">800회 / 22.5%</text>
+<rect x="246" y="539" width="114" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="258" y="560" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">3화 보기 →</text>
+<text x="384" y="561" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">681회 / 26.9%</text>
+<rect x="652" y="374" width="416" height="232" rx="10" fill="white" stroke="#dedee5"/>
+<text x="670" y="403" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">페이지 전환 시간 · 선택한 1화</text>
+<text x="670" y="439" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">1쪽</text>
+<rect x="707" y="428" width="182" height="7" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<rect x="707" y="428" width="126" height="7" rx="3" fill="#422ad5" stroke="#422ad5"/>
+<text x="912" y="439" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">42초 · 756건</text>
+<text x="670" y="495" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">2쪽</text>
+<rect x="707" y="484" width="182" height="7" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<rect x="707" y="484" width="87" height="7" rx="3" fill="#422ad5" stroke="#422ad5"/>
+<text x="912" y="495" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">29초 · 742건</text>
+<text x="670" y="551" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">3쪽</text>
+<rect x="707" y="540" width="182" height="7" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<rect x="707" y="540" width="174" height="7" rx="3" fill="#422ad5" stroke="#422ad5"/>
+<text x="912" y="551" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">58초 · 736건</text>
+<text x="228" y="641" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">회차 행 선택 → 오른쪽 상세 갱신 · 유입/공개 설정 이동 시 작품·회차·기간 유지</text>
+<text x="228" y="670" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">판정 중 233회는 이탈률 제외 · 마지막 페이지에는 다음 전환 시간이 없습니다.</text>
 </svg>

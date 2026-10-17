@@ -13,13 +13,16 @@
 <text x="54" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">읽은 타임라인</text>
 <text x="54" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">독서 설정</text>
 <text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">독서 중 에셋 열람</text>
-<text x="245" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">유리 정원 · 1화</text>
-<text x="245" y="302" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">온실의 문이 천천히 열렸다.</text>
-<text x="245" y="355" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">그녀의 손끝에서 은빛 잎이</text>
-<text x="245" y="408" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">흔들렸다. 비는 그친 뒤였다.</text>
-<text x="245" y="461" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">읽던 본문은 같은 위치에 남는다.</text>
+<text x="245" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">유리 정원 · 1화 3쪽</text>
+<text x="245" y="294" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">온실의 문이 천천히 열렸다.</text>
+<text x="245" y="336" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">그녀의 손끝에서</text>
+<rect x="245" y="354" width="250" height="32" rx="6" fill="#422ad5" stroke="#422ad5"/>
+<text x="257" y="375" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="white">은빛 잎 · 이미지 열기</text>
+<text x="245" y="424" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">흔들렸다. 비는 그친 뒤였다.</text>
+<text x="245" y="472" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="700" fill="#422ad5">연결 표현을 탭 → 오른쪽 패널</text>
+<text x="245" y="502" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">닫기 → 같은 쪽·읽기 위치·표현으로</text>
 <rect x="652" y="219" width="396" height="401" rx="10" fill="white" stroke="#dedee5"/>
-<text x="674" y="251" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">월광초</text>
+<text x="674" y="251" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">열린 오버레이 · 월광초</text>
 <text x="1010" y="251" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="400" fill="#72727c">×</text>
 <rect x="674" y="271" width="352" height="233" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
 <path d="M686 283L1014 492" stroke="#dedee5"/>

@@ -29,12 +29,12 @@
 <text x="448" y="345" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">S-01 / S-02</text>
 <path d="M629 329h19" stroke="#9999a7" marker-end="url(#a)"/>
 <rect x="649" y="287" width="194" height="82" rx="9" fill="white" stroke="#dedee5"/>
-<text x="662" y="319" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">표현·에셋 매핑</text>
-<text x="662" y="345" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">S-05 · 문맥별 연결</text>
+<text x="662" y="319" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">채택 완료 → 목록</text>
+<text x="662" y="345" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">S-03 · 선택 항목 유지</text>
 <path d="M843 329h19" stroke="#9999a7" marker-end="url(#a)"/>
 <rect x="863" y="287" width="194" height="82" rx="9" fill="white" stroke="#dedee5"/>
-<text x="876" y="319" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">독자 에셋 열람</text>
-<text x="876" y="345" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">R-01 · 본문으로 복귀</text>
+<text x="876" y="319" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">표현 연결 → 열람</text>
+<text x="876" y="345" font-family="Apple SD Gothic Neo, sans-serif" font-size="12" font-weight="400" fill="#72727c">S-05 → R-01</text>
 <rect x="30" y="412" width="1060" height="130" rx="12" fill="#f7f7fa" stroke="#dedee5"/>
 <text x="48" y="448" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">3 · 버전 업데이트</text>
 <rect x="221" y="435" width="194" height="82" rx="9" fill="white" stroke="#dedee5"/>
