@@ -15,6 +15,7 @@ dependencies = [
     { name = "pillow" },
     { name = "prometheus-client" },
     { name = "psycopg", extra = ["binary"] },
+    { name = "second-if-codex-assets" },
     { name = "uvicorn" },
     { name = "whitenoise" },
 ]
@@ -54,6 +55,7 @@ requires-dist = [
     { name = "pillow", specifier = ">=10.0.0" },
     { name = "prometheus-client", specifier = ">=0.24.1" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.1" },
+    { name = "second-if-codex-assets", editable = "packages/codex-assets" },
     { name = "uvicorn", specifier = ">=0.42.0" },
     { name = "uvicorn", marker = "extra == 'prod'", specifier = ">=0.42.0" },
     { name = "whitenoise", specifier = ">=6.12.0" },
@@ -771,6 +773,17 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/87/44/90fa543014c45560cae1fffc63ea059fb3575ee6e1cb654562197e5d16fb/ruff-0.14.14-py3-none-win_amd64.whl", hash = "sha256:3dde1435e6b6fe5b66506c1dff67a421d0b7f6488d466f651c07f4cab3bf20fd", size = 11630486, upload-time = "2026-01-22T22:30:10.852Z" },
     { url = "https://files.pythonhosted.org/packages/9e/6a/40fee331a52339926a92e17ae748827270b288a35ef4a15c9c8f2ec54715/ruff-0.14.14-py3-none-win_arm64.whl", hash = "sha256:56e6981a98b13a32236a72a8da421d7839221fa308b223b9283312312e5ac76c", size = 10920448, upload-time = "2026-01-22T22:30:15.417Z" },
 ]
+
+[[package]]
+name = "second-if-codex-assets"
+version = "0.1.0"
+source = { editable = "packages/codex-assets" }
+dependencies = [
+    { name = "django" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "django", specifier = ">=5.0" }]
 
 [[package]]
 name = "sqlparse"

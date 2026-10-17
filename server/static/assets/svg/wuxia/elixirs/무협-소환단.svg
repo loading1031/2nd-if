@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">소환단</title><desc id="desc">납작하고 둥근 꿀갈색 환약 한 알. 부드러운 음영과 소박한 약재 섬유로 표현한 창작 외형.</desc>
+<defs><linearGradient id="pill" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#e8b277"/><stop offset="0.33" stop-color="#c88a50"/><stop offset="0.67" stop-color="#9d613c"/><stop offset="1.00" stop-color="#694355"/></linearGradient></defs>
+<ellipse cx="240" cy="394" rx="102" ry="12" fill="#8b6f83" opacity=".12"/>
+<path d="M239 136C315 132 371 171 376 241C382 311 326 358 247 361C168 364 109 325 104 256C99 186 157 142 239 136Z" fill="url(#pill)" stroke="#62414c" stroke-width="6"/>
+<path d="M121 276C148 313 188 332 248 330C301 329 344 310 363 286C345 331 301 354 247 357C185 360 140 331 121 276Z" fill="#59374c" opacity=".18"/>
+<path d="M145 222C156 196 181 180 208 174" stroke="#fff0cb" stroke-width="12" fill="none" stroke-linecap="round" opacity=".75"/>
+<path d="M227 172L232 171" stroke="#fff2d4" stroke-width="7" stroke-linecap="round"/>
+<g stroke-linecap="round" fill="none"><path d="M209 258C223 239 242 235 262 242" stroke="#895332" stroke-width="5"/><path d="M213 262C227 246 242 243 260 248" stroke="#e2af6e" stroke-width="3"/>
+<path d="M172 255L177 248M286 192L292 200M305 270L312 267M199 306L206 299M273 316L279 320" stroke="#f4dcb6" stroke-width="4"/>
+<path d="M258 287L262 282M319 223L323 228M164 294L170 297" stroke="#754633" stroke-width="3"/></g>
+</svg>

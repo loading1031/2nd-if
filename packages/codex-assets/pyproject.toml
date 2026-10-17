@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "second-if-codex-assets"
+version = "0.1.0"
+description = "Django SVG encyclopedia assets, palettes and template tags"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["Django>=5.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/codex_assets"]

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game-icons 도감 에셋 목록</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#292927;background:#f4f3ef;color-scheme:light}*{box-sizing:border-box}body{margin:0}main{max-width:1440px;margin:auto;padding:40px 26px}header{display:flex;justify-content:space-between;gap:24px;align-items:start}h1{font-size:28px;margin:0 0 10px;letter-spacing:-1px}p{line-height:1.7;color:#66665f}a{color:inherit;text-underline-offset:3px}header nav{display:flex;gap:18px;white-space:nowrap;font-size:14px;padding-top:10px}.controls{display:grid;grid-template-columns:2fr 1fr 1.3fr auto;gap:12px;margin:24px 0 18px}label{display:grid;gap:7px;font-size:13px;color:#696960}input,select,button{font:inherit;color:#292927;background:#fff;border:1px solid #d1d1c8;border-radius:6px;padding:11px 12px}button{cursor:pointer}button:hover{border-color:#333}button:disabled{cursor:default;opacity:.35}.toggle{align-self:end}.status{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;color:#696960;margin:16px 0}.pagination{display:flex;gap:10px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}.card{background:white;border:1px solid #deded6;border-radius:8px;overflow:hidden}.preview{border:0;border-radius:0;width:100%;height:162px;display:grid;place-items:center;background:#fff}.preview:hover{background:#f1f1ed}.icon-image{width:112px;height:112px;object-fit:contain}.card-info{border-top:1px solid #eeeee8;padding:13px 14px;min-height:103px}.name{font-size:14px;font-weight:600;line-height:1.4;margin:0 0 7px;overflow-wrap:anywhere}.author{font-size:12px;color:#6e6e66;margin:0 0 5px}.topic{font-size:11px;color:#85857c;margin:0}.empty{padding:70px 0;text-align:center}.dark-icons .preview,.dark-icons .dialog-image{background:#262626}.dark-icons .icon-image,.dark-icons .dialog-image img{filter:invert(1)}dialog{border:1px solid #bdbdb3;border-radius:12px;padding:0;width:min(640px,92vw);max-height:90vh;background:#fff;color:#292927}dialog::backdrop{background:#0008}.dialog-head{padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px}.dialog-head h2{margin:0;font-size:21px}.dialog-image{display:grid;place-items:center;padding:24px;background:#f8f8f5}.dialog-image img{width:min(290px,70vw);height:290px;object-fit:contain}.dialog-content{padding:20px 24px;font-size:14px}.dialog-content p{margin:0 0 10px}.dialog-content a{display:inline-block;margin:6px 14px 6px 0}.notice{font-size:13px}details{margin:12px 0 20px;color:#66665f;font-size:13px}summary{cursor:pointer}.stats{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px}.stats button{font-size:12px;padding:7px 10px}.tagline{font-size:12px;color:#777;margin:10px 0}footer{font-size:12px;color:#777;margin-top:32px} @media(max-width:720px){main{padding:24px 14px}header{display:block}header nav{padding:4px 0}.controls{grid-template-columns:1fr 1fr}.search{grid-column:1/-1}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.status{align-items:start;flex-direction:column}.card-info{padding:11px}.preview{height:144px}}
+
+.color-controls{display:flex;flex-wrap:wrap;gap:16px;align-items:end;padding:18px;background:#eae9e2;border-radius:8px;margin-bottom:18px}.color-controls label{min-width:160px}.color-controls input{max-width:210px}.swatches{display:flex;gap:6px;flex-wrap:wrap}.swatches button{width:34px;height:34px;padding:0;border:2px solid #fff;box-shadow:0 0 0 1px #bbb}.swatches button[aria-pressed="true"]{box-shadow:0 0 0 3px #333}.color-status{flex-basis:100%;margin:0;font-size:13px}.colorized .preview,.colorized .dialog-image{background:var(--icon-background)}.colorized .icon-image,.colorized .dialog-image img{filter:none;object-position:-99999px;background:var(--icon-foreground);mask-image:var(--icon-mask);mask-size:contain;mask-position:center;mask-repeat:no-repeat}.color-controls button{min-height:40px}
+</style>
+</head>
+<body>
+<main>
+<header><div><h1>도감 에셋 목록</h1><p class="notice">Game-icons 공식 SVG · 주제를 고르고, 그림을 확인해 작품에 사용할 후보를 찾으세요.</p></div><nav><a href="credits.html">저작자·라이선스</a><a href="catalog.json">전체 목록</a></nav></header>
+<div class="controls">
+<label class="search" for="search">검색<input id="search" type="search" placeholder="늑대 / wolf / potion / dragon" autocomplete="off"></label>
+<label for="genre">장르 후보<select id="genre"><option value="">모든 장르</option>무협</option><option>판타지</option><option>로맨스</option></select></label>
+<label for="topic">주제<select id="topic"></select></label>
+<button id="background" class="toggle" type="button" aria-pressed="false">어두운 배경으로 보기</button>
+</div>
+<section class="color-controls" aria-label="일괄 배색">
+<label for="palette">일괄 배색 팔레트<select id="palette"><option value="">흑백 원본</option></select></label>
+<div><p class="tagline">아이콘색 · HEX 코드</p><div id="swatches" class="swatches" aria-label="팔레트 색상"></div></div>
+<label for="palette-background">배경<select id="palette-background"><option value="palette">팔레트 배경</option><option value="transparent">투명 · 밝은 바탕</option></select></label>
+<label for="requested-color">작품 속 색상<input id="requested-color" placeholder="파란색 또는 #3366CC" autocomplete="off"></label>
+<label for="match-scope">유사색 검색 범위<select id="match-scope"><option value="all">팔레트 8종 전체</option><option value="selected">선택한 팔레트 안에서</option></select></label>
+<button id="match-color" type="button">가까운 색 적용</button>
+<p id="color-status" class="color-status" aria-live="polite">팔레트를 고르면 현재 목록과 상세 보기에 일괄 적용됩니다.</p>
+</section>
+<details><summary>분류별 후보 수 보기</summary><div id="stats" class="stats"></div></details>
+<p class="notice">장르 목록은 공식 태그로 고른 후보입니다. 단어와의 최종 연결은 그림을 보고 결정합니다.</p>
+<div class="status"><span id="count" aria-live="polite"></span><div class="pagination"><button id="previous" type="button">이전</button><span id="page"></span><button id="next" type="button">다음</button></div></div>
+<section id="grid" class="grid" aria-label="아이콘 목록"></section><p id="empty" class="empty" hidden>일치하는 아이콘이 없습니다.</p>
+<footer>SVG는 원본 그대로 보관했습니다. 원작자·원본·라이선스를 각 그림의 상세 보기에서 확인할 수 있습니다.</footer>
+</main>
+<dialog id="detail" aria-labelledby="detail-name"><div class="dialog-head"><h2 id="detail-name"></h2><button id="close" type="button">닫기</button></div><div class="dialog-image"><img id="detail-image" alt=""></div><div id="detail-content" class="dialog-content"></div></dialog>
+<script id="palette-data" type="application/json">__PALETTES_JSON__</script>
+<script src="palette-colors.js"></script>
+<script id="catalog-data" type="application/json">__CATALOG_JSON__</script>
+<script>
+'use strict';
+const catalog=JSON.parse(document.getElementById('catalog-data').textContent);
+const icons=catalog.icons,labels=catalog.topics,pageSize=96;
+const search=document.getElementById('search'),genre=document.getElementById('genre'),topic=document.getElementById('topic'),grid=document.getElementById('grid');
+const aliases={'늑대':'wolf','용':'dragon','드래곤':'dragon','고블린':'goblin','오크':'orc','심장':'heart','하트':'heart','물약':'potion','영약':'potion','검':'sword','칼':'blade','방패':'shield','반지':'ring','옥패':'amulet','보석':'gem','목걸이':'necklace','꽃':'flower','장미':'rose','편지':'letter','책':'book','해골':'skull','말':'horse','고양이':'cat','호랑이':'tiger','약병':'bottle','나무':'tree','산':'mountain','버섯':'mushroom','뿌리':'root','왕관':'crown','문':'door','성':'castle','마법':'magic','망토':'cloak','인삼':'ginseng'};
+const searchable=new Map(icons.map(i=>[i.id,[i.name,i.author,...i.tags,...i.topics.map(t=>labels[t])].join(' ').toLowerCase()]));
+let page=0,results=[];
+function el(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(className)node.className=className;return node;}
+function genreIcons(){return genre.value?icons.filter(i=>i.candidate_genres.includes(genre.value)):icons;}
+function updateTopics(){const old=topic.value,subset=genreIcons();topic.replaceChildren(new Option('모든 주제',''));const stats=document.getElementById('stats');stats.replaceChildren();for(const [key,label] of Object.entries(labels)){const count=subset.filter(i=>i.topics.includes(key)).length;if(!count)continue;topic.add(new Option(label+' · '+count.toLocaleString(),key));const b=el('button',label+' '+count.toLocaleString());b.type='button';b.addEventListener('click',()=>{topic.value=key;page=0;render();});stats.append(b);}if([...topic.options].some(o=>o.value===old))topic.value=old;}
+function render(){const raw=search.value.trim().toLowerCase(),q=aliases[raw]||raw;results=genreIcons().filter(i=>(!topic.value||i.topics.includes(topic.value))&&(!q||searchable.get(i.id).includes(q)));const totalPages=Math.max(1,Math.ceil(results.length/pageSize));page=Math.min(page,totalPages-1);const visible=results.slice(page*pageSize,(page+1)*pageSize);grid.replaceChildren();for(const icon of visible){const article=el('article',undefined,'card'),button=el('button',undefined,'preview');button.type='button';button.setAttribute('aria-label',icon.name+' 상세 보기');const img=el('img',undefined,'icon-image');img.src=icon.relative_path;img.style.setProperty('--icon-mask',`url("${icon.relative_path}")`);img.alt=icon.name;img.loading='lazy';img.width=112;img.height=112;button.append(img);button.addEventListener('click',()=>openDetail(icon));const info=el('div',undefined,'card-info');info.append(el('h2',icon.name,'name'),el('p',icon.author,'author'),el('p',labels[icon.primary_topic],'topic'));article.append(button,info);grid.append(article);}document.getElementById('count').textContent=results.length.toLocaleString()+'개 후보 / 전체 '+icons.length.toLocaleString()+'개';document.getElementById('page').textContent=(page+1)+' / '+totalPages;document.getElementById('previous').disabled=page===0;document.getElementById('next').disabled=page+1>=totalPages;document.getElementById('empty').hidden=results.length!==0;}
+function link(label,url){const a=el('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;}
+function openDetail(icon){document.getElementById('detail-name').textContent=icon.name;const img=document.getElementById('detail-image');img.src=icon.relative_path;img.style.setProperty('--icon-mask',`url("${icon.relative_path}")`);img.alt=icon.name;const content=document.getElementById('detail-content');content.replaceChildren(el('p','저작자: '+icon.author),el('p','라이선스: '+icon.license+' · 원본 파일, 수정 없음'),el('p','주제: '+icon.topics.map(t=>labels[t]).join(' · ')),el('p','공식 태그: '+icon.tags.join(', ')),link('원본 페이지',icon.source_url),link('라이선스 조건',icon.license_url),link('SVG 파일',icon.relative_path));document.getElementById('detail').showModal();}
+search.addEventListener('input',()=>{page=0;render();});genre.addEventListener('change',()=>{page=0;updateTopics();render();});topic.addEventListener('change',()=>{page=0;render();});document.getElementById('previous').addEventListener('click',()=>{page--;render();});document.getElementById('next').addEventListener('click',()=>{page++;render();});document.getElementById('close').addEventListener('click',()=>document.getElementById('detail').close());document.getElementById('background').addEventListener('click',event=>{const dark=document.body.classList.toggle('dark-icons');event.currentTarget.textContent=dark?'밝은 배경으로 보기':'어두운 배경으로 보기';event.currentTarget.setAttribute('aria-pressed',String(dark));});GameIconColors.init();updateTopics();render();
+</script>
+</body>
+</html>

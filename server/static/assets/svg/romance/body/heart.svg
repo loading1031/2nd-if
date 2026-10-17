@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 560" role="img" aria-labelledby="title desc">
+  <title id="title">따뜻한 색의 해부학적 심장 일러스트</title>
+  <desc id="desc">큰 혈관과 관상동맥이 보이는 심장 하나를 부드러운 벡터 일러스트로 표현했다.</desc>
+  <style>
+    #heart { transform-box: fill-box; transform-origin: center; animation: beat 3.6s ease-in-out infinite; }
+    @keyframes beat { 0%, 72%, 100% { transform: scale(1); } 78% { transform: scale(1.025); } 84% { transform: scale(1); } 90% { transform: scale(1.014); } }
+    @media (prefers-reduced-motion: reduce) { #heart { animation: none; } }
+  </style>
+  <defs>
+    <radialGradient id="muscle" cx=".34" cy=".26" r=".8" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="#f58b83"/><stop offset=".3" stop-color="#dc5962"/><stop offset=".62" stop-color="#b93d54"/><stop offset=".86" stop-color="#8d304c"/><stop offset="1" stop-color="#6e2c48"/>
+    </radialGradient>
+    <linearGradient id="vessel" x1="0" y1="0" x2="1" y2="1" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="#f7a17f"/><stop offset=".28" stop-color="#de685f"/><stop offset=".7" stop-color="#b84455"/><stop offset="1" stop-color="#7d3049"/>
+    </linearGradient>
+    <linearGradient id="blue-vessel" x1="0" y1="0" x2="1" y2="1" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="#9bbac1"/><stop offset=".45" stop-color="#5d899a"/><stop offset="1" stop-color="#385e76"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-15%" width="145%" height="150%" color-interpolation-filters="linearRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/><feOffset in="blur" dx="2" dy="12" result="offset"/>
+      <feFlood flood-color="#542d48" flood-opacity=".22" result="color"/><feComposite in="color" in2="offset" operator="in" result="shade"/>
+      <feMerge><feMergeNode in="shade"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g id="heart" filter="url(#shadow)">
+    <!-- great vessels at the back -->
+    <path fill="url(#blue-vessel)" stroke="#754056" stroke-width="5" stroke-linejoin="round" d="M264 193C251 155 245 117 255 78C262 51 285 38 310 46C333 53 341 76 334 98L321 143L332 190L295 208Z"/>
+    <path fill="url(#vessel)" stroke="#754056" stroke-width="5" stroke-linejoin="round" d="M311 188C300 141 300 98 319 65C338 32 376 29 400 47C422 64 424 92 405 111C390 126 377 139 373 164L371 204Z"/>
+    <path fill="url(#vessel)" stroke="#754056" stroke-width="5" stroke-linejoin="round" d="M333 158C362 143 406 138 442 151C461 158 472 176 463 193C456 207 438 211 420 202L386 189L355 205Z"/>
+    <path fill="url(#blue-vessel)" stroke="#754056" stroke-width="5" stroke-linejoin="round" d="M242 143C224 128 203 124 184 130C168 136 160 151 166 166C172 180 188 185 205 179L239 169Z"/>
+    <!-- myocardium silhouette -->
+    <path fill="url(#muscle)" stroke="#71304b" stroke-width="7" stroke-linejoin="round" d="M286 165C266 143 233 140 207 154C175 172 158 211 162 254C167 305 196 362 236 412C267 450 302 488 331 512C343 522 354 518 359 503C381 451 418 395 449 346C481 295 497 247 483 207C472 176 445 161 415 164C385 167 366 185 350 214C334 188 313 170 286 165Z"/>
+    <!-- chamber planes and soft myocardial folds -->
+    <path fill="#f28a7d" opacity=".48" d="M205 201C220 180 246 176 266 191C284 205 291 229 281 250C271 271 250 283 229 273C205 262 192 229 205 201Z"/>
+    <path fill="#8e304b" opacity=".38" d="M362 214C384 184 418 177 442 192C469 210 468 248 452 278C433 312 404 342 383 370C369 389 357 416 347 442C337 409 329 372 332 342C336 297 344 243 362 214Z"/>
+    <path fill="none" stroke="#f6aa8d" stroke-width="8" stroke-linecap="round" opacity=".62" d="M204 219C209 196 226 184 244 182"/>
+    <path fill="none" stroke="#7e3048" stroke-width="7" stroke-linecap="round" opacity=".4" d="M464 225C468 264 444 304 419 337"/>
+    <!-- coronary arteries, branching over the front surface -->
+    <path fill="none" stroke="#94344e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M331 214C313 241 302 273 292 309C283 340 267 368 245 389M300 282C279 278 260 264 246 244M289 310C267 308 248 300 231 286M351 227C375 245 393 266 406 293C419 320 433 337 450 346M389 269C406 260 426 258 445 263M410 303C431 298 449 302 463 313"/>
+    <path fill="none" stroke="#ee8c7d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9" d="M331 214C313 241 302 273 292 309M300 282C279 278 260 264 246 244M351 227C375 245 393 266 406 293"/>
+    <!-- tiny warm highlights on the vessel curves -->
+    <path fill="none" stroke="#ffc29a" stroke-width="6" stroke-linecap="round" opacity=".6" d="M273 72C276 57 288 51 301 55M339 59C354 45 377 44 390 53M188 145C202 139 217 145 227 153"/>
+  </g>
+</svg>

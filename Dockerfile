@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Python dependencies (cached layer)
 COPY pyproject.toml uv.lock ./
+COPY packages/codex-assets/ ./packages/codex-assets/
 RUN uv sync --frozen --no-dev --extra prod
 
 # Install Node dependencies (DaisyUI plugin for Tailwind v4)
@@ -63,6 +64,7 @@ WORKDIR /app
 
 # Install Python dependencies (cached layer)
 COPY pyproject.toml uv.lock ./
+COPY packages/codex-assets/ ./packages/codex-assets/
 RUN uv sync --frozen --no-dev --extra prod
 
 # Copy application code from builder

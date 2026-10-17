@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">설삼 — 흑백 명암</title><desc id="desc">설삼 하나를 깊은 그림자와 밝은 면, 재질별 세부 선으로 표현한 흑백 벡터 그림.</desc>
+<defs><linearGradient id="root" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#f1f1f1" /><stop offset="0.33" stop-color="#d1d1d1" /><stop offset="0.67" stop-color="#9b9b9b" /><stop offset="1.00" stop-color="#626262" /></linearGradient><linearGradient id="leaf" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#a5a5a5" /><stop offset="0.33" stop-color="#777777" /><stop offset="0.67" stop-color="#474747" /><stop offset="1.00" stop-color="#292929" /></linearGradient></defs>
+<ellipse cx="240" cy="394" rx="102" ry="12" fill="#767676" opacity=".12" />
+<g fill="url(#leaf)" stroke="#595959" stroke-width="4.5" stroke-linejoin="round"><path d="M237 154C199 157 172 140 173 108C205 105 234 120 237 154Z" /><path d="M238 150C237 113 260 89 289 90C290 122 271 150 238 150Z" /><path d="M243 160C267 131 297 130 319 146C303 170 270 177 243 160Z" /></g>
+<path d="M237 175Q239 151 242 136" stroke="#616161" stroke-width="8" fill="none" stroke-linecap="round" />
+<g fill="none" stroke="#808080" stroke-width="4" stroke-linecap="round"><path d="M177 252C149 264 151 289 137 298M160 280L143 278M300 260C324 278 313 297 331 311M319 294L338 291M204 349C191 371 205 381 192 393M279 346C289 369 276 382 290 392" /></g>
+<path d="M241 172C202 169 177 197 176 237C174 266 185 290 198 307C206 320 194 342 185 358C180 368 187 376 198 372C222 365 225 339 239 327C251 324 254 351 271 366C283 378 298 372 294 359C289 342 276 324 286 309C304 284 311 255 304 226C298 195 273 177 241 172Z" fill="url(#root)" stroke="#747474" stroke-width="5.5" stroke-linejoin="round" />
+<g fill="none" stroke="#979797" stroke-width="3.5" stroke-linecap="round"><path d="M224 241Q239 247 252 241M218 270Q235 277 249 272M241 296L259 292M197 255L206 258M273 229L283 232" /></g>
+<path d="M236 144L193 123M249 137L275 106M261 157L301 150" stroke="#828282" stroke-width="2.5" fill="none" stroke-linecap="round" />
+<g fill="none" stroke-linecap="round"><g stroke="#4e4e4e" stroke-width="1.2" opacity=".45">
+<path d="M185 229Q182 247 188 259M186 245l5 11M190 260l7 10M195 274l7 10M202 287l7 10M211 301l3 10M281 219l7 8M288 233l7 11M291 250l5 12M287 268l4 9M277 291l-1 10M272 311l4 10M270 337l6 10" />
+<path d="M211 235q9 4 15 2M244 259q8 -1 12 -4M223 291q7 3 12 1M216 316l5 -5" />
+</g><g stroke="#f8f8f8" stroke-width="1.3" opacity=".6" />
+<g stroke="#bbbbbb" stroke-width="1" opacity=".5"><path d="M189 118l5 10M199 120l5 15M208 124l4 17M259 122l-2 -12M268 115l0 -12M273 148l9 -7M284 150l10 -5" /></g>
+</g></svg>
