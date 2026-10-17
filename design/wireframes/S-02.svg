@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760">
+<rect width="1120" height="760" fill="white"/>
+<text x="28" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="700" fill="#422ad5">S-02</text>
+<text x="93" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="700" fill="#25252b">설정집 상세·채택</text>
+<text x="28" y="64" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">구조 와이어프레임 · 예시 콘텐츠 · 배치 제안</text>
+<rect x="28" y="94" width="1064" height="632" rx="10" fill="white" stroke="#dedee5"/>
+<text x="50" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">2nd-if</text>
+<text x="230" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">유리 정원</text>
+<text x="1010" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">작가</text>
+<path d="M28 148H1092" stroke="#dedee5"/>
+<path d="M204 148L204 726" stroke="#dedee5"/>
+<text x="54" y="196" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">작품 관리</text>
+<text x="54" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">독서 인사이트</text>
+<rect x="40" y="264" width="152" height="36" rx="6" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="54" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">설정집과 에셋</text>
+<text x="54" y="334" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">지표 공개 설정</text>
+<text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">설정집 상세·채택</text>
+<rect x="228" y="211" width="208" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="240" y="232" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">← 탐색 결과 · S-01</text>
+<text x="456" y="233" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">검색어: 북부 · 무료 이용 필터 · 목록 위치 유지</text>
+<rect x="228" y="259" width="506" height="122" rx="10" fill="white" stroke="#dedee5"/>
+<text x="246" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">북부의 식물 도감</text>
+<text x="246" y="319" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">나무그늘 · 채택할 버전 v1.5</text>
+<text x="246" y="346" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">무료 작품 이용 허용 · 설정집 전체 이용 권한</text>
+<rect x="752" y="259" width="316" height="122" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M764 271L1056 369" stroke="#dedee5"/>
+<path d="M1056 271L764 369" stroke="#dedee5"/>
+<rect x="766" y="306.0" width="288" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="776" y="326.0" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<rect x="228" y="399" width="840" height="123" rx="10" fill="white" stroke="#dedee5"/>
+<text x="246" y="428" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">유리 정원에서 사용할 항목 · 2개 선택</text>
+<text x="246" y="459" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">[선택] 월광초     [선택] 오래된 온실     [ ] 은빛 덩굴</text>
+<text x="246" y="486" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">선택 항목과 버전을 채택 완료 후에도 유지합니다.</text>
+<rect x="228" y="541" width="208" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="240" y="562" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">취소 · 탐색 결과로</text>
+<rect x="826" y="541" width="242" height="32" rx="6" fill="#422ad5" stroke="#422ad5"/>
+<text x="838" y="562" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="white">채택 후 목록으로 · S-03</text>
+<rect x="228" y="592" width="840" height="112" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<text x="244" y="617" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">채택 성공 상태: 유리 정원 · 북부의 식물 도감 v1.5 · 선택 항목 2개 유지</text>
+<text x="244" y="643" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">S-03에 채택 완료 표시 · 충돌은 채택을 막지 않고 별도 연결을 제안</text>
+<rect x="842" y="658" width="208" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="854" y="679" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">충돌 표현 연결 · S-05</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760">
+<rect width="1120" height="760" fill="white"/>
+<text x="28" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="700" fill="#422ad5">S-01</text>
+<text x="93" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="700" fill="#25252b">설정집 탐색</text>
+<text x="28" y="64" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">구조 와이어프레임 · 예시 콘텐츠 · 배치 제안</text>
+<rect x="28" y="94" width="1064" height="632" rx="10" fill="white" stroke="#dedee5"/>
+<text x="50" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">2nd-if</text>
+<text x="230" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">유리 정원</text>
+<text x="1010" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">작가</text>
+<path d="M28 148H1092" stroke="#dedee5"/>
+<path d="M204 148L204 726" stroke="#dedee5"/>
+<text x="54" y="196" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">작품 관리</text>
+<text x="54" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">독서 인사이트</text>
+<rect x="40" y="264" width="152" height="36" rx="6" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="54" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">설정집과 에셋</text>
+<text x="54" y="334" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">지표 공개 설정</text>
+<text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">설정집 탐색</text>
+<rect x="228" y="215" width="644" height="40" rx="10" fill="white" stroke="#dedee5"/>
+<text x="244" y="241" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">북부  ·  검색어 유지</text>
+<rect x="886" y="219" width="182" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="898" y="240" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">무료 이용 허용 선택</text>
+<rect x="228" y="273" width="208" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="240" y="294" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">← 작품 설정집 · S-03</text>
+<text x="456" y="295" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">유리 정원 · 상세를 닫으면 검색어·필터·목록 위치 복원</text>
+<rect x="228" y="325" width="268" height="292" rx="10" fill="white" stroke="#dedee5"/>
+<rect x="244" y="341" width="236" height="101" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M256 353L468 430" stroke="#dedee5"/>
+<path d="M468 353L256 430" stroke="#dedee5"/>
+<rect x="258" y="377.5" width="208" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="268" y="397.5" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<text x="244" y="471" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">북부의 식물 도감</text>
+<text x="244" y="500" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">나무그늘</text>
+<text x="244" y="528" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">이용 조건 · 버전 확인</text>
+<rect x="244" y="560" width="236" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="256" y="581" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">상세 보기 → S-02</text>
+<rect x="514" y="325" width="268" height="292" rx="10" fill="white" stroke="#dedee5"/>
+<rect x="530" y="341" width="236" height="101" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M542 353L754 430" stroke="#dedee5"/>
+<path d="M754 353L542 430" stroke="#dedee5"/>
+<rect x="544" y="377.5" width="208" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="554" y="397.5" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<text x="530" y="471" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">북부 왕국의 문장</text>
+<text x="530" y="500" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">mono</text>
+<text x="530" y="528" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">이용 조건 · 버전 확인</text>
+<rect x="530" y="560" width="236" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="542" y="581" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">상세 보기 → S-02</text>
+<rect x="800" y="325" width="268" height="292" rx="10" fill="white" stroke="#dedee5"/>
+<rect x="816" y="341" width="236" height="101" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M828 353L1040 430" stroke="#dedee5"/>
+<path d="M1040 353L828 430" stroke="#dedee5"/>
+<rect x="830" y="377.5" width="208" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="840" y="397.5" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<text x="816" y="471" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">북부 도시의 소품</text>
+<text x="816" y="500" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">윤슬</text>
+<text x="816" y="528" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">이용 조건 · 버전 확인</text>
+<rect x="816" y="560" width="236" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="828" y="581" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">상세 보기 → S-02</text>
+<text x="228" y="654" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">상세 취소 → 이 탐색 결과 · 작품 목록 복귀 후 재진입해도 탐색 조건 유지</text>
+<text x="228" y="680" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">무료 배포 여부와 작품의 상업 이용 허용은 별도 조건입니다.</text>
+</svg>
