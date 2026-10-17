@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760">
+<rect width="1120" height="760" fill="white"/>
+<text x="28" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="700" fill="#422ad5">C-01</text>
+<text x="93" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="700" fill="#25252b">설정집 항목·에셋 편집</text>
+<text x="28" y="64" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">구조 와이어프레임 · 예시 콘텐츠 · 배치 제안</text>
+<rect x="28" y="94" width="1064" height="632" rx="10" fill="white" stroke="#dedee5"/>
+<text x="50" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">2nd-if</text>
+<text x="230" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">내 설정집</text>
+<text x="1010" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">제작자</text>
+<path d="M28 148H1092" stroke="#dedee5"/>
+<path d="M204 148L204 726" stroke="#dedee5"/>
+<text x="54" y="196" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">내 설정집</text>
+<text x="54" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">항목·에셋 편집</text>
+<text x="54" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">버전 발행</text>
+<text x="54" y="334" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">이용 조건</text>
+<text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">설정집 항목·에셋 편집</text>
+<rect x="228" y="218" width="220" height="380" rx="10" fill="white" stroke="#dedee5"/>
+<text x="246" y="247" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">항목 목록</text>
+<text x="246" y="278" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">월광초</text>
+<text x="246" y="305" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">오래된 온실</text>
+<text x="246" y="332" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">은빛 덩굴</text>
+<text x="246" y="359" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">＋ 항목 추가</text>
+<rect x="466" y="218" width="602" height="380" rx="10" fill="white" stroke="#dedee5"/>
+<text x="484" y="247" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="700" fill="#25252b">월광초 · 새 버전 초안</text>
+<text x="484" y="278" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">사용자 레이블  [식물]</text>
+<text x="484" y="305" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">설명               [                              ]</text>
+<text x="484" y="332" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">사물 이름       [월광초]</text>
+<text x="484" y="359" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">배경 이름       [해당 없음]</text>
+<text x="484" y="386" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">색상 별칭       [은백색 → 표준값]</text>
+<text x="484" y="413" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">흑백 기본 이미지 필수 / 색상 변형 선택</text>
+<rect x="800" y="622" width="118" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="812" y="643" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">초안 저장</text>
+<rect x="930" y="622" width="138" height="32" rx="6" fill="#422ad5" stroke="#422ad5"/>
+<text x="942" y="643" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="white">발행 검토</text>
+</svg>

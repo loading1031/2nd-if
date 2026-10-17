@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760">
+<rect width="1120" height="760" fill="white"/>
+<text x="28" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="700" fill="#422ad5">S-05</text>
+<text x="93" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="700" fill="#25252b">표현·에셋 매핑</text>
+<text x="28" y="64" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">구조 와이어프레임 · 예시 콘텐츠 · 배치 제안</text>
+<rect x="28" y="94" width="1064" height="632" rx="10" fill="white" stroke="#dedee5"/>
+<text x="50" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">2nd-if</text>
+<text x="230" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">유리 정원</text>
+<text x="1010" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">작가</text>
+<path d="M28 148H1092" stroke="#dedee5"/>
+<path d="M204 148L204 726" stroke="#dedee5"/>
+<text x="54" y="196" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">작품 관리</text>
+<text x="54" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">독서 인사이트</text>
+<rect x="40" y="264" width="152" height="36" rx="6" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="54" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">설정집과 에셋</text>
+<text x="54" y="334" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">지표 공개 설정</text>
+<text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">표현·에셋 매핑</text>
+<rect x="228" y="219" width="840" height="69" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<text x="248" y="260" font-family="Apple SD Gothic Neo, sans-serif" font-size="17" font-weight="400" fill="#25252b">그녀의 손끝에서 [은빛 잎]이 흔들렸다.  ·  1화 3쪽</text>
+<rect x="228" y="307" width="410" height="268" rx="10" fill="white" stroke="#dedee5"/>
+<rect x="246" y="324" width="374" height="123" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M258 336L608 435" stroke="#dedee5"/>
+<path d="M608 336L258 435" stroke="#dedee5"/>
+<rect x="260" y="371.5" width="346" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="270" y="391.5" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<text x="246" y="479" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">○ 월광초</text>
+<text x="246" y="508" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">북부의 식물 도감 · v1.4</text>
+<text x="246" y="538" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">사물 이름 · 색상 키 · 미리보기</text>
+<rect x="658" y="307" width="410" height="268" rx="10" fill="white" stroke="#dedee5"/>
+<rect x="676" y="324" width="374" height="123" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M688 336L1038 435" stroke="#dedee5"/>
+<path d="M1038 336L688 435" stroke="#dedee5"/>
+<rect x="690" y="371.5" width="346" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="700" y="391.5" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<text x="676" y="479" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">○ 은빛 덩굴</text>
+<text x="676" y="508" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">잊힌 왕국의 문장 · v2.1</text>
+<text x="676" y="538" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">사물 이름 · 색상 키 · 미리보기</text>
+<text x="228" y="625" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">미지정 충돌 표현에는 에셋을 자동 표시하지 않습니다.</text>
+<rect x="884" y="605" width="184" height="32" rx="6" fill="#422ad5" stroke="#422ad5"/>
+<text x="896" y="626" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="white">선택한 에셋 연결</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760">
+<rect width="1120" height="760" fill="white"/>
+<text x="28" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="700" fill="#422ad5">R-01</text>
+<text x="93" y="36" font-family="Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="700" fill="#25252b">독서 중 에셋 열람</text>
+<text x="28" y="64" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">구조 와이어프레임 · 예시 콘텐츠 · 배치 제안</text>
+<rect x="28" y="94" width="1064" height="632" rx="10" fill="white" stroke="#dedee5"/>
+<text x="50" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">2nd-if</text>
+<text x="230" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="14" font-weight="400" fill="#72727c">유리 정원</text>
+<text x="1010" y="128" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">독자</text>
+<path d="M28 148H1092" stroke="#dedee5"/>
+<path d="M204 148L204 726" stroke="#dedee5"/>
+<text x="54" y="196" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">목차</text>
+<text x="54" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">읽은 타임라인</text>
+<text x="54" y="288" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">독서 설정</text>
+<text x="228" y="190" font-family="Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#25252b">독서 중 에셋 열람</text>
+<text x="245" y="242" font-family="Apple SD Gothic Neo, sans-serif" font-size="16" font-weight="700" fill="#25252b">유리 정원 · 1화</text>
+<text x="245" y="302" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">온실의 문이 천천히 열렸다.</text>
+<text x="245" y="355" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">그녀의 손끝에서 은빛 잎이</text>
+<text x="245" y="408" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">흔들렸다. 비는 그친 뒤였다.</text>
+<text x="245" y="461" font-family="Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="400" fill="#25252b">읽던 본문은 같은 위치에 남는다.</text>
+<rect x="652" y="219" width="396" height="401" rx="10" fill="white" stroke="#dedee5"/>
+<text x="674" y="251" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="700" fill="#25252b">월광초</text>
+<text x="1010" y="251" font-family="Apple SD Gothic Neo, sans-serif" font-size="18" font-weight="400" fill="#72727c">×</text>
+<rect x="674" y="271" width="352" height="233" rx="10" fill="#f7f7fa" stroke="#dedee5"/>
+<path d="M686 283L1014 492" stroke="#dedee5"/>
+<path d="M1014 283L686 492" stroke="#dedee5"/>
+<rect x="688" y="373.5" width="324" height="29" rx="3" fill="#f7f7fa" stroke="#f7f7fa"/>
+<text x="698" y="393.5" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">렌더 이미지 영역</text>
+<text x="674" y="539" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">북부의 식물 도감 · 작가가 연결</text>
+<rect x="674" y="565" width="352" height="32" rx="6" fill="white" stroke="#dedee5"/>
+<text x="686" y="586" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="700" fill="#25252b">닫고 읽기 계속</text>
+<text x="245" y="662" font-family="Apple SD Gothic Neo, sans-serif" font-size="13" font-weight="400" fill="#72727c">이미지 실패 시에도 본문 읽기 계속 · 별도 설정집 구매 없음</text>
+</svg>
