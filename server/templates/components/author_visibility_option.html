@@ -1,7 +1,7 @@
 {# 지표 열람 범위 선택 항목. 작품 열람/편집 권한과 분리한다. #}
 {# 사용법: include "components/author_visibility_option.html" with value="private" title="작가만" description="작가 본인만 지표를 볼 수 있습니다." checked=True #}
-{# 필수: value, title, description / 선택: checked, disabled, id #}
+{# 필수: value, title, description / 선택: group_name, checked, disabled #}
 <label class="flex items-start gap-3 rounded-box border border-base-300 p-4 {% if disabled %}cursor-not-allowed opacity-50{% else %}cursor-pointer has-checked:border-primary has-checked:bg-primary/5{% endif %}">
-    <input class="radio radio-primary radio-sm mt-0.5" name="visibility" value="{{ value }}" type="radio" {% if checked %}checked{% endif %} {% if disabled %}disabled{% endif %}>
+    <input class="radio radio-primary radio-sm mt-0.5" name="{{ group_name|default:'visibility' }}" value="{{ value }}" type="radio" {% if checked %}checked{% endif %} {% if disabled %}disabled{% endif %}>
     <span><b class="text-sm">{{ title }}</b><span class="mt-1 block text-xs text-base-content/60">{{ description }}</span></span>
 </label>

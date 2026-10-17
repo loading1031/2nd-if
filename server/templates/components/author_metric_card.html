@@ -1,6 +1,6 @@
 {# 작가 인사이트 요약 지표 카드 #}
 {# 사용법: include "components/author_metric_card.html" with label="읽기 시작" value="2,714" description="회차별 읽기 시도" #}
-{# 필수: label, value / 선택: description, description_id, value_id, loading, empty, extra_class #}
+{# 필수: label / 선택: value(정상 상태), description, description_id, value_id, loading, empty, extra_class #}
 <article class="stat min-w-0 rounded-box border border-base-300 bg-base-100 p-4 {{ extra_class }}" aria-busy="{{ loading|yesno:'true,false' }}">
     <div class="stat-title text-xs">{{ label }}</div>
     {% if loading %}

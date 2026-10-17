@@ -21,12 +21,13 @@
     const state = previewState.value;
     required("#screens").hidden = state !== "normal";
     required("#state-panel").hidden = state === "normal";
+    required("#state-panel").setAttribute("aria-busy", String(state === "loading"));
     if (state === "normal") return;
     const [title, description] = stateMessages[state];
-    required("#state-title").textContent = title;
-    required("#state-description").textContent = description;
-    required("#state-spinner").hidden = state !== "loading";
-    required("#state-retry").hidden = state !== "error";
+    required("#state-panel-title").textContent = title;
+    required("#state-panel-description").textContent = description;
+    required("#state-panel-spinner").hidden = state !== "loading";
+    required("#state-panel-retry").hidden = state !== "error";
   }
   function navigate() {
     const screen = location.hash.slice(1);
@@ -46,7 +47,7 @@
   }
   window.addEventListener("hashchange", navigate);
   previewState.addEventListener("change", renderPreviewState);
-  required("#state-retry").addEventListener("click", () => {
+  required("#state-panel-retry").addEventListener("click", () => {
     previewState.value = "normal";
     renderPreviewState();
   });
@@ -100,30 +101,19 @@
       return row;
     }));
     const week = event.currentTarget.value === "7";
-    const times = week ? [39, 31, 54] : [42, 29, 58];
-    const counts = week ? [190, 186, 181] : [756, 742, 736];
-    document.querySelectorAll("[data-page-time]").forEach((element, i) => {
-      element.textContent = `${times[i]}\uCD08`;
-    });
-    document.querySelectorAll("[data-page-count]").forEach((element, i) => {
-      element.textContent = `${counts[i]}\uAC74`;
-    });
-    document.querySelectorAll("[data-page-progress]").forEach((element, i) => {
-      element.value = times[i];
-      element.setAttribute("aria-label", `${i + 1}\uCABD \uC804\uD658 \uC2DC\uAC04 ${times[i]}\uCD08`);
-    });
+    renderPageTimes();
     const traffic = week ? [["\uD648 \uCD94\uCC9C", 103, 78], ["\uC791\uAC00 \uD504\uB85C\uD544", 56, 46], ["\uAC80\uC0C9 \uACB0\uACFC", 45, 31]] : [["\uD648 \uCD94\uCC9C", 412, 312], ["\uC791\uAC00 \uD504\uB85C\uD544", 226, 184], ["\uAC80\uC0C9 \uACB0\uACFC", 180, 123]];
     const shared = week ? [["\uD648 \uCD94\uCC9C", 20600, 1030], ["\uAC80\uC0C9 \uACB0\uACFC", 6250, 438]] : [["\uD648 \uCD94\uCC9C", 82400, 4120], ["\uAC80\uC0C9 \uACB0\uACFC", 25e3, 1750]];
     renderRows("#traffic-rows", traffic.map(([name, clicks, starts]) => [name, format(clicks), format(starts)]));
     renderRows("#shared-rows", shared.map(([name, impressions, clicks]) => [name, format(impressions), format(clicks), `${(clicks / impressions * 100).toFixed(1)}%`]));
   });
-  required("#episode-select").addEventListener("change", (event) => {
-    const select = event.currentTarget;
+  function renderPageTimes() {
+    const select = required("#episode-select");
     const index = select.selectedIndex;
     const week = required("#period").value === "7";
     const times = week ? [[39, 31, 54], [35, 27, 48], [44, 33, 51]][index] : [[42, 29, 58], [37, 31, 49], [46, 35, 53]][index];
     const counts = week ? [[190, 186, 181], [160, 154, 149], [131, 127, 122]][index] : [[756, 742, 736], [623, 611, 598], [504, 489, 472]][index];
-    required("#episode-label").textContent = select.value.split(" \xB7 ")[0];
+    required("#episode-label").textContent = select.selectedOptions[0].textContent.split(" \xB7 ")[0];
     document.querySelectorAll("[data-page-time]").forEach((element, i) => {
       element.textContent = `${times[i]}\uCD08`;
     });
@@ -134,7 +124,8 @@
       element.value = times[i];
       element.setAttribute("aria-label", `${i + 1}\uCABD \uC804\uD658 \uC2DC\uAC04 ${times[i]}\uCD08`);
     });
-  });
+  }
+  required("#episode-select").addEventListener("change", renderPageTimes);
   function renderRows(selector, rows) {
     required(selector).replaceChildren(...rows.map((values) => {
       const row = document.createElement("tr");
@@ -190,15 +181,15 @@
       selectedBook = button.dataset.reviewUpdate ?? null;
       if (!selectedBook) return;
       const book = books[selectedBook];
-      required("#update-title").textContent = book.title;
-      required("#update-current").textContent = book.current;
-      required("#update-next").textContent = book.next;
-      required("#update-changes").textContent = book.changes;
-      required("#update-license").textContent = book.license;
+      required("#update-dialog-title").textContent = book.title;
+      required("#update-dialog-current").textContent = book.current;
+      required("#update-dialog-next").textContent = book.next;
+      required("#update-dialog-changes").textContent = book.changes;
+      required("#update-dialog-license").textContent = book.license;
       updateDialog.showModal();
     });
   });
-  required("#confirm-update").addEventListener("click", () => {
+  required("#update-dialog-confirm").addEventListener("click", () => {
     if (!selectedBook) return;
     const book = books[selectedBook];
     book.current = book.next;

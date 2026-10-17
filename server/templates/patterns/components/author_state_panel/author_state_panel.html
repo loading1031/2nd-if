@@ -1,6 +1,8 @@
+{% load component_catalog %}
+{% component_reference "author_state_panel" %}
 <div class="grid gap-4 lg:grid-cols-2">
-    <div><p class="mb-2 text-sm text-base-content/60">불러오는 중</p><div class="card border border-base-300 bg-base-100"><div class="card-body min-h-48 items-center justify-center text-center"><span class="loading loading-spinner loading-md text-primary" aria-label="불러오는 중"></span><p>집계 지표를 불러오고 있습니다.</p></div></div></div>
-    <div><p class="mb-2 text-sm text-base-content/60">빈 데이터</p><div class="card border border-base-300 bg-base-100"><div class="card-body min-h-48 items-center justify-center text-center"><h3 class="font-semibold">아직 표시할 데이터가 없습니다</h3><p class="text-sm text-base-content/60">읽기 데이터가 집계되면 표시됩니다.</p></div></div></div>
-    <div><p class="mb-2 text-sm text-base-content/60">오류 · 재시도</p><div class="card border border-base-300 bg-base-100"><div class="card-body min-h-48 items-center justify-center text-center"><h3 class="font-semibold">데이터를 불러오지 못했습니다</h3><p class="text-sm text-base-content/60">잠시 후 다시 시도해 주세요.</p><button class="btn btn-outline btn-sm">다시 불러오기</button></div></div></div>
-    <div><p class="mb-2 text-sm text-base-content/60">권한 없음</p><div class="card border border-base-300 bg-base-100"><div class="card-body min-h-48 items-center justify-center text-center"><h3 class="font-semibold">접근 권한이 없습니다</h3><p class="text-sm text-base-content/60">작품 열람·편집 권한과 지표 초대는 별도로 관리됩니다.</p></div></div></div>
+    {% include "components/author_state_panel.html" with panel_id="catalog-loading" state="loading" title="불러오는 중" description="최신 집계를 확인하고 있습니다." only %}
+    {% include "components/author_state_panel.html" with panel_id="catalog-empty" state="empty" title="아직 표시할 데이터가 없습니다" description="읽기 데이터가 집계되면 표시됩니다." only %}
+    {% include "components/author_state_panel.html" with panel_id="catalog-error" state="error" title="데이터를 불러오지 못했습니다" description="잠시 후 다시 시도해 주세요." action="다시 불러오기" only %}
+    {% include "components/author_state_panel.html" with panel_id="catalog-denied" state="denied" title="접근 권한이 없습니다" description="작품 열람·편집 권한과 지표 초대는 별도로 관리됩니다." only %}
 </div>

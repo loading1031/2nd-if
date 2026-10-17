@@ -68,28 +68,34 @@ def main() -> None:
             '<li><a href="#tokens" data-guide-nav="tokens">토큰</a></li>',
         ]
     )
-    components = """<h1>공통 컴포넌트</h1><p>화면 구조는 PR #34에서 승인됐다. 아래 패턴과 동작 시안은 모두 server/templates/components/의 Django 템플릿을 include한다.</p>
-<table><thead><tr><th>구성</th><th>공유 원본</th><th>상태·배치 기준</th></tr></thead><tbody>
-<tr><td>요약 지표 카드</td><td>components/author_metric_card.html</td><td>값·로딩 skeleton·표본 없음; 2열 모바일 / 4열 넓은 화면</td></tr>
-<tr><td>회차 판정 행·페이지 시간</td><td>components/author_episode_row.html, author_page_time.html</td><td>회차 선택·목록·시간·표본 수</td></tr>
-<tr><td>지표 공개 범위</td><td>components/author_visibility_option.html</td><td>작가만 기본값 / 지표 초대 / 전체 공개 / 비활성</td></tr>
-<tr><td>지표 초대 계정 행</td><td>components/author_invite_row.html</td><td>기본·저장 대기·비활성; 작품 읽기·편집 권한과 분리</td></tr>
-<tr><td>채택 설정집 행</td><td>components/author_setting_book_row.html</td><td>행 오른쪽의 작은 버전 업데이트 버튼; 설정집별 선택</td></tr>
-<tr><td>버전 비교·SVG 에셋 후보</td><td>components/author_setting_update_dialog.html, author_asset_candidate.html</td><td>현재/새 버전·라이선스·유지/적용; SVG·저작자·CC BY 3.0·팔레트 후보 선택</td></tr>
-<tr><td>조회 상태·피드백</td><td>components/author_state_panel.html, author_state_notice.html, alert.html, form_field.html</td><td>로딩·빈 값·오류·권한·집계 지연·저장 결과</td></tr></tbody></table>
-<p>화면 동작 시안은 Django로 공유 include를 렌더한 뒤 Tailwind/daisyUI로 빌드한다. 패턴 라이브러리도 같은 템플릿을 참조한다. <a href="http://localhost:8000/pattern-library/">로컬 패턴 라이브러리</a>에서 모든 상태를 확인한다. 표시 데이터는 예시이며 GA4·BigQuery·DB 저장·실제 권한 처리는 연결되지 않았다.</p>"""
-    tokens = """<h1>토큰</h1><p>코드 기준 · daisyUI 5.5.14의 light 테마. 출처: server/static/css/input.css, node_modules/daisyui/theme/light/object.js</p>
-<table><thead><tr><th>토큰</th><th>값</th><th>용도</th></tr></thead><tbody>
-<tr><td>base-100</td><td>oklch(100% 0 0)</td><td>화면·카드 바탕</td></tr>
-<tr><td>base-200 / base-300</td><td>oklch(98% 0 0) / oklch(95% 0 0)</td><td>주변 바탕·구분선</td></tr>
-<tr><td>base-content</td><td>oklch(21% 0.006 285.885)</td><td>기본 글자</td></tr>
-<tr><td>primary</td><td>oklch(45% 0.24 277.023)</td><td>주요 행동</td></tr>
-<tr><td>radius-field / radius-box</td><td>0.25rem / 0.5rem</td><td>필드·박스</td></tr>
-<tr><td>border</td><td>1px</td><td>기본 경계선</td></tr></tbody></table>
-<p>실제 색과 컴포넌트는 코드가 기준이다. SVG 와이어프레임은 구조와 배치를 전달하며 최종 스타일의 픽셀 일치를 보증하지 않는다.</p>"""
+    catalog = "http://localhost:8000/pattern-library/pattern/"
+    components = """<h1>공통 컴포넌트</h1><p>전시는 Django 패턴 라이브러리에서 관리한다. 각 항목에서 실제 컴포넌트·입력 옵션·상태·원본 사용법을 확인한다. 화면 구조 승인 기준은 PR #34의 c74c536이며 IA와 흐름은 유지한다.</p><ul>"""
+    component_names = {
+        "author_metric_card": "지표 카드",
+        "author_episode_select": "회차 선택",
+        "author_episode_row": "회차 판정 행",
+        "author_page_time": "페이지 전환 시간",
+        "author_visibility_option": "지표 공개 범위",
+        "author_invite_row": "초대 계정 행",
+        "author_setting_book_row": "설정집 행·버전 버튼",
+        "author_setting_update_dialog": "버전 비교·유지·적용 모달",
+        "author_asset_candidate": "표현·SVG 후보 카드",
+        "author_state_panel": "조회 상태 패널",
+        "author_state_notice": "집계 지연·저장 결과",
+        "form_field": "입력·오류·비활성 (기존 컴포넌트)",
+        "alert": "공통 알림 (기존 컴포넌트)",
+    }
+    for name, title in component_names.items():
+        components += (
+            f'<li><a href="{catalog}patterns/components/{name}/{name}.html">{title}</a>'
+            f' · <a href="../server/templates/components/{name}.html">공유 원본</a></li>'
+        )
+    components += "</ul><p>패턴 라이브러리와 기존 동작 시안은 같은 Django include와 서비스 CSS 원본을 사용한다. 예시 데이터와 모의 저장은 실제 API·권한 처리를 뜻하지 않는다. 실행 방법은 design/README.md를 참조한다.</p>"
+    tokens = f"""<h1>디자인 토큰</h1><p>테마 원본은 <a href="../server/static/css/input.css">서비스 CSS 진입점</a>에서 불러오는 Tailwind CSS·daisyUI light다. 별도 토큰 값을 이 문서에 복제하지 않는다.</p>
+<p><a href="{catalog}patterns/tokens/theme/theme.html">패턴 라이브러리에서 실제 토큰 값·용도 보기</a></p><p>카탈로그는 현재 렌더된 CSS 변수를 읽어 색·간격·타이포·모서리를 표시한다. SVG 팔레트는 에셋 표현 옵션으로 구분한다. SVG 와이어프레임은 승인된 구조와 배치 기준이다.</p>"""
     for name, body in [("components", components), ("tokens", tokens)]:
         sections.append(f'<section id="{name}" data-guide-page hidden>{style_body(body)}</section>')
-    html = """<!doctype html><html lang="ko" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2nd-if · #31 작가 도구 설계서</title><link rel="stylesheet" href="ui.css"><script src="app.js" defer></script></head>
+    html = """<!doctype html><html lang="ko" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2nd-if · #31 작가 도구 설계서</title><link rel="stylesheet" href="../server/static/css/output.css"><script src="app.js" defer></script></head>
 <body class="min-h-screen bg-base-200 text-base-content antialiased"><div class="grid min-h-screen lg:grid-cols-[264px_minmax(0,1fr)]">
 <aside class="border-b border-base-300 bg-base-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:border-r lg:border-b-0">
 <div class="border-b border-base-300 p-5"><p class="text-xs font-semibold text-primary">2nd-if / DESIGN</p><h1 class="mt-2 text-lg font-bold">#31 작가 도구 설계서</h1><p class="mt-2 text-xs leading-relaxed text-base-content/50">승인된 화면 흐름 → 화면 설명 → 와이어프레임<br>PR #34 병합 · 2026-10-17</p></div>

@@ -1,7 +1,7 @@
 {# 인사이트·설정집 화면의 공통 상태 안내 #}
 {# 사용법: include "components/author_state_notice.html" with state="error" title="지표를 불러오지 못했습니다" description="잠시 후 다시 시도해 주세요." action="다시 불러오기" #}
-{# 필수: state, title, description / 선택: action, retry, extra_class #}
-<div class="alert {% if state == 'error' %}alert-error{% elif state == 'success' %}alert-success{% elif state == 'warning' %}alert-warning{% else %}alert-info{% endif %} {{ extra_class }}" role="{% if state == 'error' %}alert{% else %}status{% endif %}" data-author-state="{{ state }}" {% if state == 'loading' %}aria-busy="true"{% endif %}>
+{# 필수: state, title, description / 선택: action, retry, disabled, extra_class #}
+<div class="alert flex flex-col items-stretch gap-3 sm:flex-row sm:items-center {% if state == 'error' %}alert-error{% elif state == 'success' %}alert-success{% elif state == 'warning' %}alert-warning{% else %}alert-info{% endif %} {{ extra_class }}" role="{% if state == 'error' %}alert{% else %}status{% endif %}" data-author-state="{{ state }}" {% if state == 'loading' %}aria-busy="true"{% endif %}>
     <div class="min-w-0 flex-1"><p class="font-semibold">{{ title }}</p><p class="mt-1 text-sm">{{ description }}</p></div>
-    {% if action %}<button type="button" class="btn btn-sm btn-ghost {% if state == 'loading' %}loading{% endif %}" {% if retry or state == 'loading' %}disabled{% endif %} {% if retry %}data-state-retry{% endif %}>{{ action }}</button>{% endif %}
+    {% if action %}<button type="button" class="btn btn-sm btn-ghost shrink-0 self-start whitespace-nowrap sm:self-center" {% if disabled or state == 'loading' %}disabled{% endif %} {% if retry %}data-state-retry{% endif %}>{% if state == 'loading' %}<span class="loading loading-spinner loading-xs" aria-hidden="true"></span>{% endif %}{{ action }}</button>{% endif %}
 </div>

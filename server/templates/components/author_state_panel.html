@@ -1,10 +1,11 @@
-{# 작가 도구의 전체 화면 조회 상태 #}
-{# 사용법: include "components/author_state_panel.html" with panel_id="state-panel" #}
-{# 필수: panel_id #}
-<section id="{{ panel_id }}" class="card border border-base-300 bg-base-100" hidden aria-live="polite">
-    <div class="card-body min-h-80 items-center justify-center text-center">
-        <span id="state-spinner" class="loading loading-spinner loading-md text-primary" hidden aria-label="불러오는 중"></span>
-        <h1 id="state-title" class="text-lg font-semibold"></h1><p id="state-description" class="max-w-sm text-sm text-base-content/60"></p>
-        <button id="state-retry" class="btn btn-outline btn-sm mt-3" hidden>다시 불러오기</button>
+{# 조회 영역의 상태 패널. ID는 인스턴스마다 고유하게 전달한다. #}
+{# 사용법: include "components/author_state_panel.html" with panel_id="insights-state" state="error" title="불러오지 못했습니다" description="잠시 후 다시 시도해 주세요." action="다시 불러오기" only #}
+{# 필수: panel_id / 선택: state(loading/empty/error/denied), title, description, action, hidden #}
+<section id="{{ panel_id }}" class="card border border-base-300 bg-base-100" {% if hidden %}hidden{% endif %} aria-live="polite" aria-labelledby="{{ panel_id }}-title" aria-busy="{% if state == 'loading' %}true{% else %}false{% endif %}">
+    <div class="card-body min-h-48 items-center justify-center text-center">
+        <span id="{{ panel_id }}-spinner" class="loading loading-spinner loading-md text-primary" {% if state != 'loading' %}hidden{% endif %} aria-label="불러오는 중"></span>
+        <h2 id="{{ panel_id }}-title" class="text-lg font-semibold">{{ title }}</h2>
+        <p id="{{ panel_id }}-description" class="max-w-sm text-sm text-base-content/60">{{ description }}</p>
+        <button id="{{ panel_id }}-retry" type="button" class="btn btn-outline btn-sm mt-3" {% if not action %}hidden{% endif %} {% if state == 'loading' %}disabled{% endif %}>{{ action|default:"다시 불러오기" }}</button>
     </div>
 </section>

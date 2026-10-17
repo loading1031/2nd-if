@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>2nd-if · 작가 도구 시안</title>
-  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="../server/static/css/output.css">
   <script src="prototype.js" defer></script>
 </head>
 <body class="min-h-screen bg-base-200 text-base-content antialiased">
@@ -39,7 +39,7 @@
     </aside>
     <main class="min-w-0 p-4 sm:p-6 lg:p-8">
       <div class="breadcrumbs mb-6 text-xs text-base-content/60"><ul><li>작품 관리</li><li>유리 정원</li><li id="breadcrumb">독서 인사이트</li></ul></div>
-      {% include "components/author_state_panel.html" with panel_id="state-panel" %}
+      {% include "components/author_state_panel.html" with panel_id="state-panel" hidden=True %}
       <div id="screens">
       <section id="insights" data-screen>
         <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
@@ -62,7 +62,7 @@
           <div class="grid gap-4 xl:grid-cols-2">
             <article class="card min-w-0 border border-base-300 bg-base-100"><div class="card-body gap-4 p-5">
               <div><h2 class="card-title text-base">회차별 읽기</h2><p class="mt-1 text-xs text-base-content/60">이탈률의 분모는 24시간 판정이 끝난 읽기 시도입니다.</p></div>
-              <div class="mb-3 max-w-xs"><label class="form-control"><span class="label-text mb-2 text-xs">페이지 시간 회차</span><select id="episode-select" class="select select-bordered select-sm" aria-label="페이지 시간 회차 선택"><option>1화 · 유리 온실</option><option>2화 · 오래된 열쇠</option><option>3화 · 밤의 손님</option></select></label></div>
+              <div class="mb-3 max-w-xs">{% include "components/author_episode_select.html" with select_id="episode-select" label="페이지 시간 회차" options=preview_episodes selected="1" only %}</div>
               <div class="overflow-x-auto"><table class="table table-sm"><thead><tr><th>회차</th><th class="text-right">판정 완료</th><th class="text-right">이탈률</th></tr></thead><tbody id="episode-rows">{% include "components/author_episode_row.html" with episode="1화 · 유리 온실" resolved="1,000" dropout="18.2%" %}{% include "components/author_episode_row.html" with episode="2화 · 오래된 열쇠" resolved="800" dropout="22.5%" %}{% include "components/author_episode_row.html" with episode="3화 · 밤의 손님" resolved="681" dropout="26.9%" %}</tbody></table></div>
               <template id="episode-row-template">{% include "components/author_episode_row.html" with episode="" resolved="" dropout="" %}</template>
               <p id="pending-count" class="text-xs text-base-content/50">아직 판정 중인 233회는 이탈률에 포함되지 않습니다.</p>

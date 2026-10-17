@@ -1,10 +1,12 @@
+{% load component_catalog %}
+{% component_reference "author_state_notice" %}
 <div class="space-y-3">
-    {% include "components/author_state_notice.html" with state="info" title="집계 지연" description="최근 날짜의 데이터는 집계가 끝난 뒤 표시됩니다." %}
-    {% include "components/author_state_notice.html" with state="info" title="아직 지표가 없습니다" description="읽기 데이터가 쌓이면 이곳에 표시됩니다." action="기간 변경" %}
-    {% include "components/author_state_notice.html" with state="info" title="저장 중" description="설정이 저장되는 동안 입력과 버튼을 잠시 비활성화합니다." action="저장 중" %}
-    <div class="flex flex-wrap items-center justify-between gap-3 rounded-box border border-base-300 p-4"><span class="text-sm">저장 전 · 입력을 수정할 수 있습니다.</span><button class="btn btn-primary btn-sm">설정 저장</button></div>
-    {% include "components/author_state_notice.html" with state="error" title="지표를 불러오지 못했습니다" description="잠시 후 다시 시도해 주세요." action="다시 불러오기" retry=True %}
-    {% include "components/author_state_notice.html" with state="error" title="저장하지 못했습니다" description="입력한 범위와 초대 목록은 유지됩니다. 연결 상태를 확인하고 다시 시도해 주세요." action="다시 저장" %}
-    {% include "components/author_state_notice.html" with state="warning" title="접근 권한 없음" description="작품 열람·편집 권한과 지표 초대는 별도로 관리됩니다." %}
-    {% include "components/author_state_notice.html" with state="success" title="저장 완료" description="이 작품의 공개 범위를 저장했습니다." %}
+    {% include "components/author_state_notice.html" with state="info" title="집계 지연" description="최근 날짜의 데이터는 집계가 끝난 뒤 표시됩니다." only %}
+    {% include "components/author_state_notice.html" with state="info" title="아직 지표가 없습니다" description="읽기 데이터가 쌓이면 이곳에 표시됩니다." action="기간 변경" only %}
+    {% include "components/author_state_notice.html" with state="loading" title="저장 중" description="설정이 저장되는 동안 입력과 버튼을 잠시 비활성화합니다." action="저장 중" only %}
+    {% include "components/author_state_notice.html" with state="info" title="저장 전" description="변경한 입력을 아직 저장하지 않았습니다." action="설정 저장" only %}
+    {% include "components/author_state_notice.html" with state="error" title="지표를 불러오지 못했습니다" description="잠시 후 다시 시도해 주세요." action="다시 불러오기" retry=True only %}
+    {% include "components/author_state_notice.html" with state="error" title="저장하지 못했습니다" description="입력한 범위와 초대 목록은 유지됩니다. 연결 상태를 확인하고 다시 시도해 주세요." action="다시 저장" only %}
+    {% include "components/author_state_notice.html" with state="warning" title="접근 권한 없음" description="작품 열람·편집 권한과 지표 초대는 별도로 관리됩니다." only %}
+    {% include "components/author_state_notice.html" with state="success" title="저장 완료" description="이 작품의 공개 범위를 저장했습니다." only %}
 </div>

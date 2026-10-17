@@ -1,6 +1,8 @@
+{% load component_catalog %}
+{% component_reference "author_visibility_option" %}
 <fieldset class="space-y-3"><legend class="mb-3 font-semibold">지표 열람 범위</legend>
-    {% include "components/author_visibility_option.html" with value="private" title="작가만" description="기본값입니다. 작가 본인만 지표를 볼 수 있습니다." checked=True %}
-    {% include "components/author_visibility_option.html" with value="invited" title="초대한 계정만" description="초대 계정은 집계 지표만 읽을 수 있습니다." %}
-    {% include "components/author_visibility_option.html" with value="public" title="전체 공개" description="누구나 이 작품의 집계 지표를 볼 수 있습니다." %}
-    <div><p class="mb-2 text-sm text-base-content/60">비활성</p>{% include "components/author_visibility_option.html" with value="disabled" title="초대한 계정만" description="작품 편집 권한만 있는 계정은 여기에 포함되지 않습니다." disabled=True %}</div>
+    {% include "components/author_visibility_option.html" with value="private" title="작가만" description="기본값입니다. 작가 본인만 지표를 볼 수 있습니다." checked=True only %}
+    {% include "components/author_visibility_option.html" with value="invited" title="초대한 계정만" description="초대 계정은 집계 지표만 읽을 수 있습니다." only %}
+    {% include "components/author_visibility_option.html" with value="public" title="전체 공개" description="누구나 이 작품의 집계 지표를 볼 수 있습니다." only %}
+    <div><p class="mb-2 text-sm text-base-content/60">비활성</p>{% include "components/author_visibility_option.html" with value="disabled" title="초대한 계정만" description="작품 편집 권한만 있는 계정은 여기에 포함되지 않습니다." disabled=True only %}</div>
 </fieldset>

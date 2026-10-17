@@ -1,0 +1,10 @@
+{# 회차 선택. options는 value/label 사전 목록이며 선택은 호출 화면이 처리한다. #}
+{# 사용법: include "components/author_episode_select.html" with select_id="episode-select" options=episodes selected="1" only #}
+{# 필수: select_id, options / 선택: label, selected, loading, disabled, error #}
+<label class="form-control block w-full max-w-sm" for="{{ select_id }}">
+    <span class="mb-2 block text-sm">{{ label|default:"페이지 전환 시간 회차" }}</span>
+    <select id="{{ select_id }}" name="{{ select_id }}" class="select select-bordered select-sm w-full {% if error %}select-error{% endif %}" {% if disabled or loading or not options %}disabled{% endif %} {% if loading %}aria-busy="true"{% endif %} {% if error %}aria-invalid="true" aria-describedby="{{ select_id }}-error"{% endif %}>
+        {% if loading %}<option>회차를 불러오는 중</option>{% else %}{% for option in options %}<option value="{{ option.value }}" {% if option.value == selected %}selected{% endif %}>{{ option.label }}</option>{% empty %}<option>선택할 회차가 없습니다</option>{% endfor %}{% endif %}
+    </select>
+    {% if error %}<span id="{{ select_id }}-error" class="mt-1 block text-sm text-error">{{ error }}</span>{% endif %}
+</label>

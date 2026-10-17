@@ -56,6 +56,7 @@ TEMPLATES[0]["OPTIONS"]["builtins"] = [
 # Pattern Library Configuration
 PATTERN_LIBRARY = {
     "SECTIONS": (
+        ("tokens", ["patterns/tokens"]),
         ("components", ["patterns/components"]),
         ("pages", ["patterns/pages"]),
     ),

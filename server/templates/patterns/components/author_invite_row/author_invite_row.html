@@ -1,1 +1,3 @@
-<div><p class="mb-2 text-sm text-base-content/60">초대 계정 · 지표 읽기 전용</p><ul class="divide-y divide-base-300 rounded-box border border-base-300 px-4">{% include "components/author_invite_row.html" with account="minseo@example.test" %}{% include "components/author_invite_row.html" with account="pending@example.test" pending=True %}{% include "components/author_invite_row.html" with account="disabled@example.test" disabled=True %}</ul></div>
+{% load component_catalog %}
+{% component_reference "author_invite_row" %}
+<div><p class="mb-2 text-sm text-base-content/60">초대 계정 · 지표 읽기 전용</p><ul class="divide-y divide-base-300 rounded-box border border-base-300 px-4">{% include "components/author_invite_row.html" with account="minseo@example.test" only %}{% include "components/author_invite_row.html" with account="pending@example.test" pending=True only %}{% include "components/author_invite_row.html" with account="disabled@example.test" disabled=True only %}</ul></div>
