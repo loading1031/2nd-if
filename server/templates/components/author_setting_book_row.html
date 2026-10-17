@@ -1,0 +1,8 @@
+{# 작품에 고정 채택된 설정집 행. 업데이트는 설정집별로 독립 적용한다. #}
+{# 사용법: include "components/author_setting_book_row.html" with book_id="flora" title="북부의 식물 도감" creator="서리" version="v1.4" license="무료 작품 이용 허용" item_count="12" next_version="v1.5" #}
+{# 필수: book_id, title, creator, version, license, item_count / 선택: next_version, update_disabled #}
+<li class="flex flex-wrap items-center gap-3 p-4 sm:px-5">
+    <div class="avatar avatar-placeholder"><div class="w-11 rounded-lg bg-base-200 text-xs text-base-content/60"><span>설정</span></div></div>
+    <div class="min-w-0 flex-1"><h3 class="text-sm font-semibold">{{ title }}</h3><p class="mt-1 text-xs text-base-content/60">{{ creator }} <span class="mx-1">·</span><span data-current-version="{{ book_id }}">{{ version }}</span> 사용 중</p><p class="mt-2 text-xs text-base-content/50">{{ license }} · 선택 항목 {{ item_count }}개</p></div>
+    <div class="shrink-0">{% if next_version %}<button class="btn btn-outline btn-sm" data-review-update="{{ book_id }}" {% if update_disabled %}disabled{% endif %}>{{ next_version }} 업데이트</button><span class="badge badge-ghost badge-sm" data-latest="{{ book_id }}" hidden>최신 버전</span>{% else %}<span class="badge badge-ghost badge-sm" data-latest="{{ book_id }}">최신 버전</span>{% endif %}</div>
+</li>

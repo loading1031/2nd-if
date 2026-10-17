@@ -1,0 +1,7 @@
+{# 지표 열람 초대 계정 행. 작품 읽기/편집 권한을 부여하지 않는다. #}
+{# 사용법: include "components/author_invite_row.html" with account="minseo@example.test" #}
+{# 필수: account / 선택: pending, disabled, row_id #}
+<li {% if row_id %}id="{{ row_id }}"{% endif %} class="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
+    <span class="min-w-0 break-all">{{ account }}{% if pending %}<span class="badge badge-warning badge-xs ml-2">저장 대기</span>{% endif %}</span>
+    <button type="button" data-remove-invite class="btn btn-ghost btn-xs text-error" {% if disabled %}disabled{% endif %}>초대 취소</button>
+</li>

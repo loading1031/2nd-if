@@ -1,0 +1,10 @@
+{# 작가 도구의 전체 화면 조회 상태 #}
+{# 사용법: include "components/author_state_panel.html" with panel_id="state-panel" #}
+{# 필수: panel_id #}
+<section id="{{ panel_id }}" class="card border border-base-300 bg-base-100" hidden aria-live="polite">
+    <div class="card-body min-h-80 items-center justify-center text-center">
+        <span id="state-spinner" class="loading loading-spinner loading-md text-primary" hidden aria-label="불러오는 중"></span>
+        <h1 id="state-title" class="text-lg font-semibold"></h1><p id="state-description" class="max-w-sm text-sm text-base-content/60"></p>
+        <button id="state-retry" class="btn btn-outline btn-sm mt-3" hidden>다시 불러오기</button>
+    </div>
+</section>

@@ -1,0 +1,10 @@
+{# 선택한 작품-설정집의 버전만 비교하고 적용하는 모달 #}
+{# 사용법: include "components/author_setting_update_dialog.html" with dialog_id="update-dialog" #}
+{# 필수: dialog_id #}
+<dialog id="{{ dialog_id }}" class="modal" aria-labelledby="update-title"><div class="modal-box max-w-2xl">
+    <p class="mb-1 text-xs text-base-content/50">설정집 버전 검토 · 이 작품의 선택</p><h2 id="update-title" class="text-lg font-semibold"></h2>
+    <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2"><div class="rounded-box border border-base-300 p-4"><p class="text-xs text-base-content/50">현재 고정 버전</p><p id="update-current" class="mt-1 font-semibold"></p></div><div class="rounded-box border border-primary/30 bg-primary/5 p-4"><p class="text-xs text-base-content/50">새 버전</p><p id="update-next" class="mt-1 font-semibold"></p></div></div>
+    <p id="update-changes" class="mt-5 text-sm leading-relaxed"></p><p id="update-license" class="mt-3 text-xs text-base-content/60"></p>
+    <p class="mt-3 text-xs leading-relaxed text-base-content/60">적용 또는 유지는 이 작품의 이 설정집에만 반영됩니다. 다른 설정집과 작품은 그대로 유지됩니다.</p>
+    <div class="modal-action flex-wrap"><form method="dialog"><button class="btn btn-ghost btn-sm">현재 버전 유지</button></form><button id="confirm-update" class="btn btn-primary btn-sm">이 설정집만 업데이트</button></div>
+</div><form method="dialog" class="modal-backdrop"><button>닫기</button></form></dialog>
