@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">공청석유 — 흑백 명암</title><desc id="desc">공청석유 하나를 깊은 그림자와 밝은 면, 재질별 세부 선으로 표현한 흑백 벡터 그림.</desc>
+<defs><linearGradient id="glass" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#d7d7d7"/><stop offset="0.25" stop-color="#a7a7a7"/><stop offset="0.50" stop-color="#6c6c6c"/><stop offset="0.75" stop-color="#393939"/><stop offset="1.00" stop-color="#202020"/></linearGradient><linearGradient id="milk" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#fcfcfc"/><stop offset="0.33" stop-color="#eeeeee"/><stop offset="0.67" stop-color="#d1d1d1"/><stop offset="1.00" stop-color="#a6a6a6"/></linearGradient><linearGradient id="cork" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#c5c5c5"/><stop offset="0.33" stop-color="#929292"/><stop offset="0.67" stop-color="#676767"/><stop offset="1.00" stop-color="#424242"/></linearGradient></defs>
+<ellipse cx="240" cy="394" rx="102" ry="12" fill="#767676" opacity=".12"/>
+<path d="M207 133L207 168C207 184 185 194 166 208C133 232 124 267 130 304C137 351 175 377 240 378C307 379 345 349 351 305C357 266 344 231 313 209C291 193 272 185 272 168L272 133Z" fill="url(#glass)" fill-opacity="1" stroke="#505050" stroke-width="6" stroke-linejoin="round"/>
+<path d="M148 267C180 252 206 278 239 271C276 263 306 254 333 267L334 300C332 339 302 359 242 360C185 361 151 340 148 305Z" fill="url(#milk)"/>
+<path d="M149 267C178 254 207 279 239 271C276 263 306 254 332 267" fill="none" stroke="#f9f9f9" stroke-width="5" stroke-linecap="round"/>
+<path d="M164 246C154 259 151 272 152 285" stroke="#f9f9f9" stroke-width="10" fill="none" stroke-linecap="round" opacity=".85"/>
+<path d="M301 340C315 332 322 320 324 308" stroke="#f9f9f9" stroke-width="5" fill="none" stroke-linecap="round" opacity=".75"/>
+<path d="M204 96Q238 89 276 96L269 140Q241 149 211 140Z" fill="url(#cork)" stroke="#535353" stroke-width="5"/>
+<ellipse cx="240" cy="96" rx="36" ry="9" fill="#c7c7c7" stroke="#535353" stroke-width="4"/>
+<path d="M220 112L218 126M255 108L252 121" stroke="#747474" stroke-width="3" stroke-linecap="round"/>
+<rect x="198" y="138" width="82" height="22" rx="9" fill="#b1b1b1" stroke="#505050" stroke-width="5"/>
+<path d="M210 147L260 147" stroke="#e8e8e8" stroke-width="4" stroke-linecap="round"/>
+<path d="M218 306C224 292 238 290 243 302C250 289 263 295 260 307C257 317 241 326 241 326C241 326 223 318 218 306Z" fill="#a4a4a4" opacity=".8"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M146 287C143 326 162 352 202 363M274 362Q316 353 335 323" stroke="#efefef" stroke-width="2" opacity=".65"/>
+<path d="M138 290Q136 322 154 343M149 325l10 16M158 339l11 11M170 350l11 7M304 346l10 -8M316 335l9 -11" stroke="#252525" stroke-width="1.3" opacity=".45"/>
+<path d="M204 179Q203 192 187 203M278 180Q279 192 294 201" stroke="#eaeaea" stroke-width="2.3" opacity=".6"/>
+<path d="M214 107l-2 14M224 104l-2 18M234 108l-1 20M245 104l-2 18M257 105l-2 20M267 105l-1 13" stroke="#333333" stroke-width="1.3" opacity=".45"/>
+<path d="M219 104l-2 11M241 109l-1 12M260 106l-2 11" stroke="#eeeeee" stroke-width="1" opacity=".45"/>
+<path d="M201 157Q239 164 275 156" stroke="#2d2d2d" stroke-width="1.5" opacity=".55"/>
+<path d="M162 281Q179 275 193 281M286 276Q306 269 323 276" stroke="#ffffff" stroke-width="1.5" opacity=".75"/>
+</g></svg>

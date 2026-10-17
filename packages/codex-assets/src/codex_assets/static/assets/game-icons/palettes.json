@@ -1,0 +1,119 @@
+{
+  "source_url": "https://game-icons.net/scripts/game-icons.js?v=20201115",
+  "source_sha256": "2aa3efa75f7c2016315d5bf6a68899ced13cf1143dcd87c0ab9df8716c59887c",
+  "description": "Official homepage palette values, in original order. Background first; eight foreground colors per palette.",
+  "palettes": [
+    {
+      "id": "threezerotwofour",
+      "background": "#090300",
+      "colors": [
+        "#DB2D20",
+        "#E8BBD0",
+        "#FDED02",
+        "#01A252",
+        "#B5E4F4",
+        "#01A0E4",
+        "#A16A94",
+        "#CDAB53"
+      ]
+    },
+    {
+      "id": "bespin",
+      "background": "#28211C",
+      "colors": [
+        "#CF6A4C",
+        "#CF7D34",
+        "#F9EE98",
+        "#54BE0D",
+        "#AFC4DB",
+        "#5EA6EA",
+        "#9B859D",
+        "#937121"
+      ]
+    },
+    {
+      "id": "bright",
+      "background": "#000000",
+      "colors": [
+        "#FB0120",
+        "#FC6D24",
+        "#FDA331",
+        "#A1C659",
+        "#76C7B7",
+        "#6FB3D2",
+        "#D381C3",
+        "#BE643C"
+      ]
+    },
+    {
+      "id": "default",
+      "background": "#181818",
+      "colors": [
+        "#AB4642",
+        "#DC9656",
+        "#F7CA88",
+        "#A1B56C",
+        "#86C1B9",
+        "#7CAFC2",
+        "#BA8BAF",
+        "#A16946"
+      ]
+    },
+    {
+      "id": "eighties",
+      "background": "#2D2D2D",
+      "colors": [
+        "#F2777A",
+        "#F99157",
+        "#FFCC66",
+        "#99CC99",
+        "#66CCCC",
+        "#6699CC",
+        "#CC99CC",
+        "#D27B53"
+      ]
+    },
+    {
+      "id": "flat",
+      "background": "#2C3E50",
+      "colors": [
+        "#E74C3C",
+        "#E67E22",
+        "#F1C40F",
+        "#2ECC71",
+        "#1ABC9C",
+        "#3498DB",
+        "#9B59B6",
+        "#BE643C"
+      ]
+    },
+    {
+      "id": "monokai",
+      "background": "#272822",
+      "colors": [
+        "#F92672",
+        "#FD971F",
+        "#F4BF75",
+        "#A6E22E",
+        "#A1EFE4",
+        "#66D9EF",
+        "#AE81FF",
+        "#CC6633"
+      ]
+    },
+    {
+      "id": "solarized",
+      "background": "#002B36",
+      "colors": [
+        "#DC322F",
+        "#CB4B16",
+        "#B58900",
+        "#859900",
+        "#2AA198",
+        "#268BD2",
+        "#6C71C4",
+        "#D33682"
+      ]
+    }
+  ]
+}

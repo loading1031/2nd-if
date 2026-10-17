@@ -5,6 +5,7 @@ description = "Django Async + HTMX + TipTap 소설 플랫폼"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "second-if-codex-assets",
     "django>=5.0",
     "django-allauth[socialaccount]>=65.15.0",
     "django-extensions>=4.1",
@@ -76,3 +77,6 @@ known-first-party = ["apps", "config"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.uv.sources]
+second-if-codex-assets = { path = "packages/codex-assets", editable = true }

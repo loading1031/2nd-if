@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">설삼</title><desc id="desc">하얗고 통통한 뿌리 하나에 짧은 잔뿌리와 연둣빛 잎이 붙어 있는 설삼의 창작 외형.</desc>
+<defs><linearGradient id="root" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#f9e6b5"/><stop offset="0.33" stop-color="#e7cd93"/><stop offset="0.67" stop-color="#c9aa71"/><stop offset="1.00" stop-color="#9a936c"/></linearGradient><linearGradient id="leaf" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#a8d47c"/><stop offset="0.33" stop-color="#77b56a"/><stop offset="0.67" stop-color="#4a905f"/><stop offset="1.00" stop-color="#2f6554"/></linearGradient></defs>
+<ellipse cx="240" cy="394" rx="102" ry="12" fill="#8b6f83" opacity=".12"/>
+<g fill="url(#leaf)" stroke="#3c6351" stroke-width="4.5" stroke-linejoin="round"><path d="M237 154C199 157 172 140 173 108C205 105 234 120 237 154Z"/><path d="M238 150C237 113 260 89 289 90C290 122 271 150 238 150Z"/><path d="M243 160C267 131 297 130 319 146C303 170 270 177 243 160Z"/></g>
+<path d="M237 175Q239 151 242 136" stroke="#456c4d" stroke-width="8" fill="none" stroke-linecap="round"/>
+<g fill="none" stroke="#8b805b" stroke-width="4" stroke-linecap="round"><path d="M177 252C149 264 151 289 137 298M160 280L143 278M300 260C324 278 313 297 331 311M319 294L338 291M204 349C191 371 205 381 192 393M279 346C289 369 276 382 290 392"/></g>
+<path d="M241 172C202 169 177 197 176 237C174 266 185 290 198 307C206 320 194 342 185 358C180 368 187 376 198 372C222 365 225 339 239 327C251 324 254 351 271 366C283 378 298 372 294 359C289 342 276 324 286 309C304 284 311 255 304 226C298 195 273 177 241 172Z" fill="url(#root)" stroke="#807452" stroke-width="5.5" stroke-linejoin="round"/>
+<path d="M200 226C203 210 216 198 229 196" stroke="#fffdf0" stroke-width="11" fill="none" stroke-linecap="round" opacity=".85"/>
+<g fill="none" stroke="#b09562" stroke-width="3.5" stroke-linecap="round"><path d="M224 241Q239 247 252 241M218 270Q235 277 249 272M241 296L259 292M197 255L206 258M273 229L283 232"/></g>
+<path d="M236 144L193 123M249 137L275 106M261 157L301 150" stroke="#579356" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>

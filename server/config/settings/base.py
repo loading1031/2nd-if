@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.twitter_oauth2",
     "allauth.socialaccount.providers.instagram",
+    "codex_assets.apps.CodexAssetsConfig",
     # Local apps
     "apps.core",
     "apps.users",

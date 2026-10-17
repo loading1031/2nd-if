@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 560" role="img" aria-labelledby="title desc">
+  <title id="title">심장 — 흑백 명암 시안</title>
+  <desc id="desc">기존 심장 실루엣에 근육 결, 가는 혈관 가지와 혈관의 둥근 명암을 더한 흑백 벡터 시안. 의학 교육용 해부도가 아닌 스타일화한 그림이다.</desc>
+  <style>
+    #heart { transform-box: fill-box; transform-origin: center; animation: beat 3.6s ease-in-out infinite; }
+    @keyframes beat { 0%, 72%, 100% { transform: scale(1); } 78% { transform: scale(1.025); } 84% { transform: scale(1); } 90% { transform: scale(1.014); } }
+    @media (prefers-reduced-motion: reduce) { #heart { animation: none; } }
+  </style>
+  <defs>
+    <radialGradient id="muscle" cx=".31" cy=".23" r=".85" color-interpolation="linearRGB"><stop stop-color="#dddddd"/><stop offset=".28" stop-color="#b1b1b1"/><stop offset=".55" stop-color="#7b7b7b"/><stop offset=".8" stop-color="#454545"/><stop offset="1" stop-color="#292929"/></radialGradient>
+    <linearGradient id="vessel" x1="0" y1="0" x2="1" y2="1" color-interpolation="linearRGB"><stop stop-color="#eeeeee"/><stop offset=".25" stop-color="#bdbdbd"/><stop offset=".62" stop-color="#7e7e7e"/><stop offset="1" stop-color="#3c3c3c"/></linearGradient>
+    <linearGradient id="blue-vessel" x1="0" y1="0" x2="1" y2="1" color-interpolation="linearRGB"><stop stop-color="#c0c0c0"/><stop offset=".3" stop-color="#8a8a8a"/><stop offset=".7" stop-color="#535353"/><stop offset="1" stop-color="#303030"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-15%" width="145%" height="150%" color-interpolation-filters="linearRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/><feOffset in="blur" dx="2" dy="12" result="offset"/>
+      <feFlood flood-color="#373737" flood-opacity=".22" result="color"/><feComposite in="color" in2="offset" operator="in" result="shade"/>
+      <feMerge><feMergeNode in="shade"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  <clipPath id="myocardium"><path d="M286 165C266 143 233 140 207 154C175 172 158 211 162 254C167 305 196 362 236 412C267 450 302 488 331 512C343 522 354 518 359 503C381 451 418 395 449 346C481 295 497 247 483 207C472 176 445 161 415 164C385 167 366 185 350 214C334 188 313 170 286 165Z"/></clipPath></defs>
+  <g id="heart" filter="url(#shadow)">
+    <!-- great vessels at the back -->
+    <path fill="url(#blue-vessel)" stroke="#4d4d4d" stroke-width="5" stroke-linejoin="round" d="M264 193C251 155 245 117 255 78C262 51 285 38 310 46C333 53 341 76 334 98L321 143L332 190L295 208Z"/>
+    <path fill="url(#vessel)" stroke="#4d4d4d" stroke-width="5" stroke-linejoin="round" d="M311 188C300 141 300 98 319 65C338 32 376 29 400 47C422 64 424 92 405 111C390 126 377 139 373 164L371 204Z"/>
+    <path fill="url(#vessel)" stroke="#4d4d4d" stroke-width="5" stroke-linejoin="round" d="M333 158C362 143 406 138 442 151C461 158 472 176 463 193C456 207 438 211 420 202L386 189L355 205Z"/>
+    <path fill="url(#blue-vessel)" stroke="#4d4d4d" stroke-width="5" stroke-linejoin="round" d="M242 143C224 128 203 124 184 130C168 136 160 151 166 166C172 180 188 185 205 179L239 169Z"/>
+    <!-- myocardium silhouette -->
+    <path fill="url(#muscle)" stroke="#404040" stroke-width="7" stroke-linejoin="round" d="M286 165C266 143 233 140 207 154C175 172 158 211 162 254C167 305 196 362 236 412C267 450 302 488 331 512C343 522 354 518 359 503C381 451 418 395 449 346C481 295 497 247 483 207C472 176 445 161 415 164C385 167 366 185 350 214C334 188 313 170 286 165Z"/>
+    <!-- chamber planes and soft myocardial folds -->
+    <path fill="#9f9f9f" opacity=".48" d="M205 201C220 180 246 176 266 191C284 205 291 229 281 250C271 271 250 283 229 273C205 262 192 229 205 201Z"/>
+    <path fill="#464646" opacity=".38" d="M362 214C384 184 418 177 442 192C469 210 468 248 452 278C433 312 404 342 383 370C369 389 357 416 347 442C337 409 329 372 332 342C336 297 344 243 362 214Z"/>
+    <path fill="none" stroke="#b8b8b8" stroke-width="8" stroke-linecap="round" opacity=".62" d="M204 219C209 196 226 184 244 182"/>
+    <path fill="none" stroke="#424242" stroke-width="7" stroke-linecap="round" opacity=".4" d="M464 225C468 264 444 304 419 337"/>
+<g clip-path="url(#myocardium)" fill="none" stroke-linecap="round"><g stroke="#222222" stroke-width="1.3" opacity=".28"><path d="M173.0 260.0Q182.0 284.0 202.0 295.0"/><path d="M177.4 269.0Q186.4 293.0 206.4 304.0"/><path d="M181.8 278.0Q190.8 302.0 210.8 313.0"/><path d="M186.2 287.0Q195.2 311.0 215.2 322.0"/><path d="M190.6 296.0Q199.6 320.0 219.6 331.0"/><path d="M195.0 305.0Q204.0 329.0 224.0 340.0"/><path d="M199.4 314.0Q208.4 338.0 228.4 349.0"/><path d="M203.8 323.0Q212.8 347.0 232.8 358.0"/><path d="M208.2 332.0Q217.2 356.0 237.2 367.0"/><path d="M212.6 341.0Q221.6 365.0 241.6 376.0"/><path d="M217.0 350.0Q226.0 374.0 246.0 385.0"/><path d="M221.4 359.0Q230.4 383.0 250.4 394.0"/><path d="M225.8 368.0Q234.8 392.0 254.8 403.0"/><path d="M230.2 377.0Q239.2 401.0 259.2 412.0"/><path d="M234.6 386.0Q243.6 410.0 263.6 421.0"/><path d="M239.0 395.0Q248.0 419.0 268.0 430.0"/><path d="M243.4 404.0Q252.4 428.0 272.4 439.0"/><path d="M247.8 413.0Q256.8 437.0 276.8 448.0"/><path d="M252.2 422.0Q261.2 446.0 281.2 457.0"/><path d="M466.0 221.0Q467.0 238.0 454.0 255.0"/><path d="M462.5 231.0Q463.5 248.0 450.5 265.0"/><path d="M459.0 241.0Q460.0 258.0 447.0 275.0"/><path d="M455.5 251.0Q456.5 268.0 443.5 285.0"/><path d="M452.0 261.0Q453.0 278.0 440.0 295.0"/><path d="M448.5 271.0Q449.5 288.0 436.5 305.0"/><path d="M445.0 281.0Q446.0 298.0 433.0 315.0"/><path d="M441.5 291.0Q442.5 308.0 429.5 325.0"/><path d="M438.0 301.0Q439.0 318.0 426.0 335.0"/><path d="M434.5 311.0Q435.5 328.0 422.5 345.0"/><path d="M431.0 321.0Q432.0 338.0 419.0 355.0"/><path d="M427.5 331.0Q428.5 348.0 415.5 365.0"/><path d="M424.0 341.0Q425.0 358.0 412.0 375.0"/><path d="M420.5 351.0Q421.5 368.0 408.5 385.0"/><path d="M417.0 361.0Q418.0 378.0 405.0 395.0"/><path d="M413.5 371.0Q414.5 388.0 401.5 405.0"/><path d="M410.0 381.0Q411.0 398.0 398.0 415.0"/><path d="M406.5 391.0Q407.5 408.0 394.5 425.0"/><path d="M403.0 401.0Q404.0 418.0 391.0 435.0"/></g><g stroke="#f0f0f0" stroke-width="1.4" opacity=".28">
+<path d="M180 250Q181 277 201 300M187 280Q195 308 217 326M207 322Q218 352 243 369M246 380Q270 414 298 434M282 431Q309 466 332 482M457 226Q461 248 450 265M431 291Q415 315 402 331M389 351Q375 372 365 396"/>
+</g>
+<path d="M304 307C316 344 311 378 299 403C312 424 329 445 344 459" stroke="#242424" stroke-width="9" opacity=".18"/>
+<path d="M307 306C320 344 315 378 304 401" stroke="#dddddd" stroke-width="2.5" opacity=".28"/>
+</g>
+    <!-- coronary arteries, branching over the front surface -->
+    <path fill="none" stroke="#4a4a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M331 214C313 241 302 273 292 309C283 340 267 368 245 389M300 282C279 278 260 264 246 244M289 310C267 308 248 300 231 286M351 227C375 245 393 266 406 293C419 320 433 337 450 346M389 269C406 260 426 258 445 263M410 303C431 298 449 302 463 313"/>
+    <path fill="none" stroke="#a0a0a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9" d="M331 214C313 241 302 273 292 309M300 282C279 278 260 264 246 244M351 227C375 245 393 266 406 293"/>
+    <!-- tiny warm highlights on the vessel curves -->
+    <path fill="none" stroke="#cccccc" stroke-width="6" stroke-linecap="round" opacity=".6" d="M273 72C276 57 288 51 301 55M339 59C354 45 377 44 390 53M188 145C202 139 217 145 227 153"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<g stroke="#333333" stroke-width="2.5" opacity=".8"><path d="M312 247L280 231L265 208M284 232L260 236L247 226M276 345L242 343L222 331M261 371L254 396L261 414M376 252L385 222L400 208M405 291L431 281L452 282M426 325L441 339L442 356M296 305L313 322L322 347"/></g>
+<g stroke="#e4e4e4" stroke-width=".9" opacity=".8"><path d="M312 246L280 230L265 207M276 344L242 342L222 330M376 251L385 221L400 207M405 290L431 280L452 281"/></g>
+<g stroke="#333333" stroke-width="1.5" opacity=".65"><path d="M266 209L257 200M261 236L251 244M243 343L232 354M255 394L241 401M386 222L379 212M430 281L437 270M441 340L454 343"/></g>
+<g stroke="#f4f4f4" stroke-width="2" opacity=".45"><path d="M270 88Q263 118 273 146M324 111Q325 78 345 63M345 160Q389 146 421 153M183 154Q204 150 220 159"/></g>
+<g stroke="#353535" stroke-width="1.5" opacity=".38"><path d="M257 102Q270 107 280 104M255 114Q268 119 279 115M258 129Q271 133 282 130M307 117Q320 120 332 114M308 130Q322 133 333 128M373 153Q377 163 375 171M388 150Q391 160 390 170M403 149Q408 161 405 173"/></g>
+</g>
+</g>
+</svg>

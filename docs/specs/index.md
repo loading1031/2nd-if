@@ -11,7 +11,8 @@
 - [branch](branch.md) - 타임라인 기준 분기 생성 (원작 회차 수의 20% 화수 제한)
 - [next-episode-ui](next-episode-ui.md) - 다음 화 선택 UI (정렬·추천은 미확정)
 - [license](license.md) - 콘텐츠 라이선스
-- [setting-book](setting-book.md) - 설정집, Blender 에셋, 색상 사전과 버전
+- [setting-book](setting-book.md) - 설정집 권한·버전과 에셋 매핑 (Blender 방향 폐기)
+- [collection-encyclopedia](collection-encyclopedia.md) - 작품별 수집 도감, SVG 단어·색상 매핑
 - [dynamic-reader](dynamic-reader.md) - 페이지 단위 리더와 선택형 시각화
 - [copy-protection](copy-protection.md) - 복사 방지 (출처 삽입 + 워터마크 + 핑거프린트)
 - [font-system](font-system.md) - 장르별 글씨체 4종

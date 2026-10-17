@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">대환단</title><desc id="desc">따뜻한 살구색과 붉은색으로 표현한 둥근 환약 한 알. 표면에 약초 잎 모양의 작은 압인과 금빛 약재 조각이 있다. 창작 외형.</desc>
+<defs><linearGradient id="pill" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#f7a17f"/><stop offset="0.33" stop-color="#e66869"/><stop offset="0.67" stop-color="#c44258"/><stop offset="1.00" stop-color="#872f4b"/></linearGradient><linearGradient id="leaf" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#ffdb7e"/><stop offset="0.33" stop-color="#f2c059"/><stop offset="0.67" stop-color="#d59538"/><stop offset="1.00" stop-color="#ab6d35"/></linearGradient></defs>
+<ellipse cx="240" cy="394" rx="102" ry="12" fill="#8b6f83" opacity=".12"/>
+<path d="M239 106C325 100 379 158 380 240C381 323 323 375 241 377C158 379 102 326 101 247C99 166 155 109 239 106Z" fill="url(#pill)" stroke="#713b54" stroke-width="6"/>
+<path d="M123 278C149 333 187 352 246 350C297 349 334 328 357 301C341 346 296 373 242 374C181 376 136 340 123 278Z" fill="#792f4f" opacity=".16"/>
+<path d="M144 211C150 181 174 157 204 148" stroke="#ffe9c7" stroke-width="14" fill="none" stroke-linecap="round" opacity=".8"/>
+<path d="M223 144L229 143" stroke="#fff2d5" stroke-width="9" stroke-linecap="round"/>
+<path d="M219 270C200 244 208 216 245 202C266 229 267 254 239 275Z" fill="url(#leaf)" stroke="#a36538" stroke-width="3.5"/>
+<path d="M224 270L247 221M233 251L219 237M240 236L253 234" stroke="#9b6235" stroke-width="3" fill="none" stroke-linecap="round"/>
+<g fill="#fff0be"><path d="M293 173L300 169L305 177L299 184Z"/><path d="M161 286L168 282L172 289L166 295Z"/><path d="M300 305L304 300L310 306L305 312Z"/></g>
+<g fill="#8a344b" opacity=".3"><ellipse cx="185" cy="255" rx="3" ry="2"/><ellipse cx="283" cy="267" rx="2" ry="3"/><ellipse cx="211" cy="318" rx="3" ry="2"/></g>
+</svg>

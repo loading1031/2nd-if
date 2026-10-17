@@ -1,0 +1,2 @@
+{# Usage: codex_asset template tag; required asset, label, style, url; optional appearance. #}
+<span class="codex-asset" role="img" aria-label="{{ label }}" style="{{ style }}" data-asset-id="{{ asset.id }}"{% if appearance %} data-palette="{{ appearance.paletteId }}" data-foreground="{{ appearance.foreground }}"{% endif %}><span class="codex-asset__shape" aria-hidden="true"></span></span>

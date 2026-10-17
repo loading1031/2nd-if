@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title desc">
+  <title id="title">회색늑대</title>
+  <desc id="desc">네 다리로 서서 오른쪽을 바라보는 회색늑대 한 마리.</desc>
+  <style>
+    #wolf { transform-box: fill-box; transform-origin: center bottom; animation: breathe 4s ease-in-out infinite; }
+    #tail { transform-box: view-box; transform-origin: 130px 220px; animation: tailSway 5s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+    @keyframes tailSway { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(3deg); } }
+    @media (prefers-reduced-motion: reduce) { #wolf, #tail { animation: none; } }
+  </style>
+  <defs>
+    <linearGradient id="coat" x1=".15" y1=".1" x2=".8" y2="1" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="#aab7bd"/><stop offset=".32" stop-color="#788994"/><stop offset=".7" stop-color="#596b78"/><stop offset="1" stop-color="#435361"/>
+    </linearGradient>
+    <linearGradient id="light-coat" x1="0" y1="0" x2="0" y2="1" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="#eee7d8"/><stop offset=".55" stop-color="#c9c2b5"/><stop offset="1" stop-color="#9c9c98"/>
+    </linearGradient>
+    <linearGradient id="shadow-coat" x1="0" y1="0" x2="1" y2="1" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="#596b78"/><stop offset="1" stop-color="#344452"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="321" cy="414" rx="218" ry="18" fill="#273b4c" opacity=".12"/>
+  <g id="wolf">
+    <!-- torso and haunch -->
+    <path fill="url(#coat)" d="M132 222C151 190 194 168 246 164C291 151 348 153 382 170C404 181 417 198 413 216C409 234 389 247 365 251C341 255 322 246 300 252C277 259 256 276 230 279C207 281 188 270 170 262C152 254 139 241 132 222Z"/>
+    <!-- hanging tail with bushy outline -->
+    <g id="tail">
+      <path fill="url(#shadow-coat)" d="M145 224C127 242 115 270 98 291C81 311 56 304 39 289L31 272C44 282 57 284 69 274C84 261 93 236 102 218L128 211Z"/>
+      <path fill="#aeb8bb" d="M91 281C80 296 63 295 49 285C64 291 78 278 87 262L102 234L111 240Z"/>
+    </g>
+    <!-- far-side legs, behind the body -->
+    <path fill="url(#shadow-coat)" d="M202 253C216 251 229 258 229 271L222 309L218 397L206 401L202 395L205 310L194 278Z"/>
+    <path fill="url(#shadow-coat)" d="M359 235C373 233 385 240 385 254L379 302L375 397L363 401L359 395L362 302L350 269Z"/>
+    <!-- near hind leg with broad thigh and hock -->
+    <path fill="url(#coat)" d="M145 236C163 230 182 237 188 252L185 278L174 304L170 392L157 397L153 391L157 302L143 273C137 260 136 244 145 236Z"/>
+    <!-- near foreleg, long and straight -->
+    <path fill="url(#coat)" d="M319 235C333 232 346 239 348 253L342 299L338 393L325 398L321 392L325 299L312 268Z"/>
+    <!-- paws and toes -->
+    <g fill="#354653">
+      <path d="M151 389L170 389L172 402L143 402L141 398Z"/><path d="M218 394L235 394L237 405L211 405L209 401Z"/>
+      <path d="M321 390L339 390L341 402L313 402L311 398Z"/><path d="M363 393L381 393L383 404L355 404L353 400Z"/>
+    </g>
+    <!-- neck ruff merges shoulder into head -->
+    <path fill="url(#coat)" d="M365 178C380 151 400 134 425 128L449 117L464 137L485 142L500 158L520 163L516 176L492 180L476 195L451 200L433 222L407 226L389 209L372 202Z"/>
+    <!-- head profile: sloped brow, cheek, long wedge muzzle -->
+    <path fill="url(#coat)" d="M422 158C431 139 447 128 465 126L484 119L500 135L518 139L535 150L552 157L568 164L566 173L548 175L531 184L507 185L489 197L466 192L446 181L430 177Z"/>
+    <!-- short, upright wolf ears -->
+    <path fill="#596b78" d="M455 133L457 111Q458 106 462 110L477 130Z"/>
+    <path fill="#596b78" d="M480 129L490 108Q492 104 496 109L505 137Z"/>
+    <path fill="#c9a99d" d="M461 126L461 115L470 128Z"/>
+    <path fill="#c9a99d" d="M487 127L493 115L498 132Z"/>
+    <!-- cheek ruff and pale throat -->
+    <path fill="#d5d0c4" d="M414 166C420 155 429 151 437 155C445 159 447 168 442 177C437 187 428 194 420 198L414 192L408 182L402 177Z"/>
+    <path fill="#c8c1b3" d="M475 174C490 172 505 166 519 162L539 163L547 168L540 176L522 180L502 191L484 189Z"/>
+    <!-- dark saddle, eye and nose -->
+    <path fill="#465865" d="M181 196C209 174 243 163 278 163C313 154 350 159 377 176L392 194L376 201L345 194L319 203L286 198L254 211L221 203L197 214Z" opacity=".48"/>
+    <path fill="#d89a4d" d="M518 145C521 142 525 144 525 148C525 151 522 153 519 151C517 150 516 147 518 145Z"/>
+    <circle cx="521" cy="148" r="1.8" fill="#263540"/>
+    <path fill="#27343e" d="M563 160L577 163L571 173L562 171Z"/>
+    <path fill="none" stroke="#46515a" stroke-width="3" stroke-linecap="round" d="M538 178Q548 181 560 176"/>
+    <!-- cream chest and coat highlights -->
+    <path fill="#e5ddce" d="M391 194C401 180 410 174 422 170L437 185L429 207L414 224L396 216L385 207Z"/>
+    <path fill="#bac3c4" opacity=".48" d="M155 230C184 198 218 184 248 179C222 196 210 214 198 239C187 257 170 270 147 278L128 260Z"/>
+  </g>
+</svg>

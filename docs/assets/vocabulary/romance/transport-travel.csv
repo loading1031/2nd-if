@@ -1,0 +1,7 @@
+﻿genre,category,category_id,term,asset_id,svg_path,status
+로맨스,교통·여행,transport-travel,기차표,로맨스-070,/static/assets/svg/romance/transport-travel/로맨스-070.svg,planned
+로맨스,교통·여행,transport-travel,기차,로맨스-071,/static/assets/svg/romance/transport-travel/로맨스-071.svg,planned
+로맨스,교통·여행,transport-travel,자동차,로맨스-072,/static/assets/svg/romance/transport-travel/로맨스-072.svg,planned
+로맨스,교통·여행,transport-travel,여행가방,로맨스-095,/static/assets/svg/romance/transport-travel/로맨스-095.svg,planned
+로맨스,교통·여행,transport-travel,여권,로맨스-096,/static/assets/svg/romance/transport-travel/로맨스-096.svg,planned
+로맨스,교통·여행,transport-travel,지도,로맨스-098,/static/assets/svg/romance/transport-travel/로맨스-098.svg,planned

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">청옥패 — 흑백 명암</title><desc id="desc">청옥패 하나를 깊은 그림자와 밝은 면, 재질별 세부 선으로 표현한 흑백 벡터 그림.</desc>
+<defs><linearGradient id="jade" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#a4a4a4" /><stop offset="0.25" stop-color="#8b8b8b" /><stop offset="0.50" stop-color="#707070" /><stop offset="0.75" stop-color="#3e3e3e" /><stop offset="1.00" stop-color="#222222" /></linearGradient><linearGradient id="thread" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#a2a2a2" /><stop offset="0.33" stop-color="#797979" /><stop offset="0.67" stop-color="#505050" /><stop offset="1.00" stop-color="#2b2b2b" /></linearGradient><linearGradient id="gold" x1=".15" y1="0" x2=".85" y2="1" color-interpolation="linearRGB"><stop offset="0.00" stop-color="#b4b4b4" /><stop offset="0.33" stop-color="#969696" /><stop offset="0.67" stop-color="#808080" /><stop offset="1.00" stop-color="#4b4b4b" /></linearGradient></defs>
+<ellipse cx="240" cy="394" rx="102" ry="12" fill="#767676" opacity=".12" />
+<g fill="none" stroke-linecap="round"><path d="M225 130C194 98 213 76 236 94C264 70 286 95 254 129" stroke="#4a4a4a" stroke-width="9" /><path d="M225 130C194 98 213 76 236 94C264 70 286 95 254 129" stroke="#a8a8a8" stroke-width="4" /></g>
+<path d="M214 133Q239 125 266 133Q277 136 281 151L303 267Q307 286 290 295Q239 317 188 295Q171 286 175 267L196 151Q199 137 214 133Z" fill="url(#jade)" stroke="#565656" stroke-width="5.5" stroke-linejoin="round" />
+<ellipse cx="238" cy="154" rx="10" ry="7" fill="#6d6d6d" stroke="#535353" stroke-width="3" />
+<path d="M238 116L238 150" stroke="#585858" stroke-width="9" stroke-linecap="round" /><g fill="none" stroke-linecap="round"><path d="M207 226C204 213 217 204 228 210C225 194 250 188 257 204C270 199 280 212 271 223C266 230 255 230 247 229L223 229" stroke="#454545" stroke-width="2.5" /><path d="M219 247Q240 259 262 247" stroke="#646464" stroke-width="4" /></g>
+<path d="M239 307L239 337" stroke="#5b5b5b" stroke-width="6" stroke-linecap="round" />
+<ellipse cx="239" cy="328" rx="12" ry="9" fill="url(#gold)" stroke="#939393" stroke-width="3" />
+<path d="M232 337Q239 332 246 337L257 379Q239 389 221 379Z" fill="url(#thread)" stroke="#464646" stroke-width="4" stroke-linejoin="round" />
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M186 266Q181 285 200 291Q241 308 282 288" stroke="#222222" stroke-width="2" opacity=".6" />
+<path d="M211 262Q236 277 263 264" stroke="#cccccc" stroke-width="1" opacity=".42" />
+<g stroke="#e3e3e3" stroke-width=".9" opacity=".3" />
+<g stroke="#252525" stroke-width="1.1" opacity=".7"><path d="M227 347l-2 26M231 345l-2 33M236 344l-1 36M241 344l1 36M246 345l4 32M250 349l5 26" /></g>
+</g></svg>
