@@ -10,6 +10,8 @@ on:
     types: [submitted, edited, dismissed]
   push:
     branches: [dev]
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:
       pull_request:
@@ -24,7 +26,7 @@ permissions:
   statuses: write
 
 concurrency:
-  group: review-gate-${{ github.event.pull_request.number || github.event.issue.number || inputs.pull_request || 'open-prs' }}
+  group: review-gate-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
@@ -42,7 +44,7 @@ jobs:
           script: |
             const p = context.payload;
             let numbers;
-            if (context.eventName === 'push') {
+            if (['push', 'schedule'].includes(context.eventName)) {
               const pulls = await github.paginate(github.rest.pulls.list, {
                 ...context.repo, state: 'open', per_page: 100
               });
@@ -53,9 +55,11 @@ jobs:
               numbers = [number];
             }
             const active = [];
+            const seenHeads = new Set();
             for (const number of numbers) {
               const { data: pr } = await github.rest.pulls.get({ ...context.repo, pull_number: number });
-              if (pr.state !== 'open' || !['dev', 'main'].includes(pr.base.ref)) continue;
+              if (pr.state !== 'open' || !['dev', 'main'].includes(pr.base.ref) || seenHeads.has(pr.head.sha)) continue;
+              seenHeads.add(pr.head.sha);
               await github.rest.repos.createCommitStatus({
                 ...context.repo, sha: pr.head.sha, context: 'review-complete', state: 'pending',
                 description: 'Checking latest Codex review state',

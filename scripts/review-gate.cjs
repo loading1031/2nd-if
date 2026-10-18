@@ -27,7 +27,10 @@ module.exports = __toCommonJS(review_gate_exports);
 var STATUS_CONTEXT = "review-complete";
 var CODEX_BOT = "chatgpt-codex-connector[bot]";
 var SUMMARY_MARKER = "<!-- codex-pull-request-review-summary -->";
-function evaluateReview(head, comments) {
+function evaluateReview(head, comments, reactions = []) {
+  if (reactions.some((r) => r.user?.login === CODEX_BOT && r.user.type === "Bot" && r.content === "eyes")) {
+    return { state: "pending", description: "Codex still has a review running" };
+  }
   const summary = comments.filter((c) => c.user?.login === CODEX_BOT && c.user.type === "Bot" && c.body?.includes(SUMMARY_MARKER)).sort((a, b) => b.updated_at.localeCompare(a.updated_at) || b.id - a.id)[0];
   if (!summary) return { state: "pending", description: "Waiting for Codex review on the latest commit" };
   const match = summary.body.match(/<!-- codex-review-state:v1 (\{[^\n]*\}) -->/);
@@ -41,8 +44,17 @@ function evaluateReview(head, comments) {
   if (!data || typeof data !== "object") return { state: "failure", description: "Invalid Codex review state" };
   const review = data.code_review;
   if (!review || review.commit_sha !== head) return { state: "pending", description: "Latest commit has not been reviewed by Codex" };
-  const request = comments.filter((c) => ["OWNER", "MEMBER", "COLLABORATOR"].includes(c.author_association || "") && /(?:^|\s)@codex[ \t]+(?:security[ \t]+)?review\b/i.test(c.body || "")).sort((a, b) => b.updated_at.localeCompare(a.updated_at) || b.id - a.id)[0];
-  if (request && request.updated_at >= summary.updated_at) return { state: "pending", description: "Waiting for Codex to finish the new review request" };
+  const requests = comments.filter((c) => ["OWNER", "MEMBER", "COLLABORATOR"].includes(c.author_association || "") && /(?:^|\s)@codex[ \t]+(?:security[ \t]+)?review\b/i.test(c.body || ""));
+  for (const request of requests) {
+    const securityRequest = /@codex[ \t]+security[ \t]+review\b/i.test(request.body || "");
+    const channel = securityRequest ? data.security_review : review;
+    const label = securityRequest ? "**Security Review**" : "**Code Review**";
+    const row = summary.body.split("\n").find((line) => line.startsWith("|") && line.includes(label));
+    const completedAt = row?.includes("**Completed**") && row.match(/datetime="([^"]+)"/);
+    if (!channel || channel.commit_sha !== head || channel.status !== "completed" || !completedAt || Date.parse(completedAt[1]) <= Date.parse(request.updated_at)) {
+      return { state: "pending", description: "Waiting for the requested Codex review to complete" };
+    }
+  }
   if (review.status !== "completed") {
     return {
       state: ["failed", "error", "cancelled"].includes(review.status || "") ? "failure" : "pending",
@@ -67,13 +79,24 @@ async function refreshPull(github, repo, number) {
     ...status2
   });
   await post({ state: "pending", description: "Checking latest Codex review state" });
-  const comments = await github.paginate(
-    "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
-    { ...repo, issue_number: number, per_page: 100 }
-  );
-  const status = evaluateReview(pull.head.sha, comments);
-  const current = await github.rest.pulls.get({ ...repo, pull_number: number });
-  if (current.data.head.sha !== pull.head.sha || current.data.state !== "open") return null;
+  const siblings = async () => (await github.paginate(
+    "GET /repos/{owner}/{repo}/pulls",
+    { ...repo, state: "open", per_page: 100 }
+  )).filter((p) => p.head.sha === pull.head.sha && ["dev", "main"].includes(p.base.ref));
+  const group = await siblings();
+  if (!group.some((p) => p.number === number)) return null;
+  let status = { state: "success", description: "Latest commit reviewed; all review threads must also be resolved" };
+  for (const sibling of group) {
+    const params = { ...repo, issue_number: sibling.number, per_page: 100 };
+    const comments = await github.paginate("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", params);
+    const reactions = await github.paginate("GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", params);
+    const result = evaluateReview(pull.head.sha, comments, reactions);
+    if (result.state === "failure" || result.state === "pending" && status.state === "success") {
+      status = { ...result, description: `PR #${sibling.number}: ${result.description}`.slice(0, 140) };
+    }
+  }
+  const signature = (pulls) => pulls.map((p) => `${p.number}:${p.head.sha}:${p.base.ref}`).sort().join(",");
+  if (signature(group) !== signature(await siblings())) return null;
   await post(status);
   return status;
 }
