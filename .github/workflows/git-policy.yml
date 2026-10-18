@@ -17,6 +17,8 @@ jobs:
           persist-credentials: false
       - name: Verify policy tests
         run: python3 -m unittest discover -s scripts/tests -p 'test_git_policy.py'
+      - name: Verify review gate state and race regressions
+        run: node scripts/tests/test_review_gate.cjs
       - name: Check PR target and new commit messages
         run: >-
           python3 scripts/check_git_policy.py pr "$GITHUB_EVENT_PATH"
