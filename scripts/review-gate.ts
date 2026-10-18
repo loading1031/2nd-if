@@ -13,6 +13,7 @@ export type Comment = {
   created_at: string;
   updated_at: string;
   author_association?: string;
+  reactions?: {eyes: number};
 };
 export type Reaction = {user: {login: string; type: string} | null; content: string};
 type Pull = {number: number; state: string; head: {sha: string}; base: {ref: string}};
@@ -49,9 +50,11 @@ export function evaluateReview(head: string, comments: Comment[], reactions: Rea
     const label = securityRequest ? '**Security Review**' : '**Code Review**';
     const row = summary.body!.split('\n').find(line => line.startsWith('|') && line.includes(label));
     const completedAt = row?.includes('**Completed**') && row.match(/datetime="([^"]+)"/);
+    const completedTime = completedAt ? Date.parse(completedAt[1]) : NaN;
+    const requestedTime = Date.parse(request.updated_at);
     // An unrelated/older completion must never substitute for a requested channel.
     if (!channel || channel.commit_sha !== head || channel.status !== 'completed'
-      || !completedAt || Date.parse(completedAt[1]) <= Date.parse(request.updated_at)) {
+      || !Number.isFinite(completedTime) || !Number.isFinite(requestedTime) || completedTime <= requestedTime) {
       return {state: 'pending', description: 'Waiting for the requested Codex review to complete'};
     }
   }
@@ -85,6 +88,12 @@ export async function refreshPull(github: Client, repo: Repo, number: number): P
     const params = {...repo, issue_number: sibling.number, per_page: 100};
     const comments = await github.paginate<Comment>('GET /repos/{owner}/{repo}/issues/{issue_number}/comments', params);
     const reactions = await github.paginate<Reaction>('GET /repos/{owner}/{repo}/issues/{issue_number}/reactions', params);
+    // Codex may react to the invoking comment instead of the PR. Use the server's
+    // count to avoid unnecessary requests, but fetch when the count is unavailable.
+    for (const comment of comments.filter(c => c.reactions?.eyes !== 0)) {
+      reactions.push(...await github.paginate<Reaction>('GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions',
+        {...repo, comment_id: comment.id, per_page: 100}));
+    }
     const result = evaluateReview(pull.head.sha, comments, reactions);
     if (result.state === 'failure' || (result.state === 'pending' && status.state === 'success')) {
       status = {...result, description: `PR #${sibling.number}: ${result.description}`.slice(0, 140)};

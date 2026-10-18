@@ -51,7 +51,9 @@ function evaluateReview(head, comments, reactions = []) {
     const label = securityRequest ? "**Security Review**" : "**Code Review**";
     const row = summary.body.split("\n").find((line) => line.startsWith("|") && line.includes(label));
     const completedAt = row?.includes("**Completed**") && row.match(/datetime="([^"]+)"/);
-    if (!channel || channel.commit_sha !== head || channel.status !== "completed" || !completedAt || Date.parse(completedAt[1]) <= Date.parse(request.updated_at)) {
+    const completedTime = completedAt ? Date.parse(completedAt[1]) : NaN;
+    const requestedTime = Date.parse(request.updated_at);
+    if (!channel || channel.commit_sha !== head || channel.status !== "completed" || !Number.isFinite(completedTime) || !Number.isFinite(requestedTime) || completedTime <= requestedTime) {
       return { state: "pending", description: "Waiting for the requested Codex review to complete" };
     }
   }
@@ -90,6 +92,12 @@ async function refreshPull(github, repo, number) {
     const params = { ...repo, issue_number: sibling.number, per_page: 100 };
     const comments = await github.paginate("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", params);
     const reactions = await github.paginate("GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", params);
+    for (const comment of comments.filter((c) => c.reactions?.eyes !== 0)) {
+      reactions.push(...await github.paginate(
+        "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+        { ...repo, comment_id: comment.id, per_page: 100 }
+      ));
+    }
     const result = evaluateReview(pull.head.sha, comments, reactions);
     if (result.state === "failure" || result.state === "pending" && status.state === "success") {
       status = { ...result, description: `PR #${sibling.number}: ${result.description}`.slice(0, 140) };
