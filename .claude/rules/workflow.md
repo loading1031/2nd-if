@@ -27,6 +27,16 @@
 - 작업을 버리는 강제 제거·강제 브랜치 삭제·강제 push·히스토리 재작성은 자동 수행하지 않는다. 원격 브랜치는 유지한다.
 - 충돌은 순서·권한·동작을 검토해 해결한다. import·URL·설정을 무조건 합집합으로 합치지 않는다.
 
+## 리뷰와 머지 조건
+
+- `dev`·`main`은 `test`, `policy`, `review-complete` 통과와 모든 리뷰 대화의 해결을 요구한다. 관리자에게도 동일하게 적용하고, 정식 승인 개수는 요구하지 않는다.
+- `review-complete`는 최신 PR head에 대한 Codex 코드 리뷰 완료를 확인한다. 미수신·실행 중·실패·이전 커밋·알 수 없는 요약 형식은 통과하지 않는다. 추가 보안 리뷰가 요청됐다면 그것도 완료돼야 한다.
+- 리뷰 대화는 GitHub의 Require conversation resolution으로 차단한다. 체크 통과만으로 미해결 대화를 무시하거나 자동 해결하지 않는다.
+- 새 커밋이 올라오면 이전 리뷰는 체크를 통과시키지 못한다. Codex의 검토 트리거가 PR 생성 시로 설정된 경우 새 커밋에는 별도 재검토 요청이 필요하다.
+- 구현: `.github/workflows/review-gate.yml`, `scripts/review-gate.ts`. `npm run build:review-gate`로 실행 모듈을 재생성한다. 쓰기 토큰으로 PR head 코드를 실행하지 않고 기본 브랜치의 검사 코드만 사용한다.
+- 기본 브랜치에 워크플로가 설치돼야 댓글/리뷰 이벤트를 처리할 수 있다. 설치 전에는 누락 체크를 통과로 처리하지 않는다. 수동 재평가는 Actions → Review gate → Run workflow의 PR 번호 입력을 사용한다.
+- 봇의 요약 v1은 현재 관측한 형식이다. 형식이 바뀌면 실패 상태를 유지하고 검사 코드를 수정한다. 단순 👍 반응이나 다른 계정이 쓴 요약 문구로 통과시키지 않는다.
+
 ## 공통 검사
 
 - 메시지 검사: `python3 scripts/check_git_policy.py commit <message-file> --branch <branch>`.
