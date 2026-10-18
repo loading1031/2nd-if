@@ -6,7 +6,9 @@
     <title>Pattern Library</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/game-icons/components.css' %}">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="{% static 'js/pattern-library.js' %}?v=composition-1" defer></script>
 </head>
 <body class="p-8 bg-base-200">
     {% block content %}

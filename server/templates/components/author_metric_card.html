@@ -1,0 +1,14 @@
+{# 작가 인사이트 요약 지표 카드 #}
+{# 사용법: include "components/author_metric_card.html" with label="읽기 시작" value="2,714" description="회차별 읽기 시도" #}
+{# 필수: label / 선택: value(정상 상태), description, description_id, value_id, loading, empty, extra_class #}
+<article class="stat min-w-0 rounded-box border border-base-300 bg-base-100 p-4 {{ extra_class }}" aria-busy="{{ loading|yesno:'true,false' }}">
+    <div class="stat-title text-xs">{{ label }}</div>
+    {% if loading %}
+    <div class="skeleton mt-3 h-8 w-24" aria-label="불러오는 중"></div>
+    {% elif empty %}
+    <div class="stat-value mt-2 text-2xl text-base-content/40">—</div>
+    {% else %}
+    <div {% if value_id %}id="{{ value_id }}"{% endif %} class="stat-value mt-2 text-2xl">{{ value }}</div>
+    {% endif %}
+    {% if description %}<div {% if description_id %}id="{{ description_id }}"{% endif %} class="stat-desc mt-2">{{ description }}</div>{% endif %}
+</article>

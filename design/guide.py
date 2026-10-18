@@ -68,32 +68,40 @@ def main() -> None:
             '<li><a href="#tokens" data-guide-nav="tokens">토큰</a></li>',
         ]
     )
-    components = """<h1>컴포넌트</h1><p>프로젝트 코드가 기준이다. 화면의 구성 요소를 실제 구현에 연결한다.</p>
-<table><thead><tr><th>요소</th><th>코드 기준</th><th>쓰임새</th></tr></thead><tbody>
-<tr><td>버튼</td><td>daisyUI btn / btn-sm / btn-outline / btn-primary</td><td>반복 행은 작은 우측 버튼, 최종 확인은 primary</td></tr>
-<tr><td>카드·표·탭</td><td>card / stat / table / tabs / badge</td><td>인사이트, 설정집 목록</td></tr>
-<tr><td>공개 범위·입력</td><td>radio / input / select</td><td>공개 설정, 초대, 제작자 편집</td></tr>
-<tr><td>모달</td><td>modal / modal-box / modal-action</td><td>버전 검토, 에셋 선택</td></tr>
-<tr><td>공유 알림·폼</td><td>components/alert.html, components/form_field.html</td><td>집계 지연, 권한 안내, 계정 초대</td></tr></tbody></table>
-<h2>재사용 원칙</h2><p>공유 컴포넌트는 server/templates/components/에 정의하고 패턴 라이브러리와 제품 화면이 같은 include를 참조한다. 여기의 SVG는 구조 검토용이고 별도 제품 동작 시안은 실제 Tailwind/daisyUI 패키지로 빌드된다.</p>"""
-    tokens = """<h1>토큰</h1><p>코드 기준 · daisyUI 5.5.14의 light 테마. 출처: server/static/css/input.css, node_modules/daisyui/theme/light/object.js</p>
-<table><thead><tr><th>토큰</th><th>값</th><th>용도</th></tr></thead><tbody>
-<tr><td>base-100</td><td>oklch(100% 0 0)</td><td>화면·카드 바탕</td></tr>
-<tr><td>base-200 / base-300</td><td>oklch(98% 0 0) / oklch(95% 0 0)</td><td>주변 바탕·구분선</td></tr>
-<tr><td>base-content</td><td>oklch(21% 0.006 285.885)</td><td>기본 글자</td></tr>
-<tr><td>primary</td><td>oklch(45% 0.24 277.023)</td><td>주요 행동</td></tr>
-<tr><td>radius-field / radius-box</td><td>0.25rem / 0.5rem</td><td>필드·박스</td></tr>
-<tr><td>border</td><td>1px</td><td>기본 경계선</td></tr></tbody></table>
-<p>실제 색과 컴포넌트는 코드가 기준이다. SVG 와이어프레임은 구조와 배치를 전달하며 최종 스타일의 픽셀 일치를 보증하지 않는다.</p>"""
+    catalog = "http://localhost:8000/pattern-library/pattern/"
+    components = """<h1>공통 컴포넌트</h1><p>전시는 Django 패턴 라이브러리에서 관리한다. 각 항목에서 실제 컴포넌트·입력 옵션·상태·원본 사용법을 확인한다. 화면 구조 승인 기준은 PR #34의 c74c536이며 IA와 흐름은 유지한다.</p><ul>"""
+    component_names = {
+        "author_metric_card": "지표 카드",
+        "author_episode_select": "회차 선택",
+        "author_episode_row": "회차 판정 행",
+        "author_page_time": "페이지 전환 시간",
+        "author_visibility_option": "지표 공개 범위",
+        "author_invite_row": "초대 계정 행",
+        "author_setting_book_row": "설정집 행·버전 버튼",
+        "author_setting_update_dialog": "버전 비교·유지·적용 모달",
+        "author_asset_candidate": "표현·SVG 후보 카드",
+        "author_state_panel": "조회 상태 패널",
+        "author_state_notice": "집계 지연·저장 결과",
+        "form_field": "입력·오류·비활성 (기존 컴포넌트)",
+        "alert": "공통 알림 (기존 컴포넌트)",
+    }
+    for name, title in component_names.items():
+        components += (
+            f'<li><a href="{catalog}patterns/components/{name}/{name}.html">{title}</a>'
+            f' · <a href="../server/templates/components/{name}.html">공유 원본</a></li>'
+        )
+    components += "</ul><p>패턴 라이브러리와 기존 동작 시안은 같은 Django include와 서비스 CSS 원본을 사용한다. 예시 데이터와 모의 저장은 실제 API·권한 처리를 뜻하지 않는다. 실행 방법은 design/README.md를 참조한다.</p>"
+    tokens = f"""<h1>디자인 토큰</h1><p>테마 원본은 <a href="../server/static/css/input.css">서비스 CSS 진입점</a>에서 불러오는 Tailwind CSS·daisyUI light다. 별도 토큰 값을 이 문서에 복제하지 않는다.</p>
+<p><a href="{catalog}patterns/tokens/theme/theme.html">패턴 라이브러리에서 실제 토큰 값·용도 보기</a></p><p>카탈로그는 현재 렌더된 CSS 변수를 읽어 색·간격·타이포·모서리를 표시한다. SVG 팔레트는 에셋 표현 옵션으로 구분한다. SVG 와이어프레임은 승인된 구조와 배치 기준이다.</p>"""
     for name, body in [("components", components), ("tokens", tokens)]:
         sections.append(f'<section id="{name}" data-guide-page hidden>{style_body(body)}</section>')
-    html = """<!doctype html><html lang="ko" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2nd-if · #26 화면 설계서</title><link rel="stylesheet" href="ui.css"><script src="app.js" defer></script></head>
+    html = """<!doctype html><html lang="ko" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2nd-if · #31 작가 도구 설계서</title><link rel="stylesheet" href="../server/static/css/output.css"><script src="app.js" defer></script></head>
 <body class="min-h-screen bg-base-200 text-base-content antialiased"><div class="grid min-h-screen lg:grid-cols-[264px_minmax(0,1fr)]">
 <aside class="border-b border-base-300 bg-base-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:border-r lg:border-b-0">
-<div class="border-b border-base-300 p-5"><p class="text-xs font-semibold text-primary">2nd-if / DESIGN</p><h1 class="mt-2 text-lg font-bold">#26 화면 설계서</h1><p class="mt-2 text-xs leading-relaxed text-base-content/50">전체 IA → 화면 설명 → 와이어프레임<br>검토 초안 · 2026-10-17</p></div>
+<div class="border-b border-base-300 p-5"><p class="text-xs font-semibold text-primary">2nd-if / DESIGN</p><h1 class="mt-2 text-lg font-bold">#31 작가 도구 설계서</h1><p class="mt-2 text-xs leading-relaxed text-base-content/50">승인된 화면 흐름 → 화면 설명 → 와이어프레임<br>PR #34 병합 · 2026-10-17</p></div>
 <nav aria-label="화면 설계 문서"><ul class="menu w-full p-3">NAV</ul></nav></aside>
 <main class="min-w-0"><header class="flex flex-wrap items-center justify-between gap-3 border-b border-base-300 bg-base-100 px-5 py-4 lg:px-8"><p id="guide-crumb" class="text-xs text-base-content/60">화면 / 전체 IA</p><a class="btn btn-ghost btn-xs" href="prototype.html#insights" target="_blank" rel="noopener">제품 동작 시안 ↗</a></header>
-<div class="max-w-6xl mx-auto p-5 lg:p-8"><div class="alert mb-6 text-xs shadow-none">이 페이지는 화면을 검토하는 설계 문서입니다. 이미지·수치는 예시이며 최종 디자인 승인은 아직 받지 않았습니다.</div>SECTIONS</div></main></div></body></html>"""
+<div class="max-w-6xl mx-auto p-5 lg:p-8"><div class="alert mb-6 text-xs shadow-none">화면 IA와 흐름은 PR #34에서 승인됐습니다. 이미지·수치는 예시이며 서버 저장, 분석 집계, 실제 권한 처리는 구현 범위에 포함하지 않습니다.</div>SECTIONS</div></main></div></body></html>"""
     html = html.replace("NAV", "".join(nav)).replace("SECTIONS", "".join(sections))
     (root / "index.html").write_text(html)
     print("Built IA + 12 screen wireframes + component/token references")

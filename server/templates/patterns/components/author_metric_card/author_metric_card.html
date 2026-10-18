@@ -1,0 +1,8 @@
+{% load component_catalog %}
+{% component_reference "author_metric_card" %}
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div><p class="mb-2 text-sm text-base-content/60">기본</p>{% include "components/author_metric_card.html" with label="읽기 시작" value="2,714" description="회차별 읽기 시도" only %}</div>
+    <div><p class="mb-2 text-sm text-base-content/60">불러오는 중</p>{% include "components/author_metric_card.html" with label="완독 판정" loading=True description="집계 중" only %}</div>
+    <div><p class="mb-2 text-sm text-base-content/60">표본 없음</p>{% include "components/author_metric_card.html" with label="회차 이탈률" empty=True description="표본이 모이면 표시됩니다" only %}</div>
+    <div><p class="mb-2 text-sm text-base-content/60">권한 범위 요약</p>{% include "components/author_metric_card.html" with label="분기 경유 원작 합류" value="184" description="모든 분기 합계" only %}</div>
+</div>

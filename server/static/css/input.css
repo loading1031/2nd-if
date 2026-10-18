@@ -9,6 +9,11 @@
 @source "../../templates/**/*.html";
 @source "../../apps/**/templates/**/*.html";
 
+/* 같은 UI 토큰으로 생성하는 화면 설계 문서와 기존 조합 시안 */
+@source "../../../design/guide.py";
+@source "../../../design/prototype.template.html";
+@source "../../../design/app.ts";
+
 /* 복사 방지 */
 .novel-reader {
     -webkit-user-select: text;

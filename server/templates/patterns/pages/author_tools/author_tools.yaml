@@ -1,0 +1,33 @@
+name: 작가 도구 · 인사이트와 설정집 조합 예시
+context:
+  metrics:
+    - {label: "읽기 시작", value: "2,714", description: "회차별 읽기 시도"}
+    - {label: "완독 판정", value: "1,936", description: "판정 완료된 읽기 중"}
+    - {label: "회차 이탈률", value: "18.2%", description: "읽기 시작 24시간 후 판정"}
+    - {label: "원작 합류", value: "128", description: "분기 경유 원작 재유입 합계"}
+  episodes:
+    - {value: "1", label: "1화 · 유리 온실"}
+    - {value: "2", label: "2화 · 오래된 열쇠"}
+  episode_rows:
+    - {title: "1화 · 유리 온실", resolved: "1,000", dropout: "18.2%"}
+    - {title: "2화 · 오래된 열쇠", resolved: "936", dropout: "21.4%"}
+  page_times:
+    - {page: "1", seconds: "42", count: "756"}
+    - {page: "2", seconds: "35", count: "702"}
+    - {page: "3", seconds: "51", count: "681"}
+  setting_books:
+    - id: flora
+      dialog_id: composition-update-flora
+      title: 북부의 식물 도감
+      creator: 서리
+      version: v1.4
+      next_version: v1.5
+      license: 무료 작품 이용 허용
+      item_count: "12"
+      changes: SVG 에셋 3개 추가 · 기존 표현 연결 유지
+    - id: city
+      title: 항구 도시 안내서
+      creator: 모래
+      version: v2.0
+      license: 무료 작품 이용 허용
+      item_count: "8"

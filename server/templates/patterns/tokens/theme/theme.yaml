@@ -1,0 +1,83 @@
+name: 디자인 토큰 (실제 light 테마)
+context:
+  tokens:
+    - name: --color-base-100
+      usage: "카드·입력 바탕 / bg-base-100"
+      color: true
+    - name: --color-base-200
+      usage: "주변 바탕 / bg-base-200"
+      color: true
+    - name: --color-base-300
+      usage: "구분선 / border-base-300"
+      color: true
+    - name: --color-base-content
+      usage: "본문 / text-base-content"
+      color: true
+    - name: --color-primary
+      usage: "주요 행동 / btn-primary"
+      color: true
+    - name: --color-primary-content
+      usage: "주요 행동의 글자"
+      color: true
+    - name: --color-secondary
+      usage: "보조 강조"
+      color: true
+    - name: --color-secondary-content
+      usage: "보조 강조 배경 위 글자"
+      color: true
+    - name: --color-accent
+      usage: "강조"
+      color: true
+    - name: --color-accent-content
+      usage: "강조 배경 위 글자"
+      color: true
+    - name: --color-neutral
+      usage: "중립"
+      color: true
+    - name: --color-neutral-content
+      usage: "중립 배경 위 글자"
+      color: true
+    - name: --color-info
+      usage: "안내 / alert-info"
+      color: true
+    - name: --color-info-content
+      usage: "안내 배경 위 글자"
+      color: true
+    - name: --color-success
+      usage: "저장 완료 / alert-success"
+      color: true
+    - name: --color-success-content
+      usage: "성공 배경 위 글자"
+      color: true
+    - name: --color-warning
+      usage: "집계 지연·주의 / alert-warning"
+      color: true
+    - name: --color-warning-content
+      usage: "주의 배경 위 글자"
+      color: true
+    - name: --color-error
+      usage: "실패 / alert-error"
+      color: true
+    - name: --color-error-content
+      usage: "오류 배경 위 글자"
+      color: true
+    - name: --radius-selector
+      usage: "선택 컨트롤"
+    - name: --radius-field
+      usage: "필드 모서리"
+    - name: --radius-box
+      usage: "카드 모서리 / rounded-box"
+    - name: --border
+      usage: "경계선 두께"
+    - name: --spacing
+      usage: "간격 기준 / gap-3, p-4"
+    - name: --text-xs
+      usage: "보조 설명 / text-xs"
+    - name: --text-sm
+      usage: "본문 / text-sm"
+    - name: --text-lg
+      usage: "제목 / text-lg"
+    - name: --size-selector
+      usage: "선택 컨트롤 크기 기준"
+    - name: --size-field
+      usage: "입력·버튼 크기 기준"

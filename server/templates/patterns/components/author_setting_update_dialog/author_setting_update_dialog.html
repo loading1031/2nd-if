@@ -1,0 +1,13 @@
+{% load component_catalog %}
+{% component_reference "author_setting_update_dialog" %}
+<div class="space-y-4">
+    <p class="text-sm text-base-content/60">예시 데이터 · 적용/유지는 선택한 작품의 해당 설정집에만 적용합니다. 아래 버튼은 모달만 열며 서버 저장은 하지 않습니다.</p>
+    <div class="flex flex-wrap gap-3">
+        <button type="button" class="btn btn-outline btn-sm" data-catalog-dialog="catalog-update">버전 비교</button>
+        <button type="button" class="btn btn-outline btn-sm" data-catalog-dialog="catalog-update-saving">적용 중</button>
+        <button type="button" class="btn btn-outline btn-sm" data-catalog-dialog="catalog-update-error">적용 실패</button>
+    </div>
+    {% include "components/author_setting_update_dialog.html" with dialog_id="catalog-update" title="북부의 식물 도감" current_version="v1.4" next_version="v1.5" changes="SVG 에셋 3개 추가 · 기존 표현 연결 유지" license="무료 작품 이용 허용 · 변경 없음" only %}
+    {% include "components/author_setting_update_dialog.html" with dialog_id="catalog-update-saving" title="북부의 식물 도감" current_version="v1.4" next_version="v1.5" changes="SVG 에셋 3개 추가" license="무료 작품 이용 허용" saving=True only %}
+    {% include "components/author_setting_update_dialog.html" with dialog_id="catalog-update-error" title="북부의 식물 도감" current_version="v1.4" next_version="v1.5" changes="SVG 에셋 3개 추가" license="무료 작품 이용 허용" error="저장하지 못했습니다. 현재 버전과 입력을 유지합니다." only %}
+</div>

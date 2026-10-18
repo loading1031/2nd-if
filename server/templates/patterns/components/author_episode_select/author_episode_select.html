@@ -1,0 +1,9 @@
+{% load component_catalog %}
+{% component_reference "author_episode_select" %}
+<div class="grid gap-5 sm:grid-cols-2">
+    {% include "components/author_episode_select.html" with select_id="catalog-episode" options=episodes selected="1" only %}
+    {% include "components/author_episode_select.html" with select_id="catalog-episode-loading" loading=True only %}
+    {% include "components/author_episode_select.html" with select_id="catalog-episode-empty" only %}
+    {% include "components/author_episode_select.html" with select_id="catalog-episode-error" error="회차를 불러오지 못했습니다. 다시 시도해 주세요." only %}
+    {% include "components/author_episode_select.html" with select_id="catalog-episode-disabled" options=episodes selected="2" disabled=True only %}
+</div>

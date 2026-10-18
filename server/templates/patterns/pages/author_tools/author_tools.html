@@ -1,0 +1,53 @@
+{% extends "patterns/base_page.html" %}
+{% block content %}
+<main class="mx-auto max-w-6xl space-y-8 p-4 sm:p-6">
+    <header>
+        <p class="text-sm text-base-content/60">승인된 화면 흐름 기반 · 예시 데이터 · 서버 저장/API 미연결</p>
+        <h1 class="mt-2 text-2xl font-bold">작가 도구 컴포넌트 조합 예시</h1>
+        <p class="mt-2 text-sm text-base-content/70">페이지 구현 시 참고하는 작은 배치 예시입니다. 컴포넌트의 옵션·상태별 전시는 각 컴포넌트 항목에서 확인합니다.</p>
+    </header>
+    <section class="space-y-5 rounded-box border border-base-300 bg-base-100 p-4 sm:p-6" aria-labelledby="composition-insights-title">
+        <h2 id="composition-insights-title" class="text-lg font-semibold">인사이트 · 회차 요약과 페이지 전환 시간</h2>
+        <p class="text-sm text-base-content/60">예시 데이터 · 회차를 선택할 수 있지만 지표 조회는 연결하지 않았습니다. 아래 수치는 1화의 고정 예시입니다.</p>
+        <div class="grid grid-cols-2 gap-3 xl:grid-cols-4">
+            {% for metric in metrics %}
+                {% include "components/author_metric_card.html" with label=metric.label value=metric.value description=metric.description only %}
+            {% endfor %}
+        </div>
+        <div class="grid gap-6 lg:grid-cols-2">
+            <div class="space-y-3">
+                <h3 class="font-semibold">회차별 요약</h3>
+                <div class="overflow-x-auto">
+                    <table class="table table-sm"><thead><tr><th>회차</th><th class="text-right">완독 판정</th><th class="text-right">이탈률</th></tr></thead><tbody>
+                        {% for episode in episode_rows %}
+                            {% include "components/author_episode_row.html" with episode=episode.title resolved=episode.resolved dropout=episode.dropout only %}
+                        {% endfor %}
+                    </tbody></table>
+                </div>
+            </div>
+            <div class="space-y-4">
+                {% include "components/author_episode_select.html" with select_id="composition-episode" options=episodes selected="1" only %}
+                <ul class="space-y-4" aria-label="1화 페이지 전환 시간">
+                    {% for timing in page_times %}
+                        {% include "components/author_page_time.html" with page=timing.page seconds=timing.seconds count=timing.count only %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="space-y-4 rounded-box border border-base-300 bg-base-100 p-4 sm:p-6" aria-labelledby="composition-books-title">
+        <h2 id="composition-books-title" class="text-lg font-semibold">설정집 · 채택한 목록과 개별 버전 검토</h2>
+        <p class="text-sm text-base-content/60">예시 데이터 · 업데이트 버튼으로 비교 모달을 열 수 있습니다. 유지·닫기는 동작하며 업데이트 저장은 연결하지 않았습니다.</p>
+        {% for book in setting_books %}
+            <div data-catalog-update-dialog="composition-update-{{ book.id }}">
+                <ul class="divide-y divide-base-300 rounded-box border border-base-300">
+                    {% include "components/author_setting_book_row.html" with book_id=book.id title=book.title creator=book.creator version=book.version license=book.license item_count=book.item_count next_version=book.next_version only %}
+                </ul>
+                {% if book.next_version %}
+                    {% include "components/author_setting_update_dialog.html" with dialog_id=book.dialog_id title=book.title current_version=book.version next_version=book.next_version changes=book.changes license=book.license only %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

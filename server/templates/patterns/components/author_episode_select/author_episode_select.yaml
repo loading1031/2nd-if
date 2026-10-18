@@ -1,0 +1,6 @@
+name: 회차 선택 · 값/로딩/빈 값/오류/비활성
+context:
+  episodes:
+    - {value: "1", label: "1화 · 유리 온실"}
+    - {value: "2", label: "2화 · 오래된 열쇠"}
+    - {value: "3", label: "3화 · 밤의 손님"}

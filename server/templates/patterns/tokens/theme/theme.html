@@ -1,0 +1,7 @@
+<section class="space-y-5">
+    <header><h1 class="text-2xl font-bold">디자인 토큰 · light</h1><p class="mt-2 text-sm text-base-content/70">원본: server/static/css/input.css → 설치된 Tailwind CSS 기본 토큰과 daisyUI light 테마. 아래 값은 현재 렌더된 CSS 변수에서 읽습니다. 별도 프로젝트 팔레트나 테마 재정의는 없습니다.</p></header>
+    <div class="overflow-x-auto"><table class="table table-sm"><thead><tr><th>토큰</th><th>현재 값</th><th>용도·사용 예</th></tr></thead><tbody>
+    {% for token in tokens %}<tr><td><code>{{ token.name }}</code></td><td><code data-token-value="{{ token.name }}">CSS 변수 로딩 중</code></td><td>{% if token.color %}<span class="mr-2 inline-block h-5 w-5 rounded border border-base-300 align-middle" style="background-color:var({{ token.name }})" aria-hidden="true"></span>{% endif %}{{ token.usage }}</td></tr>{% endfor %}
+    </tbody></table></div>
+    <p class="text-sm text-base-content/70">간격은 spacing 단위 배수, 타이포는 text-* 클래스를 사용합니다. SVG 팔레트는 packages/codex-assets의 에셋 표현 옵션이며 UI 테마 색을 대체하지 않습니다. 변수 값이 없으면 미정으로 표시합니다.</p>
+</section>

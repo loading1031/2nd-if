@@ -19,12 +19,13 @@ function renderPreviewState(): void {
   const state = previewState.value;
   required<HTMLElement>('#screens').hidden = state !== 'normal';
   required<HTMLElement>('#state-panel').hidden = state === 'normal';
+  required('#state-panel').setAttribute('aria-busy', String(state === 'loading'));
   if (state === 'normal') return;
   const [title, description] = stateMessages[state];
-  required('#state-title').textContent = title;
-  required('#state-description').textContent = description;
-  required<HTMLElement>('#state-spinner').hidden = state !== 'loading';
-  required<HTMLElement>('#state-retry').hidden = state !== 'error';
+  required('#state-panel-title').textContent = title;
+  required('#state-panel-description').textContent = description;
+  required<HTMLElement>('#state-panel-spinner').hidden = state !== 'loading';
+  required<HTMLElement>('#state-panel-retry').hidden = state !== 'error';
 }
 function navigate(): void {
   const screen = location.hash.slice(1);
@@ -44,7 +45,7 @@ function navigate(): void {
 }
 window.addEventListener('hashchange', navigate);
 previewState.addEventListener('change', renderPreviewState);
-required('#state-retry').addEventListener('click', () => {
+required('#state-panel-retry').addEventListener('click', () => {
   previewState.value = 'normal';
   renderPreviewState();
 });
@@ -79,25 +80,17 @@ required<HTMLSelectElement>('#period').addEventListener('change', event => {
   required('#rejoin-total').textContent = format(data.rejoins);
   required('#pending-count').textContent = `아직 판정 중인 ${format(data.starts - data.resolved)}회는 이탈률에 포함되지 않습니다.`;
   const tbody = required('#episode-rows');
+  const rowTemplate = required<HTMLTemplateElement>('#episode-row-template');
   tbody.replaceChildren(...data.episodes.map(([label, resolved, dropped]) => {
-    const row = document.createElement('tr');
-    [label, format(resolved), `${(dropped / resolved * 100).toFixed(1)}%`].forEach((value, index) => {
-      const cell = document.createElement('td');
-      cell.textContent = value;
-      if (index > 0) cell.className = 'text-right';
-      row.append(cell);
-    });
+    const row = rowTemplate.content.firstElementChild!.cloneNode(true) as HTMLTableRowElement;
+    const cells = row.querySelectorAll('th, td');
+    cells[0].textContent = label;
+    cells[1].textContent = format(resolved);
+    cells[2].textContent = `${(dropped / resolved * 100).toFixed(1)}%`;
     return row;
   }));
   const week = (event.currentTarget as HTMLSelectElement).value === '7';
-  const times = week ? [39, 31, 54] : [42, 29, 58];
-  const counts = week ? [190, 186, 181] : [756, 742, 736];
-  document.querySelectorAll('[data-page-time]').forEach((element, i) => { element.textContent = `${times[i]}초`; });
-  document.querySelectorAll('[data-page-count]').forEach((element, i) => { element.textContent = `${counts[i]}건`; });
-  document.querySelectorAll<HTMLProgressElement>('[data-page-progress]').forEach((element, i) => {
-    element.value = times[i];
-    element.setAttribute('aria-label', `${i + 1}쪽 전환 시간 ${times[i]}초`);
-  });
+  renderPageTimes();
   const traffic: [string, number, number][] = week
     ? [['홈 추천', 103, 78], ['작가 프로필', 56, 46], ['검색 결과', 45, 31]]
     : [['홈 추천', 412, 312], ['작가 프로필', 226, 184], ['검색 결과', 180, 123]];
@@ -107,6 +100,22 @@ required<HTMLSelectElement>('#period').addEventListener('change', event => {
   renderRows('#traffic-rows', traffic.map(([name, clicks, starts]) => [name, format(clicks), format(starts)]));
   renderRows('#shared-rows', shared.map(([name, impressions, clicks]) => [name, format(impressions), format(clicks), `${(clicks / impressions * 100).toFixed(1)}%`]));
 });
+
+function renderPageTimes(): void {
+  const select = required<HTMLSelectElement>('#episode-select');
+  const index = select.selectedIndex;
+  const week = required<HTMLSelectElement>('#period').value === '7';
+  const times = week ? [[39, 31, 54], [35, 27, 48], [44, 33, 51]][index] : [[42, 29, 58], [37, 31, 49], [46, 35, 53]][index];
+  const counts = week ? [[190, 186, 181], [160, 154, 149], [131, 127, 122]][index] : [[756, 742, 736], [623, 611, 598], [504, 489, 472]][index];
+  required('#episode-label').textContent = select.selectedOptions[0].textContent!.split(' · ')[0];
+  document.querySelectorAll('[data-page-time]').forEach((element, i) => { element.textContent = `${times[i]}초`; });
+  document.querySelectorAll('[data-page-count]').forEach((element, i) => { element.textContent = `${counts[i]}건`; });
+  document.querySelectorAll<HTMLProgressElement>('[data-page-progress]').forEach((element, i) => {
+    element.value = times[i];
+    element.setAttribute('aria-label', `${i + 1}쪽 전환 시간 ${times[i]}초`);
+  });
+}
+required<HTMLSelectElement>('#episode-select').addEventListener('change', renderPageTimes);
 
 function renderRows(selector: string, rows: string[][]): void {
   required(selector).replaceChildren(...rows.map(values => {
@@ -142,16 +151,10 @@ required('#add-invite').addEventListener('click', () => {
     return;
   }
   error.hidden = true;
-  const item = document.createElement('li');
-  item.className = 'flex items-center justify-between gap-3 py-3 text-sm';
-  const name = document.createElement('span');
+  const item = required<HTMLTemplateElement>('#invite-row-template').content.firstElementChild!.cloneNode(true) as HTMLLIElement;
+  const name = item.querySelector('span');
+  if (!name) throw new Error('Missing invite account label');
   name.textContent = email;
-  const remove = document.createElement('button');
-  remove.type = 'button';
-  remove.dataset.removeInvite = '';
-  remove.className = 'btn btn-ghost btn-xs text-error';
-  remove.textContent = '초대 취소';
-  item.append(name, remove);
   required('#invite-list').append(item);
   input.value = '';
 });
@@ -172,15 +175,15 @@ document.querySelectorAll<HTMLButtonElement>('[data-review-update]').forEach(but
     selectedBook = button.dataset.reviewUpdate ?? null;
     if (!selectedBook) return;
     const book = books[selectedBook];
-    required('#update-title').textContent = book.title;
-    required('#update-current').textContent = book.current;
-    required('#update-next').textContent = book.next;
-    required('#update-changes').textContent = book.changes;
-    required('#update-license').textContent = book.license;
+    required('#update-dialog-title').textContent = book.title;
+    required('#update-dialog-current').textContent = book.current;
+    required('#update-dialog-next').textContent = book.next;
+    required('#update-dialog-changes').textContent = book.changes;
+    required('#update-dialog-license').textContent = book.license;
     updateDialog.showModal();
   });
 });
-required('#confirm-update').addEventListener('click', () => {
+required('#update-dialog-confirm').addEventListener('click', () => {
   if (!selectedBook) return;
   const book = books[selectedBook];
   book.current = book.next;

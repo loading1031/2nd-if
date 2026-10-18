@@ -1,0 +1,7 @@
+{% load component_catalog %}
+{% component_reference "author_setting_book_row" %}
+<div class="overflow-hidden rounded-box border border-base-300 bg-base-100"><ul class="divide-y divide-base-300">
+    {% include "components/author_setting_book_row.html" with book_id="flora" title="북부의 식물 도감" creator="서리" version="v1.4" license="무료 작품 이용 허용" item_count="12" next_version="v1.5" only %}
+    {% include "components/author_setting_book_row.html" with book_id="city" title="비 오는 도시의 소품" creator="윤슬" version="v1.1" license="상업 이용 허용" item_count="8" only %}
+    {% include "components/author_setting_book_row.html" with book_id="locked" title="작품별 설정집" creator="지은이" version="v2.0" license="조건 확인 필요" item_count="3" next_version="v2.1" update_disabled=True only %}
+</ul></div>

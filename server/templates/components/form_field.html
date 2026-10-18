@@ -1,11 +1,9 @@
 {# 재사용 가능한 폼 필드 컴포넌트 #}
 {# 사용법: include "components/form_field.html" with label="이메일" type="email" name="email" placeholder="example@email.com" error=error_msg #}
 {# 필수: label, type, name #}
-{# 선택: placeholder, error, required, autocomplete, id, value, extra_class #}
-<label class="form-control w-full">
-    <div class="label">
-        <span class="label-text">{{ label }}</span>
-    </div>
+{# 선택: placeholder, error, required, autocomplete, id, value, disabled, extra_class #}
+<label class="block w-full">
+    <span class="mb-2 block text-sm">{{ label }}</span>
     <input
         id="{{ id|default:name }}"
         name="{{ name }}"
@@ -14,10 +12,10 @@
         {% if value %}value="{{ value }}"{% endif %}
         {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
         {% if required %}required{% endif %}
+        {% if disabled %}disabled{% endif %}
+        {% if error %}aria-invalid="true" aria-describedby="{{ id|default:name }}-error"{% endif %}
         class="input input-bordered w-full {% if error %}input-error{% endif %} {{ extra_class }}" />
     {% if error %}
-    <div class="label">
-        <span class="label-text-alt text-error">{{ error }}</span>
-    </div>
+    <span id="{{ id|default:name }}-error" class="mt-1 block text-sm text-error">{{ error }}</span>
     {% endif %}
 </label>

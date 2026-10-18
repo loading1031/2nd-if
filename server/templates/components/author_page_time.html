@@ -1,0 +1,7 @@
+{# 페이지 전환 시간과 집계 건수 #}
+{# 사용법: include "components/author_page_time.html" with page="1" seconds="42" count="756" #}
+{# 필수: page, seconds, count / 선택: max_seconds #}
+<li>
+    <div class="mb-1 flex justify-between text-xs"><span>{{ page }}쪽</span><span><b data-page-time>{{ seconds }}초</b><span data-page-count class="ml-2 text-base-content/50">{{ count }}건</span></span></div>
+    <progress data-page-progress class="progress progress-primary h-1.5" value="{{ seconds }}" max="{{ max_seconds|default:60 }}" aria-label="{{ page }}쪽 전환 시간 {{ seconds }}초"></progress>
+</li>

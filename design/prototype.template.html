@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>2nd-if · 작가 도구 시안</title>
-  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="../server/static/css/output.css">
   <script src="prototype.js" defer></script>
 </head>
 <body class="min-h-screen bg-base-200 text-base-content antialiased">
@@ -39,13 +39,7 @@
     </aside>
     <main class="min-w-0 p-4 sm:p-6 lg:p-8">
       <div class="breadcrumbs mb-6 text-xs text-base-content/60"><ul><li>작품 관리</li><li>유리 정원</li><li id="breadcrumb">독서 인사이트</li></ul></div>
-      <section id="state-panel" class="card border border-base-300 bg-base-100" hidden aria-live="polite">
-        <div class="card-body min-h-80 items-center justify-center text-center">
-          <span id="state-spinner" class="loading loading-spinner loading-md text-primary" hidden></span>
-          <h1 id="state-title" class="text-lg font-semibold"></h1><p id="state-description" class="max-w-sm text-sm text-base-content/60"></p>
-          <button id="state-retry" class="btn btn-outline btn-sm mt-3" hidden>다시 불러오기</button>
-        </div>
-      </section>
+      {% include "components/author_state_panel.html" with panel_id="state-panel" hidden=True %}
       <div id="screens">
       <section id="insights" data-screen>
         <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
@@ -54,10 +48,10 @@
         </div>
         {% include "components/alert.html" with message="이탈은 읽기 시작 후 24시간에 판정됩니다. 최근 날짜의 집계는 지연 반영될 수 있습니다." extra_class="mb-6 text-xs shadow-none" %}
         <div class="grid grid-cols-2 gap-3 mb-6 xl:grid-cols-4">
-          <article class="stat rounded-box border border-base-300 bg-base-100 p-4"><div class="stat-title text-xs">읽기 시작</div><div id="stat-starts" class="stat-value mt-2 text-2xl">2,714</div><div class="stat-desc mt-2">회차별 읽기 시도</div></article>
-          <article class="stat rounded-box border border-base-300 bg-base-100 p-4"><div class="stat-title text-xs">완독 판정</div><div id="stat-completed" class="stat-value mt-2 text-2xl">1,936</div><div class="stat-desc mt-2">판정 완료된 읽기 중</div></article>
-          <article class="stat rounded-box border border-base-300 bg-base-100 p-4"><div class="stat-title text-xs">회차 이탈률</div><div id="stat-dropout" class="stat-value mt-2 text-2xl">22.0%</div><div id="stat-resolved" class="stat-desc mt-2">545 / 판정 완료 2,481회</div></article>
-          <article class="stat rounded-box border border-base-300 bg-base-100 p-4"><div class="stat-title text-xs">분기 경유 원작 합류</div><div id="stat-rejoins" class="stat-value mt-2 text-2xl">184</div><div class="stat-desc mt-2">모든 분기 합계</div></article>
+          {% include "components/author_metric_card.html" with label="읽기 시작" value="2,714" value_id="stat-starts" description="회차별 읽기 시도" %}
+          {% include "components/author_metric_card.html" with label="완독 판정" value="1,936" value_id="stat-completed" description="판정 완료된 읽기 중" %}
+          {% include "components/author_metric_card.html" with label="회차 이탈률" value="22.0%" value_id="stat-dropout" description="545 / 판정 완료 2,481회" description_id="stat-resolved" %}
+          {% include "components/author_metric_card.html" with label="분기 경유 원작 합류" value="184" value_id="stat-rejoins" description="모든 분기 합계" %}
         </div>
         <div class="tabs tabs-border mb-5" role="tablist" aria-label="인사이트 종류">
           <button class="tab tab-active" role="tab" aria-selected="true" aria-controls="reading-panel" data-insight-tab="reading-panel">읽기 흐름</button>
@@ -68,16 +62,18 @@
           <div class="grid gap-4 xl:grid-cols-2">
             <article class="card min-w-0 border border-base-300 bg-base-100"><div class="card-body gap-4 p-5">
               <div><h2 class="card-title text-base">회차별 읽기</h2><p class="mt-1 text-xs text-base-content/60">이탈률의 분모는 24시간 판정이 끝난 읽기 시도입니다.</p></div>
-              <div class="overflow-x-auto"><table class="table table-sm"><thead><tr><th>회차</th><th class="text-right">판정 완료</th><th class="text-right">이탈률</th></tr></thead><tbody id="episode-rows"><tr><td>1화 · 유리 온실</td><td class="text-right">1,000</td><td class="text-right">18.2%</td></tr><tr><td>2화 · 오래된 열쇠</td><td class="text-right">800</td><td class="text-right">22.5%</td></tr><tr><td>3화 · 밤의 손님</td><td class="text-right">681</td><td class="text-right">26.9%</td></tr></tbody></table></div>
+              <div class="mb-3 max-w-xs">{% include "components/author_episode_select.html" with select_id="episode-select" label="페이지 시간 회차" options=preview_episodes selected="1" only %}</div>
+              <div class="overflow-x-auto"><table class="table table-sm"><thead><tr><th>회차</th><th class="text-right">판정 완료</th><th class="text-right">이탈률</th></tr></thead><tbody id="episode-rows">{% include "components/author_episode_row.html" with episode="1화 · 유리 온실" resolved="1,000" dropout="18.2%" %}{% include "components/author_episode_row.html" with episode="2화 · 오래된 열쇠" resolved="800" dropout="22.5%" %}{% include "components/author_episode_row.html" with episode="3화 · 밤의 손님" resolved="681" dropout="26.9%" %}</tbody></table></div>
+              <template id="episode-row-template">{% include "components/author_episode_row.html" with episode="" resolved="" dropout="" %}</template>
               <p id="pending-count" class="text-xs text-base-content/50">아직 판정 중인 233회는 이탈률에 포함되지 않습니다.</p>
             </div></article>
             <article class="card border border-base-300 bg-base-100"><div class="card-body gap-4 p-5">
-              <div class="flex items-center justify-between gap-2"><h2 class="card-title text-base">페이지 전환 시간</h2><span class="badge badge-ghost badge-sm">1화</span></div>
+              <div class="flex items-center justify-between gap-2"><h2 class="card-title text-base">페이지 전환 시간</h2><span id="episode-label" class="badge badge-ghost badge-sm">1화</span></div>
               <p class="text-xs leading-relaxed text-base-content/60">완독한 읽기의 중앙값입니다. 화면이 활성 상태인 시간만 계산합니다.</p>
               <ul class="space-y-4">
-                <li><div class="flex justify-between mb-1 text-xs"><span>1쪽</span><span><b data-page-time>42초</b><span data-page-count class="ml-2 text-base-content/50">756건</span></span></div><progress data-page-progress class="progress progress-primary h-1.5" value="42" max="60" aria-label="1쪽 전환 시간 42초"></progress></li>
-                <li><div class="flex justify-between mb-1 text-xs"><span>2쪽</span><span><b data-page-time>29초</b><span data-page-count class="ml-2 text-base-content/50">742건</span></span></div><progress data-page-progress class="progress progress-primary h-1.5" value="29" max="60" aria-label="2쪽 전환 시간 29초"></progress></li>
-                <li><div class="flex justify-between mb-1 text-xs"><span>3쪽</span><span><b data-page-time>58초</b><span data-page-count class="ml-2 text-base-content/50">736건</span></span></div><progress data-page-progress class="progress progress-primary h-1.5" value="58" max="60" aria-label="3쪽 전환 시간 58초"></progress></li>
+                {% include "components/author_page_time.html" with page="1" seconds="42" count="756" %}
+                {% include "components/author_page_time.html" with page="2" seconds="29" count="742" %}
+                {% include "components/author_page_time.html" with page="3" seconds="58" count="736" %}
               </ul><p class="text-xs text-base-content/50">마지막 페이지는 다음 페이지 전환이 없어 집계하지 않습니다.</p>
             </div></article>
           </div>
@@ -97,13 +93,13 @@
         <div class="mb-6"><h1 class="text-2xl font-bold tracking-tight">지표 공개 설정</h1><p class="mt-2 text-sm text-base-content/60">이 작품의 집계 지표를 볼 수 있는 사람을 정합니다.</p></div>
         <form id="sharing-form" class="card max-w-3xl border border-base-300 bg-base-100"><div class="card-body gap-6 p-5 sm:p-6">
           <fieldset><legend class="mb-3 font-semibold">지표 공개 범위</legend><div class="space-y-2">
-            <label class="flex cursor-pointer items-start gap-3 rounded-box border border-base-300 p-4 has-checked:border-primary has-checked:bg-primary/5"><input class="radio radio-primary radio-sm mt-0.5" name="visibility" value="private" type="radio" checked><span><b class="text-sm">작가만</b><span class="block mt-1 text-xs text-base-content/60">기본값입니다. 작가 본인만 지표를 볼 수 있습니다.</span></span></label>
-            <label class="flex cursor-pointer items-start gap-3 rounded-box border border-base-300 p-4 has-checked:border-primary has-checked:bg-primary/5"><input class="radio radio-primary radio-sm mt-0.5" name="visibility" value="invited" type="radio"><span><b class="text-sm">초대한 계정만</b><span class="block mt-1 text-xs text-base-content/60">작가와 초대한 계정이 집계 지표를 볼 수 있습니다.</span></span></label>
-            <label class="flex cursor-pointer items-start gap-3 rounded-box border border-base-300 p-4 has-checked:border-primary has-checked:bg-primary/5"><input class="radio radio-primary radio-sm mt-0.5" name="visibility" value="public" type="radio"><span><b class="text-sm">전체 공개</b><span class="block mt-1 text-xs text-base-content/60">누구나 이 작품의 집계 지표를 볼 수 있습니다.</span></span></label>
+            {% include "components/author_visibility_option.html" with value="private" title="작가만" description="기본값입니다. 작가 본인만 지표를 볼 수 있습니다." checked=True %}
+            {% include "components/author_visibility_option.html" with value="invited" title="초대한 계정만" description="작가와 초대한 계정이 집계 지표를 볼 수 있습니다." %}
+            {% include "components/author_visibility_option.html" with value="public" title="전체 공개" description="누구나 이 작품의 집계 지표를 볼 수 있습니다." %}
           </div></fieldset>
           <div id="invites-panel" hidden><h2 class="mb-2 font-semibold">지표 열람 계정</h2><p class="mb-4 text-xs text-base-content/60">작품 읽기·편집 권한은 부여되지 않습니다.</p>
-            <div class="flex items-end gap-2">{% include "components/form_field.html" with label="초대할 계정 이메일" name="invite-email" type="email" placeholder="account@example.test" extra_class="input-sm" %}<button id="add-invite" type="button" class="btn btn-outline btn-sm">추가</button></div>
-            <p id="invite-error" class="mt-2 text-xs text-error" role="alert" hidden></p><ul id="invite-list" class="divide-y divide-base-300 mt-4"><li class="flex items-center justify-between gap-3 py-3 text-sm"><span>minseo@example.test</span><button type="button" data-remove-invite class="btn btn-ghost btn-xs text-error">초대 취소</button></li></ul>
+            <div class="flex flex-col items-stretch gap-2 sm:flex-row sm:items-end">{% include "components/form_field.html" with label="초대할 계정 이메일" name="invite-email" type="email" placeholder="account@example.test" extra_class="input-sm" %}<button id="add-invite" type="button" class="btn btn-outline btn-sm">추가</button></div>
+            <p id="invite-error" class="mt-2 text-xs text-error" role="alert" hidden></p><ul id="invite-list" class="divide-y divide-base-300 mt-4">{% include "components/author_invite_row.html" with account="minseo@example.test" %}</ul><template id="invite-row-template">{% include "components/author_invite_row.html" with account="" %}</template>
           </div>
           {% include "components/alert.html" with message="작품의 열람·편집 권한은 별도로 적용됩니다. 공개 범위를 바꾸거나 초대를 취소하면 다음 조회부터 새 권한이 적용됩니다." extra_class="text-xs shadow-none" %}
           <div class="card-actions items-center justify-between gap-3"><span id="sharing-status" class="text-xs text-base-content/60" aria-live="polite">현재 저장된 범위: 작가만</span><button class="btn btn-primary btn-sm" type="submit">설정 저장</button></div>
@@ -114,9 +110,9 @@
         <div class="card border border-base-300 bg-base-100"><div class="card-body gap-0 p-0">
           <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-4 sm:px-5"><h2 class="text-base font-semibold">사용 중인 설정집 <span class="ml-1 text-sm font-normal text-base-content/50">3</span></h2><span class="text-xs text-base-content/50">작품별 고정 버전</span></div>
           <ul class="divide-y divide-base-300">
-            <li class="flex items-center gap-3 px-4 py-5 sm:gap-4 sm:px-5"><div class="avatar avatar-placeholder hidden sm:flex"><div class="w-11 rounded-lg bg-base-200 text-xs text-base-content/60"><span>식물</span></div></div><div class="min-w-0 flex-1"><h3 class="text-sm font-semibold">북부의 식물 도감</h3><p class="mt-1 text-xs text-base-content/60">나무그늘 <span class="mx-1">·</span> <span data-current-version="flora">v1.4</span> 사용 중</p><p class="mt-2 text-xs text-base-content/50">무료 작품 이용 허용 · 선택 항목 12개</p></div><div class="shrink-0"><button class="btn btn-outline btn-sm" data-review-update="flora">v1.5 업데이트</button><span class="badge badge-ghost badge-sm" data-latest="flora" hidden>최신 버전</span></div></li>
-            <li class="flex items-center gap-3 px-4 py-5 sm:gap-4 sm:px-5"><div class="avatar avatar-placeholder hidden sm:flex"><div class="w-11 rounded-lg bg-base-200 text-xs text-base-content/60"><span>문장</span></div></div><div class="min-w-0 flex-1"><h3 class="text-sm font-semibold">잊힌 왕국의 문장</h3><p class="mt-1 text-xs text-base-content/60">mono <span class="mx-1">·</span> v2.1 사용 중</p><p class="mt-2 text-xs text-base-content/50">상업 이용 허용 · 선택 항목 6개</p></div><span class="badge badge-ghost badge-sm shrink-0">최신 버전</span></li>
-            <li class="flex items-center gap-3 px-4 py-5 sm:gap-4 sm:px-5"><div class="avatar avatar-placeholder hidden sm:flex"><div class="w-11 rounded-lg bg-base-200 text-xs text-base-content/60"><span>소품</span></div></div><div class="min-w-0 flex-1"><h3 class="text-sm font-semibold">비 오는 도시의 소품</h3><p class="mt-1 text-xs text-base-content/60">윤슬 <span class="mx-1">·</span> <span data-current-version="city">v1.0</span> 사용 중</p><p class="mt-2 text-xs text-base-content/50">상업 이용 허용 · 선택 항목 8개</p></div><div class="shrink-0"><button class="btn btn-outline btn-sm" data-review-update="city">v1.1 업데이트</button><span class="badge badge-ghost badge-sm" data-latest="city" hidden>최신 버전</span></div></li>
+            {% include "components/author_setting_book_row.html" with book_id="flora" title="북부의 식물 도감" creator="나무그늘" version="v1.4" license="무료 작품 이용 허용" item_count="12" next_version="v1.5" %}
+            {% include "components/author_setting_book_row.html" with book_id="crest" title="잊힌 왕국의 문장" creator="mono" version="v2.1" license="상업 이용 허용" item_count="6" %}
+            {% include "components/author_setting_book_row.html" with book_id="city" title="비 오는 도시의 소품" creator="윤슬" version="v1.0" license="상업 이용 허용" item_count="8" next_version="v1.1" %}
           </ul><p class="border-t border-base-300 px-4 py-3 text-xs leading-relaxed text-base-content/50 sm:px-5">업데이트는 설정집마다 선택합니다. 적용하지 않으면 현재 버전과 라이선스를 유지합니다.</p>
         </div></div>
         <div class="card mt-5 border border-base-300 bg-base-100"><div class="card-body gap-4 p-5"><div class="flex flex-wrap items-center justify-between gap-2"><h2 class="card-title text-base">표현 매핑</h2><span class="text-xs text-base-content/50">1화 · 3쪽</span></div>
@@ -126,15 +122,10 @@
       </div>
     </main>
   </div>
-  <dialog id="update-dialog" class="modal" aria-labelledby="update-title"><div class="modal-box">
-    <p class="mb-1 text-xs text-base-content/50">설정집 버전 검토</p><h2 id="update-title" class="text-lg font-semibold"></h2>
-    <div class="grid grid-cols-2 gap-3 mt-5"><div class="rounded-box border border-base-300 p-4"><p class="text-xs text-base-content/50">현재 버전</p><p id="update-current" class="mt-1 font-semibold"></p></div><div class="rounded-box border border-primary/30 bg-primary/5 p-4"><p class="text-xs text-base-content/50">업데이트 버전</p><p id="update-next" class="mt-1 font-semibold"></p></div></div>
-    <p id="update-changes" class="mt-5 text-sm leading-relaxed"></p><p id="update-license" class="mt-3 text-xs text-base-content/60"></p><p class="mt-3 text-xs leading-relaxed text-base-content/60">이 설정집만 변경됩니다. 다른 설정집의 채택 버전과 다른 작품의 버전은 유지됩니다.</p>
-    <div class="modal-action"><form method="dialog"><button class="btn btn-ghost btn-sm">현재 버전 유지</button></form><button id="confirm-update" class="btn btn-primary btn-sm">이 설정집만 업데이트</button></div>
-  </div><form method="dialog" class="modal-backdrop"><button>닫기</button></form></dialog>
+  {% include "components/author_setting_update_dialog.html" with dialog_id="update-dialog" %}
   <dialog id="asset-dialog" class="modal" aria-labelledby="asset-title"><div class="modal-box"><h2 id="asset-title" class="text-lg font-semibold">“은빛 잎”에 연결할 에셋</h2><p class="mt-2 text-xs text-base-content/60">이 표현에만 적용됩니다. 렌더 이미지 영역은 현재 자리표시자입니다.</p><div class="space-y-3 mt-5">
-    <label class="flex cursor-pointer items-center gap-3 rounded-box border border-base-300 p-4"><input class="radio radio-primary radio-sm" type="radio" name="asset-choice" value="월광초"><div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-base-200 text-xs text-base-content/50">이미지</div><span><b class="text-sm">월광초</b><span class="block mt-1 text-xs text-base-content/60">북부의 식물 도감 · <span id="asset-flora-version">v1.4</span></span></span></label>
-    <label class="flex cursor-pointer items-center gap-3 rounded-box border border-base-300 p-4"><input class="radio radio-primary radio-sm" type="radio" name="asset-choice" value="은빛 덩굴"><div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-base-200 text-xs text-base-content/50">이미지</div><span><b class="text-sm">은빛 덩굴</b><span class="block mt-1 text-xs text-base-content/60">잊힌 왕국의 문장 · v2.1</span></span></label>
+    {% include "components/author_asset_candidate.html" with name="월광초" book="북부의 식물 도감" version="v1.4" choice="월광초" asset_id="delapouite/grave-flowers" author="Delapouite" license="CC BY 3.0" source_url="https://game-icons.net/1x1/delapouite/grave-flowers.html" license_url="https://creativecommons.org/licenses/by/3.0/" color="파란색" palette="solarized" version_id="asset-flora-version" %}
+    {% include "components/author_asset_candidate.html" with name="은빛 덩굴" book="잊힌 왕국의 문장" version="v2.1" choice="은빛 덩굴" asset_id="lorc/leaf-skeleton" author="Lorc" license="CC BY 3.0" source_url="https://game-icons.net/1x1/lorc/leaf-skeleton.html" license_url="https://creativecommons.org/licenses/by/3.0/" color="초록색" palette="bright" %}
   </div><div class="modal-action"><form method="dialog"><button class="btn btn-ghost btn-sm">취소</button></form><button id="confirm-asset" class="btn btn-primary btn-sm" disabled>이 에셋 연결</button></div></div><form method="dialog" class="modal-backdrop"><button>닫기</button></form></dialog>
   <dialog id="catalog-dialog" class="modal" aria-labelledby="catalog-title"><div class="modal-box"><h2 id="catalog-title" class="text-lg font-semibold">설정집 추가</h2><p class="mt-2 text-sm text-base-content/60">현재 시안은 이미 채택한 설정집의 버전과 표현 매핑을 검토합니다. 탐색·채택 및 제작자 발행 화면은 후속 디자인 범위입니다.</p><div class="modal-action"><form method="dialog"><button class="btn btn-sm">확인</button></form></div></div><form method="dialog" class="modal-backdrop"><button>닫기</button></form></dialog>
   <div id="toast" class="toast toast-end toast-bottom" hidden aria-live="polite"><div class="alert alert-success text-sm"><span id="toast-text"></span></div></div>
