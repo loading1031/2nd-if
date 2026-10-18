@@ -11,7 +11,7 @@
 | 예시 상태·데이터 | `server/templates/patterns/components/author_*/` | 위젯별 정상·로딩·빈 값·오류·권한·저장·비활성 예시 |
 | 기존 화면 조합 예시 | `prototype.template.html`, `prototype.ts` | [prototype.html](prototype.html) |
 
-`design/`에 별도 컴포넌트 전시나 토큰 값을 복제하지 않는다. `index.html`은 실제 카탈로그의 개별 항목과 공유 원본으로 연결한다. 전시와 기존 시안은 같은 Django include와 서비스 CSS를 사용한다. 페이지 조합은 카탈로그의 Pages → author_tools에도 있다.
+`design/`에 별도 컴포넌트 전시나 토큰 값을 복제하지 않는다. `index.html`은 실제 카탈로그의 개별 항목과 공유 원본으로 연결한다. 전시와 기존 시안은 같은 Django include와 서비스 CSS를 사용한다. 페이지 조합은 카탈로그의 Pages → author_tools에도 있다. 이 예시는 공유 컴포넌트를 직접 include하며, 페이지 YAML의 예시 데이터로 인사이트 요약·회차 선택·시간 목록과 설정집 행·비교 모달의 배치를 보여준다. 개별 상태·사용법은 Components에 전시한다. 회차 선택에 따른 지표 조회와 업데이트 저장은 연결하지 않는다.
 
 화면 구조 승인 기준은 PR #34의 `c74c536768fd37fb2bc0836c13048492e57cdf29`이며 dev 병합은 `7c1bc0d153d145c26280baf9474f4d9912b92b37`이다. IA·승인 흐름은 유지한다.
 

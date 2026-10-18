@@ -10,4 +10,13 @@
       if (dialog instanceof HTMLDialogElement) dialog.showModal();
     });
   });
+  document.querySelectorAll("[data-catalog-update-dialog]").forEach((example) => {
+    const button = example.querySelector("[data-review-update]");
+    const dialog = document.getElementById(example.dataset.catalogUpdateDialog);
+    if (button && dialog instanceof HTMLDialogElement) {
+      button.setAttribute("aria-controls", dialog.id);
+      button.setAttribute("aria-haspopup", "dialog");
+      button.addEventListener("click", () => dialog.showModal());
+    }
+  });
 })();
